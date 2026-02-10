@@ -1,8 +1,14 @@
 require "test_helper"
 
 class BooksControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+  include OmniAuthTestHelper
+
   setup do
     @book = books(:one)
+    @admin = admins(:one)
+    sign_in_admin(@admin)
+    sign_in @admin
   end
 
   test "should get index" do
@@ -44,5 +50,12 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to books_url
+  end
+
+  # Rainy day: unauthenticated user should be redirected to sign in
+  test "should redirect unauthenticated user to sign in" do
+    sign_out @admin
+    get books_url
+    assert_redirected_to new_admin_session_path
   end
 end
