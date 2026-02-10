@@ -13,7 +13,7 @@ class BooksTest < ApplicationSystemTestCase
 
   # Helper to log in via OAuth callback in system tests
   def login_via_oauth
-    visit '/admins/auth/google_oauth2/callback'
+    visit "/admins/auth/google_oauth2/callback"
   end
 
   # Sunny day: authenticated user can visit index

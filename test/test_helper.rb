@@ -23,7 +23,7 @@ module OmniAuthTestHelper
     admin ||= admins(:one)
 
     OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
-      provider: 'google_oauth2',
+      provider: "google_oauth2",
       uid: admin.uid,
       info: {
         email: admin.email,
@@ -31,7 +31,7 @@ module OmniAuthTestHelper
         image: admin.avatar_url
       },
       credentials: {
-        token: 'mock_token',
+        token: "mock_token",
         expires_at: Time.now + 1.week
       }
     })
