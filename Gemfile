@@ -70,4 +70,8 @@ group :test do
   gem "selenium-webdriver"
   # Pin minitest to 5.x for Rails 8.0 compatibility
   gem "minitest", "~> 5.0"
+
+  # RSpec (skeleton test suite for Ideathon; no ideathon implementation yet)
+  gem "rspec-rails", "~> 6.1"
+  gem "shoulda-matchers", "~> 6.0"
 end
