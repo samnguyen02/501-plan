@@ -21,7 +21,7 @@ gem "jbuilder"
 # gem "bcrypt", "~> 3.1.7"
 
 # Authentication with Devise and Google OAuth
-gem 'devise', '~> 4.9'
+gem "devise", "~> 4.9"
 gem "omniauth", "~> 2.1"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "omniauth-google-oauth2", "~> 1.1"
@@ -71,7 +71,7 @@ group :test do
   # Pin minitest to 5.x for Rails 8.0 compatibility
   gem "minitest", "~> 5.0"
 
-  # RSpec (skeleton test suite for Ideathon; no ideathon implementation yet)
+  # RSpec
   gem "rspec-rails", "~> 6.1"
   gem "shoulda-matchers", "~> 6.0"
 end
