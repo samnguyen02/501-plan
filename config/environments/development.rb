@@ -73,5 +73,3 @@ end
 
 # Google OAuth credentials for development
 # Replace these with your actual Google OAuth Client ID and Secret from Google Cloud Console
-ENV['GOOGLE_OAUTH_CLIENT_ID'] = 'YOUR_GOOGLE_CLIENT_ID'
-ENV['GOOGLE_OAUTH_CLIENT_SECRET'] = 'YOUR_GOOGLE_CLIENT_SECRET'
