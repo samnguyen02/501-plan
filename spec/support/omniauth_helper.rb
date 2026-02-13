@@ -1,4 +1,3 @@
-# Helper for mocking OmniAuth in RSpec (existing OAuth in app).
 module OmniAuthHelper
   def mock_google_oauth2(admin_attributes = {})
     attrs = {
