@@ -1,0 +1,2 @@
+class IdeathonYear < ApplicationRecord
+end

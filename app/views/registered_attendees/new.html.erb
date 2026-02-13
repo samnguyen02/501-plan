@@ -1,0 +1,166 @@
+<h1>Register</h1>
+
+<% if @registered_attendee.errors.any? %>
+  <div style="border:1px solid #cc0000; padding: 10px; margin-bottom: 16px; background: #fff5f5;">
+    <h3><%= pluralize(@registered_attendee.errors.count, "error") %> prevented registration:</h3>
+    <ul>
+      <% @registered_attendee.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if notice.present? %>
+  <p style="color: green;"><%= notice %></p>
+<% end %>
+
+<%= form_with model: @registered_attendee, local: true do |f| %>
+
+  <h2>Attendee Info</h2>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :ideathon_year_id, "Ideathon Year" %><br>
+    <%= f.collection_select :ideathon_year_id, IdeathonYear.all, :id, :name,
+      { include_blank: "— Select a year —" },
+      { required: true, style: "width: 360px; padding: 8px; font-size: 16px;", id: "ideathon_year_select" } %>
+  </div>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :attendee_name, "Name" %><br>
+    <%= f.text_field :attendee_name,
+      required: true,
+      placeholder: "Your full name",
+      style: "width: 360px; padding: 10px; font-size: 16px;" %>
+  </div>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :attendee_phone, "Phone" %><br>
+    <%= f.telephone_field :attendee_phone,
+      required: true,
+      placeholder: "e.g., 979-555-1234",
+      style: "width: 360px; padding: 10px; font-size: 16px;" %>
+  </div>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :attendee_email, "Email" %><br>
+    <%= f.email_field :attendee_email,
+      required: true,
+      placeholder: "name@email.com",
+      style: "width: 360px; padding: 10px; font-size: 16px;" %>
+  </div>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :attendee_major, "Major" %><br>
+    <%= f.text_field :attendee_major,
+      required: true,
+      placeholder: "e.g., Computer Science",
+      style: "width: 360px; padding: 10px; font-size: 16px;" %>
+  </div>
+
+  <div style="margin-top: 12px;">
+    <%= f.label :attendee_class, "Classification (e.g., Freshman/Sophomore/etc.)" %><br>
+    <%= f.text_field :attendee_class,
+      required: true,
+      placeholder: "e.g., Junior",
+      style: "width: 360px; padding: 10px; font-size: 16px;" %>
+  </div>
+
+  <hr style="margin: 18px 0;">
+
+  <h2>Team</h2>
+  <p><strong>Choose ONE option:</strong></p>
+
+  <!-- TEAM OPTION RADIO BUTTONS -->
+  <div style="margin-top: 8px;">
+    <label style="display:block; margin-bottom: 8px;">
+      <input type="radio" name="team_choice" value="existing"
+             <%= params[:team_choice] == "existing" ? "checked" : "" %> >
+      Join an existing team
+    </label>
+
+    <div style="margin-left: 22px; margin-bottom: 14px;">
+      <%= select_tag "existing_team_id",
+        options_for_select([["— Select a team —", ""]], params[:existing_team_id]),
+        style: "width: 360px; padding: 8px; font-size: 16px;",
+        id: "existing_team_select" %>
+
+      <div style="font-size: 12px; color: #666; margin-top: 6px;">
+        Pick a team with space available (max 4 per team).
+      </div>
+    </div>
+
+    <label style="display:block; margin-bottom: 8px;">
+      <input type="radio" name="team_choice" value="unassigned"
+             <%= (params[:team_choice].blank? || params[:team_choice] == "unassigned") ? "checked" : "" %> >
+      I don’t have a team (Unassigned)
+    </label>
+
+    <div style="margin-left: 22px; margin-bottom: 14px; font-size: 12px; color: #666;">
+      You’ll be placed into the Unassigned team for this year (unlimited).
+    </div>
+
+    <label style="display:block; margin-bottom: 8px;">
+      <input type="radio" name="team_choice" value="new"
+             <%= params[:team_choice] == "new" ? "checked" : "" %> >
+      Create a new team
+    </label>
+
+    <div style="margin-left: 22px;">
+      <label for="new_team_name">New team name</label><br>
+      <input type="text" name="new_team_name" id="new_team_name"
+             value="<%= params[:new_team_name] %>"
+             placeholder="Team name (required if creating a team)"
+             style="width: 360px; padding: 10px; font-size: 16px;" />
+      <div style="font-size: 12px; color: #666; margin-top: 6px;">
+        If you choose “Create a new team,” you must type a team name.
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden field the controller can still permit as :team_id if you want -->
+  <%= f.hidden_field :team_id, value: "" %>
+
+  <div style="margin-top: 18px;">
+    <%= f.submit "Submit Registration", style: "padding: 10px 16px; font-size: 16px;" %>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const yearSelect = document.getElementById('ideathon_year_select');
+  const teamSelect = document.getElementById('existing_team_select');
+
+  function loadTeams() {
+    const yearId = yearSelect.value;
+    if (!yearId) {
+      teamSelect.innerHTML = '<option value="">— Select a team —</option>';
+      return;
+    }
+
+    // Fetch teams for the selected year
+    fetch(`/registered_attendees/teams_for_year?year_id=${yearId}`)
+      .then(response => response.json())
+      .then(teams => {
+        // Filter out unassigned teams for the dropdown
+        const existingTeams = teams.filter(t => !t.unassigned);
+        
+        let options = '<option value="">— Select a team —</option>';
+        existingTeams.forEach(team => {
+          options += `<option value="${team.id}">${team.name} (${team.member_count}/4 members)</option>`;
+        });
+        
+        teamSelect.innerHTML = options;
+      })
+      .catch(error => console.error('Error loading teams:', error));
+  }
+
+  // Load teams when year is changed
+  yearSelect.addEventListener('change', loadTeams);
+  
+  // Load teams on initial page load if year is already selected
+  if (yearSelect.value) {
+    loadTeams();
+  }
+});
+</script>
