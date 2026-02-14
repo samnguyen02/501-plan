@@ -1,5 +1,5 @@
 class RegisteredAttendeesController < ApplicationController
-  skip_before_action :authenticate_admin!, only: %i[new create show teams_for_year]
+  skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
   before_action :set_registered_attendee, only: %i[show edit update destroy]
   before_action :load_teams, only: %i[new create edit update]
 
@@ -19,6 +19,9 @@ class RegisteredAttendeesController < ApplicationController
   # GET /registered_attendees/1/edit
   def edit; end
 
+  # GET /registered_attendees/success
+  def success; end
+
   # POST /registered_attendees
   def create
     @registered_attendee = RegisteredAttendee.new(registered_attendee_params)
@@ -31,7 +34,7 @@ class RegisteredAttendeesController < ApplicationController
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
       elsif @registered_attendee.save
-        format.html { redirect_to new_registered_attendee_path, notice: "You are successfully registered!" }
+        format.html { redirect_to success_registered_attendees_path, status: :see_other }
         format.json { render :show, status: :created, location: @registered_attendee }
       else
         load_teams

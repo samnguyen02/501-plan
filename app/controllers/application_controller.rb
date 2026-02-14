@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   private
 
   def public_page?
-    controller_name == "registered_attendees" && %w[new create].include?(action_name)
+    return true if controller_name == "ideathon" && action_name == "index"
+    if controller_name == "registered_attendees"
+      return true if %w[new create show success teams_for_year].include?(action_name)
+    end
+    false
   end
 end
