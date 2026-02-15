@@ -78,3 +78,5 @@ group :test do
   gem "shoulda-matchers", "~> 6.0"
   gem "simplecov", "~> 0.22", require: false
 end
+
+gem "rubocop", "~> 1.84", group: :development
