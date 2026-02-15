@@ -8,9 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 IdeathonYear.find_or_create_by!(name: "Ideathon 2026") do |y|
-  y.description = "Spring ProductTAMU Ideathon"
-  y.location = "Texas A&M University"
-  y.start_date = Date.new(2026, 4, 11)
-  y.end_date = Date.new(2026, 4, 12)
-  y.is_active = true
+     y.description = "Spring ProductTAMU Ideathon"
+     y.location = "Texas A&M University"
+     y.start_date = Date.new(2026, 4, 11)
+     y.end_date = Date.new(2026, 4, 12)
+     y.is_active = true
 end

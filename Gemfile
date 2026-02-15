@@ -51,32 +51,32 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+     # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+     gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
+     # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+     gem "brakeman", require: false
 
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
+     # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+     gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+     # Use console on exceptions pages [https://github.com/rails/web-console]
+     gem "web-console"
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-  # Pin minitest to 5.x for Rails 8.0 compatibility
-  gem "minitest", "~> 5.0"
+     # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+     gem "capybara"
+     gem "selenium-webdriver"
+     # Pin minitest to 5.x for Rails 8.0 compatibility
+     gem "minitest", "~> 5.0"
 
-  # RSpec
-  gem "rspec-rails", "~> 6.1"
-  gem "shoulda-matchers", "~> 6.0"
-  gem "simplecov", "~> 0.22", require: false
+     # RSpec
+     gem "rspec-rails", "~> 6.1"
+     gem "shoulda-matchers", "~> 6.0"
+     gem "simplecov", "~> 0.22", require: false
 end
 
 gem "rubocop", "~> 1.84", group: :development
