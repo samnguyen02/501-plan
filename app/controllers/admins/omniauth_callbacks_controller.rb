@@ -3,7 +3,9 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           admin = Admin.from_google(**from_google_params)
 
           if admin.present?
+               stored_path = stored_location_for(:admin)
                sign_out_all_scopes
+               store_location_for(:admin, stored_path) if stored_path
                flash[:success] = t "devise.omniauth_callbacks.success", kind: "Google"
                sign_in_and_redirect admin, event: :authentication
           else
@@ -19,7 +21,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
        end
 
        def after_sign_in_path_for(resource_or_scope)
-            stored_location_for(resource_or_scope) || root_path
+            stored_location_for(resource_or_scope) || manager_index_path
        end
 
   private

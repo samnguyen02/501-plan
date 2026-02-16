@@ -25,10 +25,10 @@ Rails.application.configure do
      config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-     config.assume_ssl = true
+     config.assume_ssl = ENV.fetch("ASSUME_SSL", "false") == "true"
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-     config.force_ssl = true
+     config.force_ssl = ENV.fetch("FORCE_SSL", "false") == "true"
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
@@ -75,6 +75,11 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
      config.active_record.dump_schema_after_migration = false
+
+  # Google OAuth credentials for production
+  # In a real deployment, pass these as Docker env vars instead of hardcoding
+     ENV['GOOGLE_OAUTH_CLIENT_ID']     ||= 'YOUR_GOOGLE_CLIENT_ID'
+     ENV['GOOGLE_OAUTH_CLIENT_SECRET'] ||= 'YOUR_GOOGLE_CLIENT_SECRET'
 
   # Only use :id for inspections in production.
      config.active_record.attributes_for_inspect = [ :id ]

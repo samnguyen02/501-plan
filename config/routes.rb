@@ -7,6 +7,8 @@ Rails.application.routes.draw do
           get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
      end
 
+     resources :manager, only: [ :index, :destroy ], controller: 'manager'
+
      resources :registered_attendees do
           collection do
                get :teams_for_year
