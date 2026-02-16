@@ -23,7 +23,7 @@ gem "tailwindcss-rails"
 # gem "bcrypt", "~> 3.1.7"
 
 # Authentication with Devise and Google OAuth
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "omniauth", "~> 2.1"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "omniauth-google-oauth2", "~> 1.1"
