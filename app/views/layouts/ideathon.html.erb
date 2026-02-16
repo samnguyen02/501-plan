@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for(:title) || "TAMU Ideathon 2026" %></title>
+  <meta name="description" content="Join Texas A&M's premier ideathon - 24 hours of innovation, creativity, and collaboration. February 28 - March 1, 2026.">
+  
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="TAMU Ideathon 2026">
+  <meta property="og:description" content="24 hours of innovation. $5,000+ in prizes. Join 200+ Aggies.">
+  <meta property="og:type" content="website">
+  
+  <!-- Font Imports (Google Fonts for Titan One & Lilita One, custom for Urban Blocker) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Titan+One&display=swap" rel="stylesheet">
+  
+  <!-- Custom font-face for Urban Blocker -->
+  <style>
+    @font-face {
+      font-family: 'Urban Blocker';
+      src: url('/fonts/UrbanBlocker.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Prevent scroll restoration issues */
+    html:focus-within {
+      scroll-behavior: smooth;
+    }
+    
+    /* Custom scrollbar for the ideathon theme */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #060918;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #FFD700 0%, #FF6D00 100%);
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FFD700;
+    }
+    
+    /* Gradient backgrounds for decorative elements */
+    .bg-gradient-radial {
+      background: radial-gradient(ellipse at center, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 70%);
+    }
+    
+    /* Selection styling */
+    ::selection {
+      background: rgba(255, 215, 0, 0.35);
+      color: white;
+    }
+  </style>
+  
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  
+  <!-- Force scroll to top on page load/refresh -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  </script>
+  
+  <%= content_for :head %>
+</head>
+<body class="min-h-screen bg-ideathon-navy font-lilita-one text-white antialiased overflow-x-hidden m-0 p-0">
+  
+  <!-- Main Content Area -->
+  <main class="m-0 p-0">
+    <%= yield %>
+  </main>
+  
+</body>
+</html>

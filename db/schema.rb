@@ -10,13 +10,81 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_05_182624) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "books", force: :cascade do |t|
-    t.string "title"
+  create_table "admins", force: :cascade do |t|
+    t.string "avatar_url"
     t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "full_name"
+    t.string "uid"
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_admins_on_email", unique: true
+  end
+
+  create_table "attendees", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.string "name", null: false
+    t.string "phone_number"
     t.datetime "updated_at", null: false
   end
+
+  create_table "books", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ideathon_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "event_date"
+    t.text "event_description"
+    t.string "event_name"
+    t.time "event_time"
+    t.bigint "ideathon_year_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ideathon_year_id"], name: "index_ideathon_events_on_ideathon_year_id"
+  end
+
+  create_table "ideathon_years", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.date "end_date"
+    t.boolean "is_active"
+    t.string "location"
+    t.string "name"
+    t.date "start_date"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "registered_attendees", force: :cascade do |t|
+    t.string "attendee_class"
+    t.string "attendee_email"
+    t.string "attendee_major"
+    t.string "attendee_name"
+    t.string "attendee_phone"
+    t.datetime "created_at", null: false
+    t.bigint "ideathon_year_id", null: false
+    t.bigint "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ideathon_year_id"], name: "index_registered_attendees_on_ideathon_year_id"
+    t.index ["team_id"], name: "index_registered_attendees_on_team_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "ideathon_year_id", null: false
+    t.string "team_name"
+    t.boolean "unassigned"
+    t.datetime "updated_at", null: false
+    t.index ["ideathon_year_id"], name: "index_teams_on_ideathon_year_id"
+  end
+
+  add_foreign_key "ideathon_events", "ideathon_years"
+  add_foreign_key "registered_attendees", "ideathon_years"
+  add_foreign_key "registered_attendees", "teams"
+  add_foreign_key "teams", "ideathon_years"
 end
