@@ -25,7 +25,7 @@ gem "tailwindcss-rails"
 # Authentication with Devise and Google OAuth
 gem "devise", "~> 4.9"
 gem "omniauth", "~> 2.1"
-gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem "omniauth-rails_csrf_protection", "~> 2.0"
 gem "omniauth-google-oauth2", "~> 1.1"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
