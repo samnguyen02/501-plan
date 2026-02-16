@@ -5,10 +5,10 @@ class ManagerController < ApplicationController
           @sort = params[:sort] == "team" ? "team" : "name"
 
           @registered_attendees = if params[:query].present?
-                                        RegisteredAttendee.search_by_name_or_team(params[:query])
-                                   else
-                                        RegisteredAttendee.all
-                                   end
+               RegisteredAttendee.search_by_name_or_team(params[:query])
+          else
+               RegisteredAttendee.all
+          end
 
           @registered_attendees = @registered_attendees.sorted_by_team if @sort == "team"
 

@@ -17,7 +17,7 @@ unassigned_team = Team.find_or_create_by!(ideathon_year: year, unassigned: true)
 end
 
 # Create a few named teams
-team_names = ["Alpha Builders", "Code Crusaders", "Pixel Pirates", "Data Dragons"]
+team_names = [ "Alpha Builders", "Code Crusaders", "Pixel Pirates", "Data Dragons" ]
 teams = team_names.map do |name|
      Team.find_or_create_by!(ideathon_year: year, team_name: name) do |t|
           t.unassigned = false
