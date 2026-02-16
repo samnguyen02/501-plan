@@ -2,6 +2,7 @@ class RegisteredAttendeesController < ApplicationController
      skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
      before_action :set_registered_attendee, only: %i[show edit update destroy]
      before_action :load_teams, only: %i[new create edit update]
+     layout "ideathon", only: %i[new create success]
 
   # GET /registered_attendees
      def index
@@ -14,6 +15,7 @@ class RegisteredAttendeesController < ApplicationController
   # GET /registered_attendees/new
      def new
           @registered_attendee = RegisteredAttendee.new
+          @registered_attendee.ideathon_year = active_year
      end
 
   # GET /registered_attendees/1/edit
@@ -25,6 +27,7 @@ class RegisteredAttendeesController < ApplicationController
   # POST /registered_attendees
      def create
           @registered_attendee = RegisteredAttendee.new(registered_attendee_params)
+          @registered_attendee.ideathon_year = active_year
 
           apply_team_selection!(@registered_attendee)
 
@@ -101,18 +104,13 @@ class RegisteredAttendeesController < ApplicationController
             @registered_attendee = RegisteredAttendee.find(params[:id])
        end
 
-  # Teams list for the chosen year (used by the form)
-       def load_teams
-            year_id =
-              params.dig(:registered_attendee, :ideathon_year_id) ||
-              @registered_attendee&.ideathon_year_id
+       def active_year
+            @active_year ||= IdeathonYear.find_by!(is_active: true)
+       end
 
-            @teams =
-              if year_id.present?
-                   Team.where(ideathon_year_id: year_id).order(:unassigned, :team_name)
-              else
-                   []
-              end
+  # Teams list for the active year (used by the form)
+       def load_teams
+            @teams = Team.where(ideathon_year: active_year).order(:unassigned, :team_name)
        end
 
        def registered_attendee_params

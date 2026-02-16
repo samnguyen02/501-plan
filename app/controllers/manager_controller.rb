@@ -1,5 +1,4 @@
 class ManagerController < ApplicationController
-     skip_before_action :authenticate_admin! # TODO: remove this after testing
      layout "ideathon"
 
      def index
