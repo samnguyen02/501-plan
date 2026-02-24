@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe "RegisteredAttendees", type: :request do
-     let(:ideathon_year) { IdeathonYear.create!(name: "2026", start_date: 1.week.from_now, end_date: 2.weeks.from_now) }
+     let(:ideathon_year) { IdeathonYear.create!(name: "2026", start_date: 1.week.from_now, end_date: 2.weeks.from_now, is_active: true) }
      let(:unassigned_team) { Team.create!(ideathon_year: ideathon_year, team_name: "Unassigned", unassigned: true) }
-     let(:admin) { Admin.create!(email: "admin@tamu.edu", full_name: "Admin", uid: "123") }
+     let(:admin) { Admin.create!(email: "admin@example.com", full_name: "Admin", uid: "123") }
 
      before { unassigned_team }
 
@@ -20,7 +20,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
           it "returns success (public page)" do
                get success_registered_attendees_path
                expect(response).to have_http_status(:ok)
-               expect(response.body).to include("Registration successful")
+               expect(response.body).to include("YOU'RE IN")
           end
      end
 
@@ -57,26 +57,19 @@ RSpec.describe "RegisteredAttendees", type: :request do
                }
           end
 
-          it "creates an attendee and redirects to success page (any email allowed)" do
-               expect {
-                    post registered_attendees_path, params: valid_params
-               }.to change(RegisteredAttendee, :count).by(1)
-               expect(response).to redirect_to(success_registered_attendees_path)
-               expect(RegisteredAttendee.last.attendee_email).to eq("jane@gmail.com")
-          end
-
-          it "accepts non-TAMU email" do
+          it "creates an attendee and redirects to success page" do
                post registered_attendees_path, params: valid_params
+               expect(RegisteredAttendee.count).to eq(1)
                expect(response).to redirect_to(success_registered_attendees_path)
                expect(RegisteredAttendee.last.attendee_email).to eq("jane@gmail.com")
           end
 
-          context "with invalid params (missing year)" do
+          context "with invalid params (missing required name)" do
                let(:invalid_params) do
                     {
                       registered_attendee: {
-                        ideathon_year_id: nil,
-                        attendee_name: "Jane",
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "",
                         attendee_phone: "979-555-1234",
                         attendee_email: "jane@example.com",
                         attendee_major: "CS",
@@ -88,8 +81,66 @@ RSpec.describe "RegisteredAttendees", type: :request do
 
                it "re-renders new and does not create" do
                     expect { post registered_attendees_path, params: invalid_params }.not_to change(RegisteredAttendee, :count)
-                    expect(response).to have_http_status(:unprocessable_entity)
+                    expect(response).to have_http_status(422)
                end
+          end
+
+          context "with team_choice existing" do
+               it "creates attendee with existing team" do
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "New Member",
+                        attendee_phone: "979-555-0000",
+                        attendee_email: "new@example.com",
+                        attendee_major: "CS",
+                        attendee_class: "Freshman"
+                      },
+                      team_choice: "existing",
+                      existing_team_id: unassigned_team.id
+                    }
+                    expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
+                    expect(RegisteredAttendee.last.team_id).to eq(unassigned_team.id)
+               end
+          end
+
+          context "with team_choice existing but invalid" do
+               it "re-renders new when existing_team_id is blank" do
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "X",
+                        attendee_phone: "979-555-0000",
+                        attendee_email: "x@example.com",
+                        attendee_major: "CS",
+                        attendee_class: "Sr"
+                      },
+                      team_choice: "existing",
+                      existing_team_id: ""
+                    }
+                    expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
+               end
+          end
+
+          context "with team_choice new" do
+               it "creates attendee with new team" do
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "Captain",
+                        attendee_phone: "979-555-9999",
+                        attendee_email: "cap@example.com",
+                        attendee_major: "CS",
+                        attendee_class: "Senior"
+                      },
+                      team_choice: "new",
+                      new_team_name: "New Team Name"
+                    }
+                    expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
+                    expect(RegisteredAttendee.last.team.team_name).to eq("New Team Name")
+               end
+
           end
      end
 
@@ -159,6 +210,11 @@ RSpec.describe "RegisteredAttendees", type: :request do
           context "when signed in as admin" do
                before { sign_in admin }
 
+               it "edit returns success" do
+                    get edit_registered_attendee_path(attendee)
+                    expect(response).to have_http_status(:ok)
+               end
+
                it "update succeeds and redirects to show" do
                     patch registered_attendee_path(attendee), params: {
                       registered_attendee: {
@@ -180,6 +236,22 @@ RSpec.describe "RegisteredAttendees", type: :request do
                     expect(response).to redirect_to(registered_attendees_path)
                     expect(RegisteredAttendee.find_by(id: attendee.id)).to be_nil
                end
+
+               it "update with invalid params re-renders edit" do
+                    patch registered_attendee_path(attendee), params: {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "",
+                        attendee_phone: attendee.attendee_phone,
+                        attendee_email: attendee.attendee_email,
+                        attendee_major: attendee.attendee_major,
+                        attendee_class: attendee.attendee_class
+                      },
+                      team_choice: "unassigned"
+                    }
+                    expect(response).to have_http_status(422)
+               end
+
           end
      end
 end

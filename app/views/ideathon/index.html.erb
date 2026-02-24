@@ -116,7 +116,7 @@
         <a href="#sponsors" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">Sponsors</a>
         <a href="#faq" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">FAQ</a>
         <div class="border-t border-white/10 my-2"></div>
-        <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", data: { action: "click->ideathon-nav#closeMobile" } do %>
+        <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false", action: "click->ideathon-nav#closeMobile" }, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full" do %>
           Login
         <% end %>
         <%= link_to "Register", new_registered_attendee_path, class: "bg-gradient-to-r from-ideathon-yellow to-ideathon-orange text-ideathon-navy font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", data: { action: "click->ideathon-nav#closeMobile" } %>

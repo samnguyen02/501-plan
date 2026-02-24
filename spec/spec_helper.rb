@@ -1,14 +1,12 @@
 require "simplecov"
 SimpleCov.start "rails" do
-     minimum_coverage 80
+     minimum_coverage 90
      coverage_dir File.expand_path("../coverage", __dir__)
 
      # Exclude code that isn’t in use
-     add_filter "app/controllers/ideathon_events_controller.rb"
-     add_filter "app/controllers/ideathon_years_controller.rb"
-     add_filter "app/controllers/teams_controller.rb"
      add_filter "app/jobs/application_job.rb"
      add_filter "app/mailers/application_mailer.rb"
+     add_filter "app/controllers/admins/sessions_controller.rb"
 end
 
 RSpec.configure do |config|

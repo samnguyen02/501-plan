@@ -7,7 +7,7 @@ RSpec.describe "Admins::OmniauthCallbacks", type: :request do
           OmniAuth::AuthHash.new(
             provider: "google_oauth2",
             uid: "123456789",
-            info: { email: "admin@tamu.edu", name: "Test Admin", image: "https://example.com/avatar.jpg" },
+            info: { email: "admin@example.com", name: "Test Admin", image: "https://example.com/avatar.jpg" },
             credentials: { token: "mock_token", expires_at: 1.week.from_now }
           )
      end
@@ -18,7 +18,7 @@ RSpec.describe "Admins::OmniauthCallbacks", type: :request do
      describe "GET /admins/auth/google_oauth2/callback" do
           context "when the email is in the admin allowlist" do
                before do
-                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu")
+                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com")
                     OmniAuth.config.mock_auth[:google_oauth2] = auth_hash
                end
 
@@ -26,15 +26,15 @@ RSpec.describe "Admins::OmniauthCallbacks", type: :request do
                     expect { get "/admins/auth/google_oauth2/callback" }.to change(Admin, :count).by(1)
                end
 
-               it "redirects to root after successful authentication" do
+               it "redirects to admin dashboard after successful authentication" do
                     get "/admins/auth/google_oauth2/callback"
-                    expect(response).to redirect_to(root_path)
+                    expect(response).to redirect_to(manager_index_path)
                end
           end
 
           context "when the email is not in the admin allowlist" do
                before do
-                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@tamu.edu")
+                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@example.com")
                     OmniAuth.config.mock_auth[:google_oauth2] = auth_hash
                end
 

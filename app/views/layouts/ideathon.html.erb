@@ -90,11 +90,20 @@
   <%= content_for :head %>
 </head>
 <body class="min-h-screen bg-ideathon-navy font-lilita-one text-white antialiased overflow-x-hidden m-0 p-0">
-  
-  <!-- Main Content Area -->
+
+  <% if flash[:alert].present? %>
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl bg-red-600/90 text-white shadow-lg text-sm">
+      <%= flash[:alert] %>
+    </div>
+  <% elsif flash[:success].present? %>
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl bg-emerald-600/90 text-white shadow-lg text-sm">
+      <%= flash[:success] %>
+    </div>
+  <% end %>
+
   <main class="m-0 p-0">
     <%= yield %>
   </main>
-  
+
 </body>
 </html>
