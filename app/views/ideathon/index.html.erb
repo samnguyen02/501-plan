@@ -74,6 +74,8 @@
         <a href="#about" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">About</a>
         <a href="#schedule" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">Schedule</a>
         <a href="#prizes" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">Prizes</a>
+        <a href="#judges" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">Judges</a>
+        <a href="#rules" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">Rules</a>
         <a href="#sponsors" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">Sponsors</a>
         <a href="#faq" class="font-lilita-one text-white/70 hover:text-ideathon-yellow transition-colors text-sm tracking-wide px-4 py-2 rounded-lg hover:bg-white/5">FAQ</a>
       </div>
@@ -113,6 +115,8 @@
         <a href="#about" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">About</a>
         <a href="#schedule" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">Schedule</a>
         <a href="#prizes" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">Prizes</a>
+        <a href="#judges" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">Judges</a>
+        <a href="#rules" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">Rules</a>
         <a href="#sponsors" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">Sponsors</a>
         <a href="#faq" class="font-lilita-one text-white/90 hover:text-ideathon-yellow hover:bg-white/5 px-4 py-3 rounded-xl transition-all" data-action="click->ideathon-nav#closeMobile">FAQ</a>
         <div class="border-t border-white/10 my-2"></div>
@@ -693,6 +697,125 @@
       </a>
     </div>
     
+  </div>
+</section>
+
+
+<%# Judges section %>
+<section id="judges" class="relative z-10 py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="text-center mb-16">
+      <h2 class="font-urban-blocker text-5xl sm:text-6xl text-white mb-4
+                 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+        <span class="text-ideathon-yellow">MEET THE</span> JUDGES
+      </h2>
+      <p class="font-lilita-one text-lg text-white/70">
+        Experienced professionals and industry leaders evaluating your innovations
+      </p>
+    </div>
+    
+    <!-- Judges Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% 6.times do %>
+        <div class="bento-card bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:border-ideathon-yellow/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+          <div class="w-16 h-16 bg-gradient-to-br from-ideathon-yellow to-ideathon-orange rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <svg class="w-8 h-8 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <h3 class="font-titan-one text-white text-lg mb-1">TBD</h3>
+          <p class="font-lilita-one text-ideathon-yellow text-sm mb-2">TBD</p>
+          <p class="font-lilita-one text-white/60 text-xs mb-3">TBD</p>
+          <p class="font-lilita-one text-white/70 text-sm leading-relaxed">Judge information coming soon</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+
+<%# Rules section %>
+<section id="rules" class="relative z-10 py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+    
+    <div class="text-center mb-16">
+      <h2 class="font-urban-blocker text-5xl sm:text-6xl text-white mb-4
+                 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+        <span class="text-ideathon-yellow">CONTEST</span> RULES
+      </h2>
+      <p class="font-lilita-one text-lg text-white/70">
+        Make sure you understand all the requirements before competing
+      </p>
+    </div>
+    
+    <!-- Rules List -->
+    <div class="space-y-4">
+      <div class="mb-8">
+        <h3 class="font-titan-one text-ideathon-yellow text-xl mb-4">Competition Rules</h3>
+        <div class="space-y-3">
+          <% [
+            { title: "Original Work", description: "All work must be created during the Ideathon." },
+            { title: "AI Tools Permitted", description: "Use of AI tools is permitted unless otherwise specified." },
+            { title: "Pitch Deck Required", description: "Teams must submit their pitch deck before the deadline." },
+            { title: "No Late Submissions", description: "Late submissions will not be judged." },
+            { title: "One Presentation", description: "One presentation per team." }
+          ].each_with_index do |rule, index| %>
+            <div class="bento-card bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:border-ideathon-yellow/30 transition-all duration-300">
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0">
+                  <div class="flex items-center justify-center h-6 w-6 rounded-lg bg-ideathon-yellow/20 border border-ideathon-yellow/30">
+                    <span class="font-titan-one text-ideathon-yellow text-xs"><%= index + 1 %></span>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-titan-one text-white text-sm mb-1"><%= rule[:title] %></h4>
+                  <p class="font-lilita-one text-white/70 text-sm"><%= rule[:description] %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-titan-one text-ideathon-green text-xl mb-4">Required Deliverables</h3>
+        <div class="space-y-2">
+          <% [
+            "Pitch deck (PDF)",
+            "Problem statement",
+            "Prototype",
+            "Proposed solution (video)",
+            "Basic implementation plan",
+            "Market or impact potential"
+          ].each_with_index do |deliverable, index| %>
+            <div class="bento-card bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md rounded-xl p-3 border border-white/20 hover:border-ideathon-green/30 transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center h-5 w-5 rounded-full bg-ideathon-green/20 border border-ideathon-green/30 flex-shrink-0">
+                  <svg class="w-3 h-3 text-ideathon-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <p class="font-lilita-one text-white/80 text-sm"><%= deliverable %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Important Notice -->
+    <div class="mt-8 p-6 rounded-2xl border-2 border-ideathon-red/30 bg-ideathon-red/10 backdrop-blur-sm">
+      <div class="flex items-start gap-4">
+        <svg class="w-6 h-6 text-ideathon-red flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+        </svg>
+        <div>
+          <h4 class="font-titan-one text-ideathon-red mb-2">Important Notice</h4>
+          <p class="font-lilita-one text-white/80 text-sm leading-relaxed">By registering and participating in TAMU Ideathon 2026, you acknowledge that you have read and agree to follow all rules and regulations. Violations may result in disqualification and loss of eligibility for prizes.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
