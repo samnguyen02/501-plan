@@ -384,155 +384,67 @@
       <!-- Vertical Line - stops before the end -->
       <div class="absolute left-4 md:left-1/2 top-0 w-1 bg-gradient-to-b from-ideathon-yellow via-ideathon-red to-ideathon-green rounded-full" style="height: calc(100% - 60px);"></div>
       
-      <!-- Day 1 Header -->
-      <div class="relative flex justify-center mb-8">
-        <div class="bg-ideathon-yellow text-ideathon-navy font-titan-one px-6 py-2 rounded-full shadow-lg z-10">
-          Day 1 - February 28
-        </div>
-      </div>
-      
-      <div class="space-y-6">
-        
-        <!-- 9:00 AM -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
-            <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-              <div class="font-titan-one text-ideathon-yellow text-lg">9:00 AM</div>
-              <div class="font-lilita-one text-white text-base">Check-in & Breakfast</div>
-              <div class="font-lilita-one text-white/70 text-sm">Registration and team formation</div>
+      <% if @events.any? %>
+        <% @events.group_by { |e| e.event_date }.each_with_index do |(date, day_events), day_index| %>
+          <!-- Day Header -->
+          <div class="relative flex justify-center mb-8">
+            <div class="<%= day_index.even? ? 'bg-ideathon-yellow text-ideathon-navy' : 'bg-ideathon-red text-white' %> font-titan-one px-6 py-2 rounded-full shadow-lg z-10">
+              Day <%= day_index + 1 %> - <%= date.strftime("%B %d") %>
             </div>
           </div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 z-10">
-            <img src="/images/coinicon.png" alt="" class="w-full h-full object-contain" />
+          
+          <div class="space-y-6">
+            <% day_events.each_with_index do |event, index| %>
+              <!-- Event -->
+              <div class="relative flex items-center gap-6 md:gap-0">
+                <% if index.even? %>
+                  <!-- Left side (desktop) -->
+                  <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
+                    <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
+                      <div class="font-titan-one text-ideathon-yellow text-lg"><%= event.event_time.strftime("%l:%M %p") %></div>
+                      <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
+                      <div class="font-lilita-one text-white/70 text-sm"><%= event.event_description %></div>
+                    </div>
+                  </div>
+                <% else %>
+                  <!-- Left empty (desktop) -->
+                  <div class="hidden md:block md:w-1/2 md:pr-8"></div>
+                <% end %>
+                
+                <!-- Center icon -->
+                <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 z-10">
+                  <img src="/images/coinicon.png" alt="" class="w-full h-full object-contain" />
+                </div>
+                
+                <!-- Mobile version -->
+                <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1">
+                  <div class="font-titan-one text-ideathon-yellow text-lg"><%= event.event_time.strftime("%l:%M %p") %></div>
+                  <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
+                  <div class="font-lilita-one text-white/70 text-sm"><%= event.event_description %></div>
+                </div>
+                
+                <% if index.even? %>
+                  <!-- Right empty (desktop) -->
+                  <div class="hidden md:block md:w-1/2 md:pl-8"></div>
+                <% else %>
+                  <!-- Right side (desktop) -->
+                  <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8">
+                    <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
+                      <div class="font-titan-one text-ideathon-red text-lg"><%= event.event_time.strftime("%l:%M %p") %></div>
+                      <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
+                      <div class="font-lilita-one text-white/70 text-sm"><%= event.event_description %></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
           </div>
-          <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1">
-            <div class="font-titan-one text-ideathon-yellow text-lg">9:00 AM</div>
-            <div class="font-lilita-one text-white text-base">Check-in & Breakfast</div>
-            <div class="font-lilita-one text-white/70 text-sm">Registration and team formation</div>
-          </div>
-          <div class="hidden md:block md:w-1/2 md:pl-8"></div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-12">
+          <p class="font-lilita-one text-white/70 text-lg">No events scheduled yet</p>
         </div>
-        
-        <!-- 10:00 AM -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8"></div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 z-10">
-            <img src="/images/coinicon.png" alt="" class="w-full h-full object-contain" />
-          </div>
-          <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8">
-            <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-              <div class="font-titan-one text-ideathon-red text-lg">10:00 AM</div>
-              <div class="font-lilita-one text-white text-base">Opening Ceremony</div>
-              <div class="font-lilita-one text-white/70 text-sm">Keynote speaker & rules announcement</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 11:00 AM - Hacking Begins (highlighted) -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
-            <div class="bento-card inline-block bg-gradient-to-br from-ideathon-green/15 to-ideathon-cyan/10 backdrop-blur-sm rounded-2xl p-5 border border-ideathon-green/30 glow-green">
-              <div class="font-titan-one text-ideathon-green text-lg">11:00 AM</div>
-              <div class="font-lilita-one text-white text-base font-bold">Hacking Begins!</div>
-              <div class="font-lilita-one text-white/70 text-sm">24 hours on the clock</div>
-            </div>
-          </div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 z-10 flex items-center justify-center">
-            <div class="absolute inset-0 bg-white/20 rounded-full border border-white/30"></div>
-            <img src="/images/starimage.png" alt="" class="w-10 h-10 object-contain relative z-10" />
-          </div>
-          <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-ideathon-green/15 to-ideathon-cyan/10 backdrop-blur-sm rounded-2xl p-5 border border-ideathon-green/30 glow-green flex-1">
-            <div class="font-titan-one text-ideathon-green text-lg">11:00 AM</div>
-            <div class="font-lilita-one text-white text-base font-bold">Hacking Begins!</div>
-            <div class="font-lilita-one text-white/70 text-sm">24 hours on the clock</div>
-          </div>
-          <div class="hidden md:block md:w-1/2 md:pl-8"></div>
-        </div>
-        
-        <!-- 2:00 PM -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8"></div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 z-10">
-            <img src="/images/coinicon.png" alt="" class="w-full h-full object-contain" />
-          </div>
-          <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8">
-            <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-              <div class="font-titan-one text-ideathon-cyan text-lg">2:00 PM - 8:00 PM</div>
-              <div class="font-lilita-one text-white text-base">Workshops & Mentoring</div>
-              <div class="font-lilita-one text-white/70 text-sm">Design thinking, pitching, tech sessions</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      
-      <!-- Day 2 Header -->
-      <div class="relative flex justify-center my-8">
-        <div class="bg-ideathon-red text-white font-titan-one px-6 py-2 rounded-full shadow-lg z-10">
-          Day 2 - March 1
-        </div>
-      </div>
-      
-      <div class="space-y-6">
-        
-        <!-- 11:00 AM -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
-            <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-              <div class="font-titan-one text-ideathon-red text-lg">11:00 AM</div>
-              <div class="font-lilita-one text-white text-base">Submissions Due</div>
-              <div class="font-lilita-one text-white/70 text-sm">Final project submission deadline</div>
-            </div>
-          </div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 z-10 flex items-center justify-center">
-            <div class="absolute inset-0 bg-white/20 rounded-full border border-white/30"></div>
-            <img src="/images/flagicon.png" alt="" class="w-10 h-10 object-contain relative z-10" />
-          </div>
-          <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1">
-            <div class="font-titan-one text-ideathon-red text-lg">11:00 AM</div>
-            <div class="font-lilita-one text-white text-base">Submissions Due</div>
-            <div class="font-lilita-one text-white/70 text-sm">Final project submission deadline</div>
-          </div>
-          <div class="hidden md:block md:w-1/2 md:pl-8"></div>
-        </div>
-        
-        <!-- 12:00 PM -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8"></div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 z-10">
-            <img src="/images/coinicon.png" alt="" class="w-full h-full object-contain" />
-          </div>
-          <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8">
-            <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-              <div class="font-titan-one text-ideathon-yellow text-lg">12:00 PM</div>
-              <div class="font-lilita-one text-white text-base">Final Presentations</div>
-              <div class="font-lilita-one text-white/70 text-sm">Pitch to judges panel</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 3:00 PM - Awards (highlighted) -->
-        <div class="relative flex items-center gap-6 md:gap-0">
-          <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
-            <div class="bento-card inline-block bg-gradient-to-br from-ideathon-yellow/15 to-ideathon-orange/10 backdrop-blur-sm rounded-2xl p-5 border border-ideathon-yellow/30 glow-gold">
-              <div class="font-titan-one text-ideathon-yellow text-lg">3:00 PM</div>
-              <div class="font-lilita-one text-white text-base font-bold">Awards Ceremony</div>
-              <div class="font-lilita-one text-white/70 text-sm">Winners announced & prizes awarded</div>
-            </div>
-          </div>
-          <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 z-10 flex items-center justify-center">
-            <div class="absolute inset-0 bg-white/20 rounded-full border border-white/30"></div>
-            <img src="/images/trophyicon.png" alt="" class="w-10 h-10 object-contain relative z-10" />
-          </div>
-          <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-ideathon-yellow/15 to-ideathon-orange/10 backdrop-blur-sm rounded-2xl p-5 border border-ideathon-yellow/30 glow-gold flex-1">
-            <div class="font-titan-one text-ideathon-yellow text-lg">3:00 PM</div>
-            <div class="font-lilita-one text-white text-base font-bold">Awards Ceremony</div>
-            <div class="font-lilita-one text-white/70 text-sm">Winners announced & prizes awarded</div>
-          </div>
-          <div class="hidden md:block md:w-1/2 md:pl-8"></div>
-        </div>
-
-      </div>
+      <% end %>
     </div>
   </div>
 </section>
