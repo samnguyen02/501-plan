@@ -70,7 +70,15 @@
       </svg>
       Back to Home
     <% end %>
-    <%= link_to "Sign Out", destroy_admin_session_path, class: "text-white/30 hover:text-white/60 text-xs transition-colors" %>
+    <div class="flex items-center gap-4">
+      <%= link_to "Export Participants CSV",
+                  export_participants_manager_index_path(request.query_parameters.merge(format: :csv)),
+                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
+      <%= link_to "Export Teams CSV",
+                  export_teams_manager_index_path(request.query_parameters.merge(format: :csv)),
+                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
+      <%= link_to "Sign Out", destroy_admin_session_path, class: "text-white/30 hover:text-white/60 text-xs transition-colors" %>
+    </div>
   </div>
 
   <div class="max-w-5xl mx-auto">

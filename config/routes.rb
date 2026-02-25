@@ -7,7 +7,12 @@ Rails.application.routes.draw do
           get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
      end
 
-     resources :manager, only: [ :index, :destroy ], controller: 'manager'
+     resources :manager, only: [ :index, :destroy ], controller: 'manager' do
+          collection do
+               get :export_participants
+               get :export_teams
+          end
+     end
 
      resources :registered_attendees do
           collection do
