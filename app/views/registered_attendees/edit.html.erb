@@ -1,10 +1,217 @@
-<% content_for :title, "Editing registered attendee" %>
+<% content_for :title, "Edit Attendee - TAMU Ideathon 2026" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing registered attendee</h1>
+<% content_for :head do %>
+<style>
+  .reg-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .reg-input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s ease;
+  }
+  .reg-input:focus {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+    outline: none;
+  }
+  .reg-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+  .reg-radio {
+    accent-color: #FFD700;
+  }
+  .btn-submit {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+  .btn-submit:hover {
+    background: rgba(255, 215, 0, 0.25);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+  }
+  .divider {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+</style>
+<% end %>
 
-  <%= render "form", registered_attendee: @registered_attendee %>
+<%
+  # Determine initial team selection state
+  current_team_choice = if params[:team_choice].present?
+    params[:team_choice]
+  elsif @registered_attendee.team.nil? || @registered_attendee.team&.unassigned
+    "unassigned"
+  else
+    "existing"
+  end
+  current_team_id = params[:existing_team_id] || (@registered_attendee.team_id&.to_s if current_team_choice == "existing")
+%>
 
-  <%= link_to "Show this registered attendee", @registered_attendee, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to registered attendees", registered_attendees_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+<div class="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+  <div class="max-w-lg mx-auto">
+    <!-- Back link -->
+    <div class="mb-6 text-center">
+      <%= link_to manager_index_path, class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Manager
+      <% end %>
+    </div>
+
+    <!-- Edit card -->
+    <div class="reg-card rounded-2xl p-6 sm:p-8">
+      <h1 class="font-urban-blocker text-3xl sm:text-4xl text-ideathon-yellow tracking-wide text-center mb-1">
+        EDIT ATTENDEE
+      </h1>
+      <p class="text-white/40 text-sm text-center mb-8">
+        <%= @registered_attendee.attendee_name %>
+      </p>
+
+      <!-- Errors -->
+      <% if @registered_attendee.errors.any? %>
+        <div class="mb-6 rounded-lg px-4 py-3 text-sm text-red-400" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25);">
+          <p class="font-semibold mb-1"><%= pluralize(@registered_attendee.errors.count, "error") %> prevented saving:</p>
+          <ul class="list-disc list-inside space-y-0.5">
+            <% @registered_attendee.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @registered_attendee, local: true do |f| %>
+        <%= f.hidden_field :ideathon_year_id %>
+        <input type="hidden" name="from" value="manager">
+
+        <!-- Attendee Info -->
+        <h2 class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-4">Attendee Info</h2>
+
+        <div class="space-y-4">
+          <div>
+            <%= f.label :attendee_name, "Name", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.text_field :attendee_name,
+              required: true,
+              placeholder: "Full name",
+              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+          </div>
+
+          <div>
+            <%= f.label :attendee_phone, "Phone", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.telephone_field :attendee_phone,
+              required: true,
+              placeholder: "e.g., 979-555-1234",
+              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+          </div>
+
+          <div>
+            <%= f.label :attendee_email, "Email", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.email_field :attendee_email,
+              required: true,
+              placeholder: "name@email.com",
+              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+          </div>
+
+          <div>
+            <%= f.label :attendee_major, "Major", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.text_field :attendee_major,
+              required: true,
+              placeholder: "e.g., Computer Science",
+              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+          </div>
+
+          <div>
+            <%= f.label :attendee_class, "Classification", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.text_field :attendee_class,
+              required: true,
+              placeholder: "e.g., Junior",
+              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+          </div>
+        </div>
+
+        <hr class="divider my-8">
+
+        <!-- Team Selection -->
+        <h2 class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-4">Team</h2>
+
+        <div class="space-y-4">
+          <!-- Unassigned -->
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="team_choice" value="unassigned"
+                   class="reg-radio mt-0.5"
+                   <%= current_team_choice == "unassigned" ? "checked" : "" %>>
+            <div>
+              <span class="text-white text-sm">No team (unassigned)</span>
+              <p class="text-white/30 text-xs mt-0.5">Attendee will be in the unassigned pool</p>
+            </div>
+          </label>
+
+          <!-- Existing team -->
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="team_choice" value="existing"
+                   class="reg-radio mt-0.5"
+                   <%= current_team_choice == "existing" ? "checked" : "" %>>
+            <div class="flex-1">
+              <span class="text-white text-sm">Assign to existing team</span>
+              <p class="text-white/30 text-xs mt-0.5 mb-2">Pick a team (max 4 per team)</p>
+              <select name="existing_team_id" id="existing_team_select"
+                      class="reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm">
+                <option value="">-- Select a team --</option>
+              </select>
+            </div>
+          </label>
+
+          <!-- New team -->
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="team_choice" value="new"
+                   class="reg-radio mt-0.5"
+                   <%= current_team_choice == "new" ? "checked" : "" %>>
+            <div class="flex-1">
+              <span class="text-white text-sm">Move to new team</span>
+              <p class="text-white/30 text-xs mt-0.5 mb-2">Enter a name for the new team</p>
+              <input type="text" name="new_team_name" id="new_team_name"
+                     value="<%= params[:new_team_name] %>"
+                     placeholder="Team name"
+                     class="reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm">
+            </div>
+          </label>
+        </div>
+
+        <%= f.hidden_field :team_id, value: "" %>
+
+        <!-- Submit -->
+        <div class="mt-8">
+          <%= f.submit "Save Changes",
+            class: "btn-submit w-full rounded-xl px-6 py-4 text-ideathon-yellow font-semibold text-base cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const yearId = document.querySelector('input[name="registered_attendee[ideathon_year_id]"]').value;
+  const teamSelect = document.getElementById('existing_team_select');
+  const currentTeamId = <%= raw(current_team_choice == "existing" && current_team_id.present? ? current_team_id.to_s : "null") %>;
+
+  if (yearId) {
+    fetch(`/registered_attendees/teams_for_year?year_id=${yearId}`)
+      .then(response => response.json())
+      .then(teams => {
+        const existingTeams = teams.filter(t => !t.unassigned);
+        let options = '<option value="">-- Select a team --</option>';
+        existingTeams.forEach(team => {
+          const selected = (currentTeamId && team.id === currentTeamId) ? ' selected' : '';
+          options += `<option value="${team.id}"${selected}>${team.name} (${team.member_count}/4 members)</option>`;
+        });
+        teamSelect.innerHTML = options;
+      })
+      .catch(error => console.error('Error loading teams:', error));
+  }
+});
+</script>

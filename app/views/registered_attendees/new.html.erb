@@ -43,11 +43,13 @@
   <div class="max-w-lg mx-auto">
     <!-- Back link -->
     <div class="mb-6 text-center">
-      <%= link_to root_path, class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
+      <% back_path = params[:from] == "manager" ? manager_index_path : root_path %>
+      <% back_label = params[:from] == "manager" ? "Back to Manager" : "Back to Home" %>
+      <%= link_to back_path, class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
-        Back to Home
+        <%= back_label %>
       <% end %>
     </div>
 
@@ -74,6 +76,7 @@
 
       <%= form_with model: @registered_attendee, local: true do |f| %>
         <%= f.hidden_field :ideathon_year_id, value: @registered_attendee.ideathon_year_id %>
+        <input type="hidden" name="from" value="<%= params[:from] %>">
 
         <!-- Attendee Info -->
         <h2 class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-4">Attendee Info</h2>
