@@ -19,7 +19,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        'urban-blocker': ['Urban Blocker', 'Impact', 'sans-serif'],
+        'beachday': ['Beach Day', 'Impact', 'sans-serif'],
         'titan-one': ['Titan One', 'cursive'],
         'lilita-one': ['Lilita One', 'cursive'],
       },
