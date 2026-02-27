@@ -1,10 +1,28 @@
-<% content_for :title, "Editing ideathon event" %>
+<% content_for :title, "Edit Event - TAMU Ideathon 2026" %>
+<% content_for :submit_label, "Update Event" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing ideathon event</h1>
+<div class="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+  <div class="max-w-lg mx-auto">
+    <!-- Back link -->
+    <div class="mb-6">
+      <%= link_to manager_index_path(tab: "events"), class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Manager
+      <% end %>
+    </div>
 
-  <%= render "form", ideathon_event: @ideathon_event %>
+    <!-- Form card -->
+    <div class="event-card rounded-2xl p-6 sm:p-8">
+      <h1 class="font-urban-blocker text-3xl sm:text-4xl text-ideathon-yellow tracking-wide text-center mb-1">
+        EDIT EVENT
+      </h1>
+      <p class="text-white/40 text-sm text-center mb-8">
+        Ideathon 2026
+      </p>
 
-  <%= link_to "Show this ideathon event", @ideathon_event, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to ideathon events", ideathon_events_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+      <%= render "form", ideathon_event: @ideathon_event %>
+    </div>
+  </div>
 </div>

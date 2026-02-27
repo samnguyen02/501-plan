@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
      before_action :authenticate_admin!, unless: :public_page?
 
+     rescue_from ActionController::InvalidAuthenticityToken do
+          reset_session
+          redirect_to new_admin_session_path, alert: "Your session expired or cookies were cleared. Please sign in again."
+     end
+
   private
 
        def public_page?
