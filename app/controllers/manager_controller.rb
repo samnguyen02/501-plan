@@ -13,9 +13,6 @@ class ManagerController < ApplicationController
           @registered_attendees = @registered_attendees.sorted_by_team if @sort == "team"
 
           @teams_count = Team.where(unassigned: false).count
-
-          active_year = IdeathonYear.find_by(is_active: true)
-          @events = active_year ? IdeathonEvent.where(ideathon_year: active_year).order(event_date: :asc, event_time: :asc) : IdeathonEvent.none
      end
 
      def destroy
