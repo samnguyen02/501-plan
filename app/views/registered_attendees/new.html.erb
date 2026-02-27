@@ -57,12 +57,14 @@
 <div class="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
   <div class="max-w-lg mx-auto">
     <!-- Back link -->
+    <% back_path = params[:return_to] == "manager" ? manager_index_path : root_path %>
+    <% back_label = params[:return_to] == "manager" ? "Back to Manager" : "Back to Home" %>
     <div class="mb-6 text-center">
-      <%= link_to root_path, class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
+      <%= link_to back_path, class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
-        Back to Home
+        <%= back_label %>
       <% end %>
     </div>
 
@@ -146,7 +148,8 @@
           <label class="flex items-start gap-3 cursor-pointer">
             <input type="radio" name="team_choice" value="unassigned"
                    class="reg-radio mt-0.5"
-                   <%= (params[:team_choice].blank? || params[:team_choice] == "unassigned") ? "checked" : "" %>>
+                   <%= (params[:team_choice].blank? || params[:team_choice] == "unassigned") ? "checked" : "" %>
+                   onchange="document.getElementById('existing_team_input').classList.add('hidden'); document.getElementById('new_team_input').classList.add('hidden')">
             <div>
               <span class="text-white text-sm">I don't have a team</span>
               <p class="text-white/30 text-xs mt-0.5">You'll be placed in the unassigned pool</p>
@@ -157,18 +160,21 @@
           <label class="flex items-start gap-3 cursor-pointer">
             <input type="radio" name="team_choice" value="existing"
                    class="reg-radio mt-0.5"
-                   <%= params[:team_choice] == "existing" ? "checked" : "" %>>
+                   <%= params[:team_choice] == "existing" ? "checked" : "" %>
+                   onchange="document.getElementById('existing_team_input').classList.toggle('hidden', !this.checked); document.getElementById('new_team_input').classList.add('hidden')">
             <div class="flex-1">
               <span class="text-white text-sm">Join an existing team</span>
-              <p class="text-white/30 text-xs mt-0.5 mb-2">Pick a team with space available (max 4 per team)</p>
-              <% existing_teams = @teams.reject { |t| t.unassigned } %>
-              <%= select_tag "existing_team_id",
-                options_for_select(
-                  [["-- Select a team --", ""]] + existing_teams.map { |t| ["#{t.team_name} (#{t.registered_attendees.count}/4 members)", t.id] },
-                  params[:existing_team_id]
-                ),
-                class: "reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm",
-                id: "existing_team_select" %>
+              <p class="text-white/30 text-xs mt-0.5">Pick a team with space available (max 4 per team)</p>
+              <div id="existing_team_input" class="mt-2 <%= params[:team_choice] == 'existing' ? '' : 'hidden' %>">
+                <% existing_teams = @teams.reject { |t| t.unassigned } %>
+                <%= select_tag "existing_team_id",
+                  options_for_select(
+                    [["-- Select a team --", ""]] + existing_teams.map { |t| ["#{t.team_name} (#{t.registered_attendees.count}/4 members)", t.id] },
+                    params[:existing_team_id]
+                  ),
+                  class: "reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm",
+                  id: "existing_team_select" %>
+              </div>
             </div>
           </label>
 
@@ -176,14 +182,17 @@
           <label class="flex items-start gap-3 cursor-pointer">
             <input type="radio" name="team_choice" value="new"
                    class="reg-radio mt-0.5"
-                   <%= params[:team_choice] == "new" ? "checked" : "" %>>
+                   <%= params[:team_choice] == "new" ? "checked" : "" %>
+                   onchange="document.getElementById('new_team_input').classList.toggle('hidden', !this.checked); document.getElementById('existing_team_input').classList.add('hidden')">
             <div class="flex-1">
               <span class="text-white text-sm">Create a new team</span>
-              <p class="text-white/30 text-xs mt-0.5 mb-2">Enter a unique name for your new team</p>
-              <input type="text" name="new_team_name" id="new_team_name"
-                     value="<%= params[:new_team_name] %>"
-                     placeholder="Team name"
-                     class="reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm">
+              <p class="text-white/30 text-xs mt-0.5">Enter a unique name for your new team</p>
+              <div id="new_team_input" class="mt-2 <%= params[:team_choice] == 'new' ? '' : 'hidden' %>">
+                <input type="text" name="new_team_name" id="new_team_name"
+                       value="<%= params[:new_team_name] %>"
+                       placeholder="Team name"
+                       class="reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm">
+              </div>
             </div>
           </label>
         </div>
@@ -191,7 +200,7 @@
         <%= f.hidden_field :team_id, value: "" %>
 
         <!-- Submit -->
-        <div class="mt-8">
+        <div class="mt-12">
           <%= f.submit "Register",
             class: "btn-submit w-full rounded-xl px-6 py-4 text-ideathon-yellow font-semibold text-base cursor-pointer" %>
         </div>

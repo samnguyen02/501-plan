@@ -1,0 +1,85 @@
+<% content_for :head do %>
+<style>
+  .event-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .event-input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s ease;
+  }
+  .event-input:focus {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+    outline: none;
+  }
+  .event-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+  .btn-submit {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+  .btn-submit:hover {
+    background: rgba(255, 215, 0, 0.25);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+  }
+</style>
+<% end %>
+
+<%= form_with model: ideathon_event do |f| %>
+  <% if ideathon_event.errors.any? %>
+    <div class="mb-6 rounded-lg px-4 py-3 text-sm text-red-400" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25);">
+      <p class="font-semibold mb-1"><%= pluralize(ideathon_event.errors.count, "error") %> prevented saving:</p>
+      <ul class="list-disc list-inside space-y-0.5">
+        <% ideathon_event.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= f.label :event_name, "Event Name", class: "block text-white/50 text-xs mb-1.5" %>
+      <%= f.text_field :event_name,
+          required: true,
+          placeholder: "e.g., Opening Ceremony",
+          class: "event-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :event_date, "Date", class: "block text-white/50 text-xs mb-1.5" %>
+        <%= f.date_field :event_date,
+            required: true,
+            class: "event-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+      </div>
+      <div>
+        <%= f.label :event_time, "Time", class: "block text-white/50 text-xs mb-1.5" %>
+        <%= f.time_field :event_time,
+            required: true,
+            class: "event-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :event_description, "Description", class: "block text-white/50 text-xs mb-1.5" %>
+      <%= f.text_area :event_description,
+          rows: 4,
+          placeholder: "Brief description of the event...",
+          class: "event-input w-full rounded-lg px-4 py-3 text-white text-sm resize-none" %>
+    </div>
+  </div>
+
+  <div class="mt-8 flex gap-3">
+    <%= f.submit yield(:submit_label),
+        class: "btn-submit flex-1 rounded-xl px-6 py-4 text-ideathon-yellow font-semibold text-base cursor-pointer" %>
+    <%= link_to "Cancel", manager_index_path(tab: "events"),
+        class: "px-6 py-4 rounded-xl text-white/40 hover:text-white/70 font-semibold text-base transition-colors text-center" %>
+  </div>
+<% end %>
