@@ -14,6 +14,8 @@ Rails.application.routes.draw do
           end
      end
 
+     resources :ideathon_events, only: [ :new, :create, :edit, :update, :destroy ]
+
      resources :registered_attendees do
           collection do
                get :teams_for_year
