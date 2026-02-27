@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
      resources :manager, only: [ :index, :destroy ], controller: 'manager'
 
+     resources :ideathon_events, only: [ :new, :create, :edit, :update, :destroy ]
+
      resources :registered_attendees do
           collection do
                get :teams_for_year
