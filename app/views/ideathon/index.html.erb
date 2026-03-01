@@ -142,6 +142,38 @@
     0%   { opacity: 1; transform: translateY(0); }
     100% { opacity: 0; transform: translateY(-16px); }
   }
+
+  .leaf {
+    position: fixed;
+    top: -50px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/images/leaf.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .leaf:nth-child(odd) {
+    animation-duration: 6s;
+    left: 20%;
+  }
+
+  .leaf:nth-child(even) {
+    animation-duration: 10s;
+    left: 60%;
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+    }
+  }
 </style>
 <% end %>
 
@@ -346,6 +378,13 @@
 <div class="relative" style="background: url('/images/scrolldown.jpeg'); background-attachment: fixed; background-size: cover; background-position: top center;">
   <!-- Dark overlay to focus on content -->
   <div class="absolute inset-0 bg-ideathon-navy/30 z-0"></div>
+  
+  <div class="leaves relative z-5">
+    <% 10.times do %>
+      <div class="leaf"></div>
+    <% end %>
+  </div>
+  
   <div class="relative z-10">
 
 <%# About / Bento grid section %>
