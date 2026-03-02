@@ -33,7 +33,7 @@ export default class extends Controller {
     }, { threshold: 0.5 })
     
     // Observe all stat number elements
-    const statsElements = this.element.querySelectorAll(".font-urban-blocker")
+    const statsElements = this.element.querySelectorAll(".font-beachday")
     statsElements.forEach(el => observer.observe(el))
   }
 }

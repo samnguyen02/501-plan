@@ -16,6 +16,7 @@ class RegisteredAttendeesController < ApplicationController
      def new
           @registered_attendee = RegisteredAttendee.new
           @registered_attendee.ideathon_year = active_year
+          load_teams
      end
 
   # GET /registered_attendees/1/edit
@@ -169,7 +170,11 @@ class RegisteredAttendeesController < ApplicationController
                  )
 
                  unless team.save
-                      team.errors.full_messages.each { |msg| attendee.errors.add(:base, msg) }
+                      team.errors.full_messages.each do |msg|
+                           # Make error messages more user-friendly
+                           friendly_msg = msg.include?("already exists") ? "Team name \"#{new_team_name}\" already exists" : msg
+                           attendee.errors.add(:base, friendly_msg)
+                      end
                       return
                  end
 
@@ -177,12 +182,15 @@ class RegisteredAttendeesController < ApplicationController
 
             else
               # default to unassigned if not chosen / unassigned radio
-                 unassigned = Team.find_by(ideathon_year_id: attendee.ideathon_year_id, unassigned: true)
-                 if unassigned.nil?
-                      attendee.errors.add(:base, "Unassigned team does not exist for this year. Please contact an admin.")
-                      return
+                 begin
+                      unassigned = Team.find_or_create_by!(ideathon_year_id: attendee.ideathon_year_id, unassigned: true) do |t|
+                           t.team_name = "Unassigned"
+                      end
+                      attendee.team_id = unassigned.id
+                 rescue => e
+                      attendee.errors.add(:base, "Unable to create or find unassigned team. Please contact support.")
+                      nil
                  end
-                 attendee.team_id = unassigned.id
             end
        end
 end

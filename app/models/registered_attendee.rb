@@ -3,6 +3,8 @@ class RegisteredAttendee < ApplicationRecord
      belongs_to :team, optional: true
      validates :ideathon_year_id, :attendee_name, :attendee_phone, :attendee_email, :attendee_major, :attendee_class, presence: true
 
+     validate :phone_must_have_ten_digits
+
      default_scope { order(attendee_name: :asc) }
 
      scope :search_by_name, ->(query) {
@@ -21,4 +23,15 @@ class RegisteredAttendee < ApplicationRecord
      scope :sorted_by_team, -> {
           reorder(nil).left_joins(:team).order("teams.team_name ASC NULLS LAST, attendee_name ASC")
      }
+
+     private
+
+          def phone_must_have_ten_digits
+               if attendee_phone.present?
+                    digit_count = attendee_phone.gsub(/\D/, "").length
+                    if digit_count != 10
+                         errors.add(:attendee_phone, "must contain exactly 10 digits")
+                    end
+               end
+          end
 end

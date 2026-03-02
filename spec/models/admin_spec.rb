@@ -15,30 +15,30 @@ RSpec.describe Admin, type: :model do
           end
 
           it "returns true when email is in the allowlist (comma-separated)" do
-               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu, other@tamu.edu")
-               expect(Admin.allowed_email?("admin@tamu.edu")).to eq(true)
-               expect(Admin.allowed_email?("other@tamu.edu")).to eq(true)
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com, other@example.com")
+               expect(Admin.allowed_email?("admin@example.com")).to eq(true)
+               expect(Admin.allowed_email?("other@example.com")).to eq(true)
           end
 
           it "returns false when email is not in the allowlist" do
-               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu")
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com")
                expect(Admin.allowed_email?("user@gmail.com")).to eq(false)
           end
      end
 
      describe ".from_google" do
-          let(:email) { "admin@tamu.edu" }
+          let(:email) { "admin@example.com" }
           let(:full_name) { "Test Admin" }
           let(:uid) { "123456789" }
           let(:avatar_url) { "https://example.com/avatar.jpg" }
 
           before do
-               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu")
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com")
           end
 
           context "when email is not in allowlist" do
                before do
-                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@tamu.edu")
+                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@example.com")
                end
 
                it "returns nil and does not create an admin" do

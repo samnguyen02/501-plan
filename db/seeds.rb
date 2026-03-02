@@ -11,13 +11,40 @@ year = IdeathonYear.find_or_create_by!(name: "Ideathon 2026") do |y|
      y.is_active = true
 end
 
+# Seed Ideathon Events
+events_data = [
+     # Day 1 Events
+     { event_name: "Check-in & Breakfast", event_description: "Registration and team formation", event_date: Date.new(2026, 4, 11), event_time: Time.parse("09:00") },
+     { event_name: "Opening Ceremony", event_description: "Keynote speaker & rules announcement", event_date: Date.new(2026, 4, 11), event_time: Time.parse("10:00") },
+     { event_name: "Hacking Begins!", event_description: "24 hours on the clock", event_date: Date.new(2026, 4, 11), event_time: Time.parse("11:00") },
+     { event_name: "Workshops & Mentoring", event_description: "Design thinking, pitching, tech sessions", event_date: Date.new(2026, 4, 11), event_time: Time.parse("14:00") },
+     { event_name: "Dinner", event_description: "Dinner for all participants", event_date: Date.new(2026, 4, 11), event_time: Time.parse("18:00") },
+
+     # Day 2 Events
+     { event_name: "Submissions Due", event_description: "Final project submission deadline", event_date: Date.new(2026, 4, 12), event_time: Time.parse("11:00") },
+     { event_name: "Judging Begins", event_description: "Teams present to judges", event_date: Date.new(2026, 4, 12), event_time: Time.parse("12:00") },
+     { event_name: "Lunch", event_description: "Lunch for all participants", event_date: Date.new(2026, 4, 12), event_time: Time.parse("12:30") },
+     { event_name: "Closing Ceremony", event_description: "Award ceremony and recognition", event_date: Date.new(2026, 4, 12), event_time: Time.parse("15:00") }
+]
+
+events_data.each do |event_data|
+     IdeathonEvent.find_or_create_by!(
+          ideathon_year: year,
+          event_name: event_data[:event_name],
+          event_date: event_data[:event_date]
+     ) do |e|
+          e.event_description = event_data[:event_description]
+          e.event_time = event_data[:event_time]
+     end
+end
+
 # Ensure an "Unassigned" team exists (required by registration form)
 unassigned_team = Team.find_or_create_by!(ideathon_year: year, unassigned: true) do |t|
      t.team_name = "Unassigned"
 end
 
 # Create a few named teams
-team_names = ["Alpha Builders", "Code Crusaders", "Pixel Pirates", "Data Dragons"]
+team_names = [ "Alpha Builders", "Code Crusaders", "Pixel Pirates", "Data Dragons" ]
 teams = team_names.map do |name|
      Team.find_or_create_by!(ideathon_year: year, team_name: name) do |t|
           t.unassigned = false
