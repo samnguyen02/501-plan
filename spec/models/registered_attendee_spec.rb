@@ -34,6 +34,77 @@ RSpec.describe RegisteredAttendee, type: :model do
                )
                expect(attendee).to be_valid
           end
+
+          it "rejects names with numbers" do
+               attendee = RegisteredAttendee.new(
+                 ideathon_year: ideathon_year,
+                 team: team,
+                 attendee_name: "Jane1",
+                 attendee_phone: "979-555-1234",
+                 attendee_email: "jane@example.com",
+                 attendee_major: "CS",
+                 attendee_class: "Senior"
+               )
+               expect(attendee).not_to be_valid
+               expect(attendee.errors[:attendee_name]).to include("may only contain letters, spaces, hyphens, apostrophes, and periods")
+          end
+
+          it "normalizes phone numbers and enforces exactly 10 digits" do
+               attendee = RegisteredAttendee.new(
+                 ideathon_year: ideathon_year,
+                 team: team,
+                 attendee_name: "Jane",
+                 attendee_phone: "979-555-1234",
+                 attendee_email: "jane@example.com",
+                 attendee_major: "CS",
+                 attendee_class: "Senior"
+               )
+               expect(attendee).to be_valid
+               attendee.validate
+               expect(attendee.attendee_phone).to eq("9795551234")
+          end
+
+          it "rejects invalid emails with disallowed characters" do
+               attendee = RegisteredAttendee.new(
+                 ideathon_year: ideathon_year,
+                 team: team,
+                 attendee_name: "Jane",
+                 attendee_phone: "979-555-1234",
+                 attendee_email: "bad<email@example.com",
+                 attendee_major: "CS",
+                 attendee_class: "Senior"
+               )
+               expect(attendee).not_to be_valid
+               expect(attendee.errors[:attendee_email]).to be_present
+          end
+
+          it "rejects majors with non-letter characters" do
+               attendee = RegisteredAttendee.new(
+                 ideathon_year: ideathon_year,
+                 team: team,
+                 attendee_name: "Jane",
+                 attendee_phone: "979-555-1234",
+                 attendee_email: "jane@example.com",
+                 attendee_major: "CS-123",
+                 attendee_class: "Senior"
+               )
+               expect(attendee).not_to be_valid
+               expect(attendee.errors[:attendee_major]).to include("may only contain letters")
+          end
+
+          it "rejects classifications with numbers" do
+               attendee = RegisteredAttendee.new(
+                 ideathon_year: ideathon_year,
+                 team: team,
+                 attendee_name: "Jane",
+                 attendee_phone: "979-555-1234",
+                 attendee_email: "jane@example.com",
+                 attendee_major: "CS",
+                 attendee_class: "Senior1"
+               )
+               expect(attendee).not_to be_valid
+               expect(attendee.errors[:attendee_class]).to include("may only contain letters, spaces, and hyphens")
+          end
      end
 
      describe "email acceptance" do
@@ -73,9 +144,9 @@ RSpec.describe RegisteredAttendee, type: :model do
           let(:team_b) { Team.create!(ideathon_year: ideathon_year, team_name: "Team B", unassigned: false) }
 
           before do
-               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Alice", attendee_phone: "1", attendee_email: "a@x.com", attendee_major: "CS", attendee_class: "Sr")
-               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Bob", attendee_phone: "2", attendee_email: "b@x.com", attendee_major: "EE", attendee_class: "Jr")
-               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_b, attendee_name: "Carol", attendee_phone: "3", attendee_email: "c@x.com", attendee_major: "CS", attendee_class: "Sr")
+               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Alice", attendee_phone: "1234567890", attendee_email: "a@x.com", attendee_major: "CS", attendee_class: "Sr")
+               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Bob", attendee_phone: "1234567891", attendee_email: "b@x.com", attendee_major: "EE", attendee_class: "Jr")
+               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_b, attendee_name: "Carol", attendee_phone: "1234567892", attendee_email: "c@x.com", attendee_major: "CS", attendee_class: "Sr")
           end
 
           it "search_by_name filters by name" do

@@ -35,7 +35,10 @@ class RegisteredAttendeesController < ApplicationController
           respond_to do |format|
                if @registered_attendee.errors.any?
                     load_teams
-                    format.html { render :new, status: :unprocessable_entity }
+                    format.html do
+                         flash.now[:alert] = @registered_attendee.errors.full_messages.join(", ")
+                         render :new, status: :unprocessable_entity
+                    end
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
                     format.html { redirect_to success_registered_attendees_path, status: :see_other }

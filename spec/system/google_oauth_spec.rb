@@ -14,12 +14,13 @@ RSpec.describe "Google OAuth sign-in (admin)", type: :system do
      context "when email is on the admin allowlist (pre-validated)" do
           before do
                @orig_allowlist = ENV["ALLOWED_ADMIN_EMAILS"]
-               ENV["ALLOWED_ADMIN_EMAILS"] = "admin@example.com"
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com")
                mock_google_oauth2(email: "admin@example.com", full_name: "Admin User", uid: "123", avatar_url: "https://example.com/a.jpg")
                visit "/admins/auth/google_oauth2/callback"
           end
 
           after do
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_call_original
                if @orig_allowlist.nil?
                     ENV.delete("ALLOWED_ADMIN_EMAILS")
                else
@@ -36,12 +37,13 @@ RSpec.describe "Google OAuth sign-in (admin)", type: :system do
      context "when email is not on the admin allowlist" do
           before do
                @orig_allowlist = ENV["ALLOWED_ADMIN_EMAILS"]
-               ENV["ALLOWED_ADMIN_EMAILS"] = "other@example.com"
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@example.com")
                mock_google_oauth2(email: "user@gmail.com", full_name: "Regular User", uid: "456", avatar_url: nil)
                visit "/admins/auth/google_oauth2/callback"
           end
 
           after do
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_call_original
                if @orig_allowlist.nil?
                     ENV.delete("ALLOWED_ADMIN_EMAILS")
                else
@@ -51,7 +53,8 @@ RSpec.describe "Google OAuth sign-in (admin)", type: :system do
 
           it "does not grant access and shows error about admin privileges" do
                expect(Admin.find_by(email: "user@gmail.com")).to be_nil
-               expect(page).to have_content(/not authorized|authorized|admin/i)
+               expect(page).to have_current_path(new_admin_session_path)
+               expect(page).to have_content("is not authorized as an admin")
           end
      end
 end

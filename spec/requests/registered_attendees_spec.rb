@@ -87,6 +87,25 @@ RSpec.describe "RegisteredAttendees", type: :request do
 
           context "with team_choice existing" do
                it "creates attendee with existing team" do
+                    existing_team = Team.create!(ideathon_year: ideathon_year, team_name: "Existing Team", unassigned: false)
+
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "New Member",
+                        attendee_phone: "979-555-0000",
+                        attendee_email: "new@example.com",
+                        attendee_major: "CS",
+                        attendee_class: "Freshman"
+                      },
+                      team_choice: "existing",
+                      existing_team_id: existing_team.id
+                    }
+                    expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
+                    expect(RegisteredAttendee.last.team_id).to eq(existing_team.id)
+               end
+
+               it "does not allow joining the unassigned pool via existing team" do
                     params = {
                       registered_attendee: {
                         ideathon_year_id: ideathon_year.id,
@@ -99,8 +118,41 @@ RSpec.describe "RegisteredAttendees", type: :request do
                       team_choice: "existing",
                       existing_team_id: unassigned_team.id
                     }
-                    expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
-                    expect(RegisteredAttendee.last.team_id).to eq(unassigned_team.id)
+                    expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
+                    expect(flash[:alert]).to match(/unassigned pool/i)
+               end
+
+               it "does not allow joining a full team" do
+                    full_team = Team.create!(ideathon_year: ideathon_year, team_name: "Full Team", unassigned: false)
+                    4.times do |i|
+                         RegisteredAttendee.create!(
+                           ideathon_year: ideathon_year,
+                           team: full_team,
+                           attendee_name: "Member #{('A'.ord + i).chr}",
+                           attendee_phone: "97955512#{format('%02d', i)}",
+                           attendee_email: "m#{i}@example.com",
+                           attendee_major: "CS",
+                           attendee_class: "Senior"
+                         )
+                    end
+
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "Extra Member",
+                        attendee_phone: "979-555-9999",
+                        attendee_email: "extra@example.com",
+                        attendee_major: "CS",
+                        attendee_class: "Senior"
+                      },
+                      team_choice: "existing",
+                      existing_team_id: full_team.id
+                    }
+
+                    expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
+                    expect(flash[:alert]).to match(/already full/i)
                end
           end
 
@@ -139,6 +191,23 @@ RSpec.describe "RegisteredAttendees", type: :request do
                     }
                     expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
                     expect(RegisteredAttendee.last.team.team_name).to eq("New Team Name")
+               end
+
+               it "re-renders when new team name is blank" do
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "Captain",
+                        attendee_phone: "979-555-9999",
+                        attendee_email: "cap@example.com",
+                        attendee_major: "CS",
+                        attendee_class: "Senior"
+                      },
+                      team_choice: "new",
+                      new_team_name: ""
+                    }
+                    expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
                end
           end
      end
