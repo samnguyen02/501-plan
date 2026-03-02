@@ -91,14 +91,16 @@
 </head>
 <body class="min-h-screen bg-ideathon-navy font-lilita-one text-white antialiased overflow-x-hidden m-0 p-0">
 
-  <% if flash[:alert].present? %>
-    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg text-sm" style="background: rgba(220, 38, 38, 0.9); color: white !important;">
-      <%= flash[:alert] %>
-    </div>
-  <% elsif flash[:success].present? %>
-    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg text-sm" style="background: rgba(22, 163, 74, 0.9); color: white !important;">
-      <%= flash[:success] %>
-    </div>
+  <% unless controller_path == "admins/sessions" %>
+    <% if flash[:alert].present? %>
+      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg text-sm" style="background: rgba(220, 38, 38, 0.9); color: white !important;">
+        <%= flash[:alert] %>
+      </div>
+    <% elsif flash[:success].present? %>
+      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg text-sm" style="background: rgba(22, 163, 74, 0.9); color: white !important;">
+        <%= flash[:success] %>
+      </div>
+    <% end %>
   <% end %>
 
   <main class="m-0 p-0">

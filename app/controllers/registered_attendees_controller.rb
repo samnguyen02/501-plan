@@ -35,7 +35,10 @@ class RegisteredAttendeesController < ApplicationController
           respond_to do |format|
                if @registered_attendee.errors.any?
                     load_teams
-                    format.html { render :new, status: :unprocessable_entity }
+                    format.html do
+                         flash.now[:alert] = @registered_attendee.errors.full_messages.join(", ")
+                         render :new, status: :unprocessable_entity
+                    end
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
                     format.html { redirect_to success_registered_attendees_path, status: :see_other }
@@ -152,6 +155,17 @@ class RegisteredAttendeesController < ApplicationController
                  team = Team.find_by(id: existing_team_id.to_i, ideathon_year_id: attendee.ideathon_year_id)
                  if team.nil?
                       attendee.errors.add(:base, "Selected team is invalid for this year.")
+                      return
+                 end
+
+                 if team.unassigned?
+                      attendee.errors.add(:base, "Cannot join the unassigned pool directly. Please choose a real team or leave blank.")
+                      return
+                 end
+
+                 current_member_count = team.registered_attendees.where.not(id: attendee.id).count
+                 if current_member_count >= 4
+                      attendee.errors.add(:base, "Team \"#{team.team_name}\" is already full (4/4 members). Please choose a different team or create a new one.")
                       return
                  end
 
