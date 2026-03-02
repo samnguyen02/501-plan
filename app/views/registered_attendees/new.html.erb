@@ -143,6 +143,8 @@
             <%= f.text_field :attendee_name,
               required: true,
               placeholder: "Your full name",
+              pattern: "[a-zA-Z\\s\\-'\\.]+" ,
+              title: "Name may only contain letters, spaces, hyphens, apostrophes, and periods",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
 
@@ -150,7 +152,11 @@
             <%= f.label :attendee_phone, "Phone", class: "block text-white/50 text-xs mb-1.5" %>
             <%= f.telephone_field :attendee_phone,
               required: true,
-              placeholder: "e.g., 979-555-1234 (10 digits)",
+              placeholder: "e.g., 9795551234",
+              pattern: "\\d{10}",
+              maxlength: 10,
+              title: "Must be exactly 10 numeric digits",
+              inputmode: "numeric",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
             <p class="text-white/30 text-xs mt-1">Must be exactly 10 digits</p>
           </div>
@@ -159,7 +165,9 @@
             <%= f.label :attendee_email, "Email", class: "block text-white/50 text-xs mb-1.5" %>
             <%= f.email_field :attendee_email,
               required: true,
-              placeholder: "name@email.com",
+              placeholder: "name@tamu.edu",
+              pattern: "[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}",
+              title: "Must be a valid email address using only letters, numbers, and . _ % + - @",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
 
@@ -168,6 +176,8 @@
             <%= f.text_field :attendee_major,
               required: true,
               placeholder: "e.g., Computer Science",
+              pattern: "[a-zA-Z\\s\\-\\&\\/\\,\\.]+",
+              title: "Major may only contain letters, spaces, and basic punctuation (- & / , .)",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
 
@@ -176,6 +186,8 @@
             <%= f.text_field :attendee_class,
               required: true,
               placeholder: "e.g., Junior",
+              pattern: "[a-zA-Z\\s\\-]+",
+              title: "Classification may only contain letters, spaces, and hyphens",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
         </div>
@@ -250,3 +262,44 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    // Block digits from name field
+    var nameField = document.getElementById("registered_attendee_attendee_name");
+    if (nameField) {
+      nameField.addEventListener("input", function() {
+        var pos = this.selectionStart;
+        var cleaned = this.value.replace(/[^a-zA-Z\s\-'\.]/g, "");
+        if (cleaned !== this.value) {
+          this.value = cleaned;
+          this.setSelectionRange(pos - 1, pos - 1);
+        }
+      });
+    }
+
+    // Block non-digits from phone field and cap at 10
+    var phoneField = document.getElementById("registered_attendee_attendee_phone");
+    if (phoneField) {
+      phoneField.addEventListener("input", function() {
+        var pos = this.selectionStart;
+        var cleaned = this.value.replace(/\D/g, "").slice(0, 10);
+        if (cleaned !== this.value) {
+          this.value = cleaned;
+          this.setSelectionRange(pos - 1, pos - 1);
+        }
+      });
+      phoneField.addEventListener("keydown", function(e) {
+        var allowed = ["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Tab","Home","End"];
+        if (allowed.includes(e.key)) return;
+        if (e.key >= "0" && e.key <= "9") {
+          if (this.value.replace(/\D/g, "").length >= 10 && this.selectionStart === this.selectionEnd) {
+            e.preventDefault();
+          }
+          return;
+        }
+        e.preventDefault();
+      });
+    }
+  })();
+</script>

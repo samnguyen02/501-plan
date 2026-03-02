@@ -155,6 +155,17 @@ class RegisteredAttendeesController < ApplicationController
                       return
                  end
 
+                 if team.unassigned?
+                      attendee.errors.add(:base, "Cannot join the unassigned pool directly. Please choose a real team or leave blank.")
+                      return
+                 end
+
+                 current_member_count = team.registered_attendees.where.not(id: attendee.id).count
+                 if current_member_count >= 4
+                      attendee.errors.add(:base, "Team \"#{team.team_name}\" is already full (4/4 members). Please choose a different team or create a new one.")
+                      return
+                 end
+
                  attendee.team_id = team.id
 
             when "new"
