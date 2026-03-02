@@ -16,29 +16,33 @@
     color: rgb(158, 194, 191) !important;
   }
   body {
-    background-color: white;
+    background-color: rgb(255, 249, 246);
     color: rgb(127, 85, 81);
   }
   .glass-card {
     background: rgb(252, 240, 228);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(238, 136, 138, 0.15);
   }
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(158, 194, 191, 0.3);
+    background: rgb(250, 235, 222);
+    border-color: rgba(158, 194, 191, 0.4);
   }
   .glass-search {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(158, 194, 191, 0.45);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
-  .glass-search:focus {
-    border-color: rgba(158, 194, 191, 0.5);
-    box-shadow: 0 0 20px rgba(158, 194, 191, 0.15);
+  .glass-search:focus-within {
+    border-color: rgba(158, 194, 191, 0.7);
+    box-shadow: 0 0 0 3px rgba(158, 194, 191, 0.15);
+  }
+  .glass-search input {
     outline: none;
+    box-shadow: none;
+  }
+  .glass-search input:focus {
+    outline: none;
+    box-shadow: none;
   }
   .btn-edit {
     background: rgba(158, 194, 191, 0.08);
@@ -90,10 +94,6 @@
   .tab-active { background: rgba(158,194,191,0.12) !important; border-color: rgba(158,194,191,0.35) !important; color: rgb(158, 194, 191) !important; }
   .search-icon-crisp {
     color: rgb(127, 85, 81) !important;
-    opacity: 1 !important;
-    filter: none !important;
-    -webkit-filter: none !important;
-    transform: translateY(-50%) translateZ(0);
   }
   [data-tooltip] { position: relative; }
   [data-tooltip]::before {
@@ -196,13 +196,15 @@
         <!-- Search -->
         <%= form_with url: manager_index_path, method: :get, data: { controller: "manager-search", turbo_frame: "attendees_list" }, class: "flex-1" do |f| %>
           <%= f.hidden_field :sort, value: @sort %>
-          <div class="relative">
+          <div class="glass-search outlined-control rounded-xl flex items-center gap-2 px-4 py-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="search-icon-crisp h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             <%= f.text_field :query,
                 value: params[:query],
                 placeholder: "Search by name or team...",
                 autocomplete: "off",
-                class: "w-full glass-search outlined-control rounded-xl pr-4 py-3 text-white placeholder-white/30 text-sm",
-                style: "padding-left: 2.5rem; position: relative; z-index: 1;",
+                class: "flex-1 bg-transparent outline-none text-sm",
                 data: { manager_search_target: "input", action: "input->manager-search#search" } %>
           </div>
         <% end %>
