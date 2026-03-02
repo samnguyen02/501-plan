@@ -140,7 +140,6 @@ RSpec.describe "RegisteredAttendees", type: :request do
                     expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
                     expect(RegisteredAttendee.last.team.team_name).to eq("New Team Name")
                end
-
           end
      end
 
@@ -251,7 +250,6 @@ RSpec.describe "RegisteredAttendees", type: :request do
                     }
                     expect(response).to have_http_status(422)
                end
-
           end
      end
 end

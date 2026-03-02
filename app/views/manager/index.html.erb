@@ -197,15 +197,12 @@
         <%= form_with url: manager_index_path, method: :get, data: { controller: "manager-search", turbo_frame: "attendees_list" }, class: "flex-1" do |f| %>
           <%= f.hidden_field :sort, value: @sort %>
           <div class="relative">
-            <svg xmlns="http://www.w3.org/2000/svg" class="search-icon-crisp h-5 w-5 absolute left-4 top-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
             <%= f.text_field :query,
                 value: params[:query],
                 placeholder: "Search by name or team...",
                 autocomplete: "off",
-              class: "w-full glass-search outlined-control rounded-xl pr-4 py-3 text-white placeholder-white/30 text-sm",
-                style: "padding-left: 3.25rem;",
+                class: "w-full glass-search outlined-control rounded-xl pr-4 py-3 text-white placeholder-white/30 text-sm",
+                style: "padding-left: 2.5rem; position: relative; z-index: 1;",
                 data: { manager_search_target: "input", action: "input->manager-search#search" } %>
           </div>
         <% end %>

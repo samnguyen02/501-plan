@@ -73,10 +73,10 @@ class ManagerController < ApplicationController
             sort = params[:sort] == "name" ? "name" : "team"
 
             scope = if params[:query].present?
-                          RegisteredAttendee.search_by_name_or_team(params[:query])
-                     else
-                          RegisteredAttendee.all
-                     end
+                 RegisteredAttendee.search_by_name_or_team(params[:query])
+            else
+                 RegisteredAttendee.all
+            end
 
             scope = scope.sorted_by_team if sort == "team"
             scope
