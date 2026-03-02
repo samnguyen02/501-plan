@@ -9,13 +9,13 @@
   .registration-page input::placeholder,
   .registration-page textarea::placeholder,
   .registration-page select::placeholder {
-    color: rgba(127, 85, 81, 0.3) !important;
+    color: rgba(127, 85, 81, 0.5) !important;
   }
   .registration-page input::-webkit-input-placeholder {
-    color: rgba(127, 85, 81, 0.3) !important;
+    color: rgba(127, 85, 81, 0.5) !important;
   }
   .registration-page input::-moz-placeholder {
-    color: rgba(127, 85, 81, 0.3) !important;
+    color: rgba(127, 85, 81, 0.5) !important;
   }
   .registration-page .register-title {
     color: rgb(238, 136, 138) !important;
@@ -42,7 +42,7 @@
   }
   .reg-input {
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(238, 136, 138, 0.3);
     transition: all 0.2s ease;
   }
   .reg-input:focus {
@@ -51,11 +51,11 @@
     outline: none;
   }
   .reg-input::placeholder {
-    color: rgba(127, 85, 81, 0.3) !important;
+    color: rgba(127, 85, 81, 0.5) !important;
   }
   input.reg-input::placeholder,
   textarea.reg-input::placeholder {
-    color: rgba(127, 85, 81, 0.3) !important;
+    color: rgba(127, 85, 81, 0.5) !important;
   }
   .reg-radio {
     accent-color: rgb(158, 194, 191);
@@ -115,7 +115,7 @@
       <h1 class="register-title font-beachday text-3xl sm:text-4xl tracking-wide text-center mb-1" style="color: rgb(238, 136, 138);">
         REGISTER
       </h1>
-      <p class="text-white/40 text-sm text-center mb-8">
+      <p class="text-sm text-center mb-8" style="color: rgba(127, 85, 81, 0.7);">
         Ideathon 2026
       </p>
 
@@ -135,11 +135,11 @@
         <%= f.hidden_field :ideathon_year_id, value: @registered_attendee.ideathon_year_id, id: "ideathon_year_id" %>
 
         <!-- Attendee Info -->
-        <h2 class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-4">Attendee Info</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wider mb-4" style="color: rgb(215, 129, 112);">Attendee Info</h2>
 
         <div class="space-y-4">
           <div>
-            <%= f.label :attendee_name, "Name", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.label :attendee_name, "Name", class: "block text-xs mb-1.5 font-semibold", style: "color: rgb(127, 85, 81);" %>
             <%= f.text_field :attendee_name,
               required: true,
               placeholder: "Your full name",
@@ -149,7 +149,7 @@
           </div>
 
           <div>
-            <%= f.label :attendee_phone, "Phone", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.label :attendee_phone, "Phone", class: "block text-xs mb-1.5 font-semibold", style: "color: rgb(127, 85, 81);" %>
             <%= f.telephone_field :attendee_phone,
               required: true,
               placeholder: "e.g., 9795551234",
@@ -158,11 +158,11 @@
               title: "Must be exactly 10 numeric digits",
               inputmode: "numeric",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
-            <p class="text-white/30 text-xs mt-1">Must be exactly 10 digits</p>
+            <p class="text-xs mt-1" style="color: rgba(127, 85, 81, 0.6);">Must be exactly 10 digits</p>
           </div>
 
           <div>
-            <%= f.label :attendee_email, "Email", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.label :attendee_email, "Email", class: "block text-xs mb-1.5 font-semibold", style: "color: rgb(127, 85, 81);" %>
             <%= f.email_field :attendee_email,
               required: true,
               placeholder: "name@tamu.edu",
@@ -172,17 +172,17 @@
           </div>
 
           <div>
-            <%= f.label :attendee_major, "Major", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.label :attendee_major, "Major", class: "block text-xs mb-1.5 font-semibold", style: "color: rgb(127, 85, 81);" %>
             <%= f.text_field :attendee_major,
               required: true,
               placeholder: "e.g., Computer Science",
-              pattern: "[a-zA-Z\\s\\-\\&\\/\\,\\.]+",
-              title: "Major may only contain letters, spaces, and basic punctuation (- & / , .)",
+              pattern: "[a-zA-Z\\s]+",
+              title: "Major may only contain letters",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
 
           <div>
-            <%= f.label :attendee_class, "Classification", class: "block text-white/50 text-xs mb-1.5" %>
+            <%= f.label :attendee_class, "Classification", class: "block text-xs mb-1.5 font-semibold", style: "color: rgb(127, 85, 81);" %>
             <%= f.text_field :attendee_class,
               required: true,
               placeholder: "e.g., Junior",
@@ -195,7 +195,7 @@
         <hr class="divider my-8">
 
         <!-- Team Selection -->
-        <h2 class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-4">Team</h2>
+        <h2 class="text-sm font-semibold uppercase tracking-wider mb-4" style="color: rgb(215, 129, 112);">Team</h2>
 
         <div class="space-y-4">
           <!-- Unassigned -->
@@ -221,13 +221,20 @@
               <p class="subtle-text text-xs mt-0.5">Pick a team with space available (max 4 per team)</p>
               <div id="existing_team_input" class="mt-2 <%= params[:team_choice] == 'existing' ? '' : 'hidden' %>">
                 <% existing_teams = @teams.reject { |t| t.unassigned } %>
-                <%= select_tag "existing_team_id",
-                  options_for_select(
-                    [["-- Select a team --", ""]] + existing_teams.map { |t| ["#{t.team_name} (#{t.registered_attendees.count}/4 members)", t.id] },
-                    params[:existing_team_id]
-                  ),
-                  class: "reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm",
-                  id: "existing_team_select" %>
+                <select name="existing_team_id" id="existing_team_select"
+                        class="reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm">
+                  <option value="">-- Select a team --</option>
+                  <% existing_teams.each do |t| %>
+                    <% count = t.registered_attendees.count %>
+                    <% full = count >= 4 %>
+                    <option value="<%= t.id %>"
+                            <%= "selected" if params[:existing_team_id].to_s == t.id.to_s %>
+                            <%= "disabled" if full %>
+                            style="<%= full ? 'color: rgba(127,85,81,0.35);' : '' %>">
+                      <%= full ? "#{t.team_name} (Full)" : "#{t.team_name} (#{count}/4 members)" %>
+                    </option>
+                  <% end %>
+                </select>
               </div>
             </div>
           </label>

@@ -65,8 +65,8 @@ class RegisteredAttendee < ApplicationRecord
 
           def major_must_be_valid
                return unless attendee_major.present?
-               unless attendee_major =~ /\A[a-zA-Z\s\-\&\/\,\.]+\z/
-                    errors.add(:attendee_major, "may only contain letters, spaces, and basic punctuation (- & / , .)")
+               unless attendee_major =~ /\A[a-zA-Z\s]+\z/
+                    errors.add(:attendee_major, "may only contain letters")
                end
           end
 
