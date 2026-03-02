@@ -80,7 +80,7 @@ RSpec.describe RegisteredAttendee, type: :model do
 
           it "search_by_name filters by name" do
                result = RegisteredAttendee.search_by_name("Alice")
-               expect(result.map(&:attendee_name)).to eq(["Alice"])
+               expect(result.map(&:attendee_name)).to eq([ "Alice" ])
           end
 
           it "search_by_name_or_team filters by name or team name" do
