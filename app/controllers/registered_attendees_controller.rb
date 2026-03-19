@@ -2,7 +2,7 @@ class RegisteredAttendeesController < ApplicationController
      skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
      before_action :set_registered_attendee, only: %i[show edit update destroy]
      before_action :load_teams, only: %i[new create edit update]
-     layout "ideathon", only: %i[new create success]
+     layout "ideathon", only: %i[new create success edit update]
 
   # GET /registered_attendees
      def index
@@ -38,7 +38,7 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :new, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
-                    format.html { redirect_to success_registered_attendees_path, status: :see_other }
+                    format.html { redirect_to params[:return_to] == "manager" ? manager_index_path : success_registered_attendees_path, status: :see_other }
                     format.json { render :show, status: :created, location: @registered_attendee }
                else
                     load_teams
@@ -59,7 +59,7 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :edit, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
-                    format.html { redirect_to @registered_attendee, notice: "Registered attendee was successfully updated.", status: :see_other }
+                    format.html { redirect_to manager_index_path, notice: "Attendee updated successfully.", status: :see_other }
                     format.json { render :show, status: :ok, location: @registered_attendee }
                else
                     load_teams

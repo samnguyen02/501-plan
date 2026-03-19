@@ -4,6 +4,7 @@ class RegisteredAttendee < ApplicationRecord
      validates :ideathon_year_id, :attendee_name, :attendee_phone, :attendee_email, :attendee_major, :attendee_class, presence: true
 
      validate :phone_must_have_ten_digits
+     validate :email_must_be_tamu
 
      default_scope { order(attendee_name: :asc) }
 
@@ -25,6 +26,12 @@ class RegisteredAttendee < ApplicationRecord
      }
 
      private
+
+          def email_must_be_tamu
+               if attendee_email.present? && !attendee_email.end_with?("@tamu.edu")
+                    errors.add(:attendee_email, "must be a @tamu.edu address")
+               end
+          end
 
           def phone_must_have_ten_digits
                if attendee_phone.present?
