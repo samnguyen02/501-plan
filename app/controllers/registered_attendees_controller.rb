@@ -2,7 +2,7 @@ class RegisteredAttendeesController < ApplicationController
      skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
      before_action :set_registered_attendee, only: %i[show edit update destroy]
      before_action :load_teams, only: %i[new create edit update]
-     layout "ideathon", only: %i[new create success]
+     layout "ideathon", only: %i[new create success edit update]
 
   # GET /registered_attendees
      def index
