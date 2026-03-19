@@ -38,7 +38,7 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :new, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
-                    format.html { redirect_to success_registered_attendees_path, status: :see_other }
+                    format.html { redirect_to params[:return_to] == "manager" ? manager_index_path : success_registered_attendees_path, status: :see_other }
                     format.json { render :show, status: :created, location: @registered_attendee }
                else
                     load_teams

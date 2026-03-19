@@ -137,7 +137,12 @@
 
           <div>
             <%= f.label :attendee_email, "Email", class: "block text-white/50 text-xs mb-1.5" %>
-            <%= f.email_field :attendee_email, required: true, class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+            <%= f.email_field :attendee_email,
+              required: true,
+              placeholder: "name@tamu.edu",
+              pattern: ".+@tamu\\.edu",
+              title: "Must be a @tamu.edu email address",
+              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
 
           <div>
@@ -147,7 +152,10 @@
 
           <div>
             <%= f.label :attendee_class, "Classification", class: "block text-white/50 text-xs mb-1.5" %>
-            <%= f.text_field :attendee_class, required: true, class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+            <%= f.select :attendee_class,
+              [["Freshman", "Freshman"], ["Sophomore", "Sophomore"], ["Junior", "Junior"], ["Senior", "Senior"], ["Other", "Other"]],
+              { prompt: "Select classification" },
+              required: true, class: "reg-input w-full rounded-lg px-4 py-3 text-sm select.reg-input" %>
           </div>
         </div>
 

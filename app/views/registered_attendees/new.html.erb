@@ -133,6 +133,7 @@
 
       <%= form_with model: @registered_attendee, local: true do |f| %>
         <%= f.hidden_field :ideathon_year_id, value: @registered_attendee.ideathon_year_id, id: "ideathon_year_id" %>
+        <%= hidden_field_tag :return_to, params[:return_to] %>
 
         <!-- Attendee Info -->
         <h2 class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-4">Attendee Info</h2>
@@ -159,7 +160,9 @@
             <%= f.label :attendee_email, "Email", class: "block text-white/50 text-xs mb-1.5" %>
             <%= f.email_field :attendee_email,
               required: true,
-              placeholder: "name@email.com",
+              placeholder: "name@tamu.edu",
+              pattern: ".+@tamu\\.edu",
+              title: "Must be a @tamu.edu email address",
               class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
           </div>
 
@@ -173,10 +176,10 @@
 
           <div>
             <%= f.label :attendee_class, "Classification", class: "block text-white/50 text-xs mb-1.5" %>
-            <%= f.text_field :attendee_class,
-              required: true,
-              placeholder: "e.g., Junior",
-              class: "reg-input w-full rounded-lg px-4 py-3 text-white text-sm" %>
+            <%= f.select :attendee_class,
+              [["Freshman", "Freshman"], ["Sophomore", "Sophomore"], ["Junior", "Junior"], ["Senior", "Senior"], ["Other", "Other"]],
+              { prompt: "Select classification" },
+              required: true, class: "reg-input w-full rounded-lg px-4 py-3 text-sm select.reg-input" %>
           </div>
         </div>
 
