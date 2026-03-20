@@ -30,7 +30,7 @@ class RegisteredAttendeesController < ApplicationController
           @registered_attendee = RegisteredAttendee.new(registered_attendee_params)
           @registered_attendee.ideathon_year = active_year
 
-          apply_team_selection!(@registered_attendee)
+          apply_team_selection!(@registered_attendee, enforce_limit: true)
 
           respond_to do |format|
                if @registered_attendee.errors.any?
@@ -131,7 +131,7 @@ class RegisteredAttendeesController < ApplicationController
   # params[:team_choice] = "existing" | "unassigned" | "new"
   # params[:existing_team_id] = team id (string)
   # params[:new_team_name] = name (string)
-       def apply_team_selection!(attendee)
+       def apply_team_selection!(attendee, enforce_limit: false)
          # year must be selected first
             if attendee.ideathon_year_id.blank?
                  attendee.errors.add(:ideathon_year_id, "must be selected")
@@ -152,6 +152,11 @@ class RegisteredAttendeesController < ApplicationController
                  team = Team.find_by(id: existing_team_id.to_i, ideathon_year_id: attendee.ideathon_year_id)
                  if team.nil?
                       attendee.errors.add(:base, "Selected team is invalid for this year.")
+                      return
+                 end
+
+                 if enforce_limit && team.registered_attendees.count >= 4
+                      attendee.errors.add(:base, "That team is already full (max 4 members).")
                       return
                  end
 
