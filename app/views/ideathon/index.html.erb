@@ -40,16 +40,16 @@
 
   /* Glass Effects */
   .glass {
-    background: rgba(249, 225, 143, 0.30);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(249, 225, 143, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     transform: translateZ(0);
   }
 
   .glass-solid {
-    background: rgba(249, 225, 143, 0.40);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
@@ -83,12 +83,12 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 30px rgba(255,215,0,0.3);
+    box-shadow: 0 0 30px rgba(238, 136, 138, 0.3);
   }
 
   /* Glows */
   .glow-gold {
-    box-shadow: 0 0 15px rgba(255,215,0,0.2);
+    box-shadow: 0 0 15px rgba(238, 136, 138, 0.2);
   }
 
   .glow-green {
@@ -125,7 +125,7 @@
   }
 
   .nav-link:hover {
-    color: #FFD700;
+    color: rgb(238, 136, 138);
     background-color: rgba(255, 255, 255, 0.05);
   }
 
@@ -309,7 +309,7 @@
   <!-- Background Image - fixed to extend behind nav -->
   <div class="fixed inset-0 z-0">
     <img src="/images/background.jpeg" 
-         alt="Subway Surfers" 
+         alt="Sakura Background"
          class="w-full h-full object-cover object-center"
          loading="eager" />
   </div>
@@ -338,8 +338,8 @@
             IDEATHON
           </span>
           <!-- Year Badge - positioned at bottom right of IDEATHON -->
-          <span class="absolute bottom-0 right-0 font-titan-one text-sm sm:text-base text-ideathon-navy 
-                       px-3 py-0.5 rounded-full shadow-dark transform rotate-3"
+          <span class="absolute bottom-0 right-0 font-titan-one text-sm sm:text-base
+                       px-3 py-0.5 rounded-full shadow-dark transform rotate-3" style="color: rgb(127, 85, 81);"
                 style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
             2026
           </span>
@@ -430,7 +430,7 @@
 <%# Sections with background %>
 <div class="relative" style="background: url('/images/cherry blossom landscape bg.png'); background-attachment: fixed; background-size: cover; background-position: top center;">
   <!-- Dark overlay to focus on content -->
-  <div class="absolute inset-0 bg-ideathon-navy/30 z-0"></div>
+  <div class="absolute inset-0 z-0" style="background: rgba(0, 0, 0, 0.15);"></div>
   
   <div class="leaves relative z-5">
     <% 10.times do %>
@@ -446,7 +446,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        WHAT IS <span style="color: rgb(249, 225, 143);">IDEATHON?</span>
+        WHAT IS <span style="color: rgb(238, 136, 138);">IDEATHON?</span>
       </h2>
       <p class="section-subheading">
         More than a hackathon - it's where creativity meets innovation
@@ -466,7 +466,7 @@
           <div>
             <h3 class="font-titan-one text-2xl text-white mb-3">Innovate Without Limits</h3>
             <p class="font-lilita-one text-white text-base leading-relaxed">
-              Unlike traditional hackathons, TAMU Ideathon focuses on <span class="font-bold" style="color: rgb(249, 225, 143);">ideas first, code second</span>. 
+              Unlike traditional hackathons, TAMU Ideathon focuses on <span class="font-bold" style="color: rgb(238, 136, 138);">ideas first, code second</span>. 
               Whether you're a developer, designer, business major, or dreamer - your unique perspective is what we need. 
               Form teams, brainstorm solutions, and pitch your vision to industry judges.
             </p>
@@ -479,12 +479,12 @@
                   border shadow-lg row-span-2 flex flex-col justify-between"
            style="background: rgb(238, 136, 138); border-color: rgba(238, 136, 138);">
         <div>
-          <div class="w-12 h-12 bg-ideathon-navy/30 rounded-xl flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: rgba(127, 85, 81, 0.25);">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(127, 85, 81);">
               <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="font-titan-one text-xl text-ideathon-navy mb-2">24 Hours</h3>
+          <h3 class="font-titan-one text-xl mb-2" style="color: rgb(127, 85, 81);">24 Hours</h3>
           <p class="font-lilita-one text-white text-sm">
             One weekend. Unlimited potential. Food, mentors, and workshops provided throughout.
           </p>
@@ -525,8 +525,8 @@
           backdrop-blur-md rounded-3xl p-8 border border-white/30 glow-gold">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="background-color: rgb(249, 225, 143);">
-              <svg class="w-7 h-7 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+            <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="background-color: rgb(158, 194, 191);">
+              <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 14l9-5-9-5-9 5 9 5z"/>
                 <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
               </svg>
@@ -537,8 +537,8 @@
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <span class="font-lilita-one text-lg" style="color: rgb(249, 225, 143);">Ready to join?</span>
-            <a href="#register" class="text-ideathon-navy font-titan-one px-6 py-3 rounded-xl" style="background-color: rgb(249, 225, 143);"
+            <span class="font-lilita-one text-lg" style="color: rgb(252, 240, 228);">Ready to join?</span>
+            <a href="#register" class="text-white font-titan-one px-6 py-3 rounded-xl" style="background-color: rgb(238, 136, 138);"
                                        shadow-lg hover:shadow-game-glow transform hover:scale-105 transition-all">
               Register Now
             </a>
@@ -586,7 +586,7 @@
                   <!-- Left side (desktop) -->
                   <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
                     <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-                      <div class="font-titan-one text-lg" style="color: rgb(249, 225, 143);"><%= event.event_time.strftime("%l:%M %p") %></div>
+                      <div class="font-titan-one text-lg" style="color: rgb(238, 136, 138);"><%= event.event_time.strftime("%l:%M %p") %></div>
                       <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                       <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
                     </div>
@@ -603,7 +603,7 @@
                 
                 <!-- Mobile version -->
                 <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1">
-                  <div class="font-titan-one text-lg" style="color: rgb(249, 225, 143);"><%= event.event_time.strftime("%l:%M %p") %></div>
+                  <div class="font-titan-one text-lg" style="color: rgb(238, 136, 138);"><%= event.event_time.strftime("%l:%M %p") %></div>
                   <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                   <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
                 </div>
@@ -641,7 +641,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        <span style="color: rgb(249, 225, 143);">PRIZES</span> & REWARDS
+        <span style="color: rgb(238, 136, 138);">PRIZES</span> & REWARDS
       </h2>
       <p class="section-subheading">
         Prize details coming soon
@@ -671,7 +671,7 @@
                   border border-white/30 glow-gold relative overflow-hidden">
         <!-- Crown -->
         <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-          <svg class="w-12 h-12 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(249, 225, 143);">
+          <svg class="w-12 h-12 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(252, 240, 228);">
             <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/>
           </svg>
         </div>
@@ -754,7 +754,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        <span style="color: rgb(228, 240, 171);">FAQ</span>
+        <span style="color: rgb(238, 136, 138);">FAQ</span>
       </h2>
       <p class="section-subheading">Got questions? We've got answers.</p>
     </div>
@@ -772,7 +772,7 @@
         <button class="w-full px-6 py-5 flex items-center justify-between text-left" 
                 data-action="click->ideathon-faq#toggle" data-ideathon-faq-target="button">
           <span class="font-titan-one text-white text-lg"><%= question %></span>
-          <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(249, 225, 143);">
+          <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(238, 136, 138);">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
@@ -793,7 +793,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        OUR <span style="color: rgb(249, 225, 143);">SPONSORS</span>
+        OUR <span style="color: rgb(238, 136, 138);">SPONSORS</span>
       </h2>
       <p class="section-subheading">
         Powered by industry leaders who believe in student innovation
@@ -803,15 +803,15 @@
     <!-- Presenting Sponsors -->
     <div class="mb-12">
       <div class="text-center mb-6">
-        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(249, 225, 143);">Presenting Sponsors</span>
+        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(238, 136, 138);">Presenting Sponsors</span>
       </div>
       <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(249, 225, 143); --sponsor-hover-opacity: rgba(249, 225, 143, 0.3);">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
           <div class="w-48 h-16 flex items-center justify-center">
             <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(249, 225, 143); --sponsor-hover-opacity: rgba(249, 225, 143, 0.3);">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
           <div class="w-48 h-16 flex items-center justify-center">
             <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
           </div>
@@ -822,22 +822,22 @@
     <!-- Gold Sponsors -->
     <div class="mb-12">
       <div class="text-center mb-6">
-        <span class="font-titan-one text-ideathon-orange text-sm tracking-widest uppercase">Gold Sponsors</span>
+        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(215, 129, 112);">Gold Sponsors</span>
       </div>
       <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-ideathon-orange/30 transition-all group">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-ideathon-orange transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-ideathon-orange/30 transition-all group">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-ideathon-orange transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-ideathon-orange/30 transition-all group">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-ideathon-orange transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
           </div>
         </a>
       </div>
@@ -866,7 +866,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        MEET THE <span style="color: rgb(249, 225, 143);">JUDGES</span>
+        MEET THE <span style="color: rgb(238, 136, 138);">JUDGES</span>
       </h2>
       <p class="font-lilita-one text-lg text-white">
         Experienced professionals and industry leaders evaluating your innovations
@@ -878,12 +878,12 @@
       <% 6.times do %>
         <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
           <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
-            <svg class="w-8 h-8 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
           </div>
           <h3 class="font-titan-one text-white text-lg mb-1">TBD</h3>
-          <p class="font-lilita-one text-sm mb-2" style="color: rgb(249, 225, 143);">TBD</p>
+          <p class="font-lilita-one text-sm mb-2" style="color: rgb(238, 136, 138);">TBD</p>
           <p class="font-lilita-one text-white text-xs mb-3">TBD</p>
           <p class="font-lilita-one text-white text-sm leading-relaxed">Judge information coming soon</p>
         </div>
@@ -899,7 +899,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        CONTEST <span style="color: rgb(249, 225, 143);">RULES</span>
+        CONTEST <span style="color: rgb(238, 136, 138);">RULES</span>
       </h2>
       <p class="font-lilita-one text-lg text-white">
         Make sure you understand all the requirements before competing
@@ -909,7 +909,7 @@
     <!-- Rules List -->
     <div class="space-y-4">
       <div class="mb-8">
-        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(249, 225, 143);">Competition Rules</h3>
+        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(238, 136, 138);">Competition Rules</h3>
         <div class="space-y-3">
           <% [
             { title: "Original Work", description: "All work must be created during the Ideathon." },
@@ -921,8 +921,8 @@
             <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
               <div class="flex items-start gap-3">
                 <div class="flex-shrink-0">
-                  <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(249, 225, 143, 0.2); border-color: rgba(249, 225, 143, 0.3);">
-                    <span class="font-titan-one text-xs" style="color: rgb(249, 225, 143);"><%= index + 1 %></span>
+                  <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(238, 136, 138, 0.15); border-color: rgba(238, 136, 138, 0.25);">
+                    <span class="font-titan-one text-xs" style="color: rgb(238, 136, 138);"><%= index + 1 %></span>
                   </div>
                 </div>
                 <div>
@@ -970,14 +970,14 @@
 <section class="relative z-10 py-20 px-4">
   <div class="max-w-4xl mx-auto">
     
-    <div class="bento-card backdrop-blur-sm rounded-3xl p-10 text-center relative overflow-hidden glow-gold" style="background: linear-gradient(to bottom right, rgba(249, 225, 143, 0.15), rgba(238, 136, 138, 0.12)); border: 1px solid rgba(249, 225, 143, 0.4);">
+    <div class="bento-card backdrop-blur-sm rounded-3xl p-10 text-center relative overflow-hidden glow-gold" style="background: linear-gradient(to bottom right, rgba(238, 136, 138, 0.12), rgba(158, 194, 191, 0.1)); border: 1px solid rgba(238, 136, 138, 0.3);">
       
-      <div class="absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl" style="background-color: rgba(249, 225, 143, 0.05);"></div>
+      <div class="absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl" style="background-color: rgba(238, 136, 138, 0.05);"></div>
       <div class="absolute bottom-0 left-0 w-40 h-40 rounded-full blur-3xl" style="background-color: rgba(215, 129, 112, 0.05);"></div>
       
       <div class="relative z-10">
         <h2 class="font-beachday text-4xl sm:text-5xl mb-4" style="color: rgb(238, 136, 138);">
-          READY TO <span style="color: rgb(249, 225, 143);">INNOVATE</span>?
+          READY TO <span style="color: rgb(238, 136, 138);">INNOVATE</span>?
         </h2>
         <p class="font-lilita-one text-lg text-white mb-8 max-w-xl mx-auto">
           Join 200+ fellow Aggies for 24 hours of creativity, collaboration, and competition. 

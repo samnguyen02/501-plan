@@ -8,16 +8,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        ideathon: {
-          navy: '#0A0E27',
-          yellow: '#FFD700',
-          red: '#FF3131',
-          green: '#00E676',
-          cyan: '#00D4FF',
-          orange: '#FF6D00',
-        },
-      },
       fontFamily: {
         'beachday': ['Beach Day', 'Impact', 'sans-serif'],
         'titan-one': ['Titan One', 'cursive'],
