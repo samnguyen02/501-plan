@@ -232,6 +232,7 @@
         <a href="#schedule" class="nav-link">Schedule</a>
         <a href="#prizes" class="nav-link">Prizes</a>
         <a href="#judges" class="nav-link">Judges</a>
+        <a href="#judging-criteria" class="nav-link">Judging Criteria</a>
         <a href="#rules" class="nav-link">Rules</a>
         <a href="#sponsors" class="nav-link">Sponsors</a>
         <a href="#faq" class="nav-link">FAQ</a>
@@ -285,6 +286,7 @@
         <a href="#schedule" class="nav-link" data-action="click->ideathon-nav#closeMobile">Schedule</a>
         <a href="#prizes" class="nav-link" data-action="click->ideathon-nav#closeMobile">Prizes</a>
         <a href="#judges" class="nav-link" data-action="click->ideathon-nav#closeMobile">Judges</a>
+        <a href="#judging-criteria" class="nav-link" data-action="click->ideathon-nav#closeMobile">Judging Criteria</a>
         <a href="#rules" class="nav-link" data-action="click->ideathon-nav#closeMobile">Rules</a>
         <a href="#sponsors" class="nav-link" data-action="click->ideathon-nav#closeMobile">Sponsors</a>
         <a href="#faq" class="nav-link" data-action="click->ideathon-nav#closeMobile">FAQ</a>
@@ -889,6 +891,48 @@
         </div>
       <% end %>
     </div>
+  </div>
+</section>
+
+
+<%# Judging Criteria section %>
+<section id="judging-criteria" class="relative z-10 py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="text-center mb-16">
+      <h2 class="section-heading">
+        <span style="color: rgb(228, 240, 171);">JUDGING</span> CRITERIA
+      </h2>
+      <p class="font-lilita-one text-lg text-white">
+        How submissions are evaluated during the competition
+      </p>
+    </div>
+
+    <div class="space-y-3">
+      <% [
+        { title: "Innovation", description: "Originality and creativity of the idea." },
+        { title: "Feasibility", description: "Can the solution realistically be implemented?" },
+        { title: "Impact", description: "Potential to solve a meaningful problem." },
+        { title: "User-Centric Thinking", description: "Understanding of the target audience." },
+        { title: "Business Viability", description: "Scalability and sustainability." },
+        { title: "Presentation Quality", description: "Clarity, storytelling, and persuasion." }
+      ].each_with_index do |criterion, index| %>
+        <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0">
+              <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(228, 240, 171, 0.15); border-color: rgba(228, 240, 171, 0.25);">
+                <span class="font-titan-one text-xs" style="color: rgb(228, 240, 171);"><%= index + 1 %></span>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-titan-one text-white text-sm mb-1"><%= criterion[:title] %></h3>
+              <p class="font-lilita-one text-white text-sm"><%= criterion[:description] %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
   </div>
 </section>
 
