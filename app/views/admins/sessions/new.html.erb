@@ -5,23 +5,28 @@
 
 <style>
   body {
-    background-color: rgb(45, 28, 25) !important;
+    background-color: rgb(255, 220, 230) !important;
   }
   .login-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgb(252, 240, 228);
+    border: 1px solid rgba(238, 136, 138, 0.2);
+    box-shadow: 0 20px 60px rgba(127, 85, 81, 0.12);
   }
   .btn-google {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(127, 85, 81, 0.15);
     transition: all 0.3s ease;
   }
   .btn-google:hover {
-    background: rgba(238, 136, 138, 0.2);
-    border-color: rgba(238, 136, 138, 0.5);
-    box-shadow: 0 0 25px rgba(238, 136, 138, 0.15);
+    background: rgba(238, 136, 138, 0.12);
+    border-color: rgba(238, 136, 138, 0.4);
+    box-shadow: 0 0 20px rgba(238, 136, 138, 0.15);
+  }
+  .back-link {
+    color: rgba(127, 85, 81, 0.5);
+  }
+  .back-link:hover {
+    color: rgb(238, 136, 138);
   }
 </style>
 <% end %>
@@ -30,7 +35,7 @@
   <div class="w-full max-w-md">
     <!-- Back to home -->
     <div class="mb-8 text-center">
-      <%= link_to root_path, class: "inline-flex items-center gap-2 text-white/50 hover:text-ideathon-yellow transition-colors text-sm" do %>
+      <%= link_to root_path, class: "back-link inline-flex items-center gap-2 transition-colors text-sm" do %>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
@@ -46,19 +51,19 @@
           TAMU IDEATHON
         </h1>
       <% end %>
-      <p class="text-white/40 text-sm mb-8">
+      <p class="text-sm mb-8" style="color: rgba(127, 85, 81, 0.55);">
         Sign in to access the Manager Dashboard
       </p>
 
       <!-- Alert -->
       <% if alert.present? %>
-        <div class="mb-6 rounded-lg px-4 py-3 text-sm text-red-400" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25);">
+        <div class="mb-6 rounded-lg px-4 py-3 text-sm text-red-600" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);">
           <%= alert %>
         </div>
       <% end %>
 
       <!-- Google sign in button -->
-      <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "btn-google w-full rounded-xl px-6 py-4 flex items-center justify-center gap-3 text-white font-semibold text-base cursor-pointer" do %>
+      <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "btn-google w-full rounded-xl px-6 py-4 flex items-center justify-center gap-3 font-semibold text-base cursor-pointer", style: "color: rgb(127, 85, 81);" do %>
         <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -68,7 +73,7 @@
         Sign in with Google
       <% end %>
 
-      <p class="text-white/20 text-xs mt-6">
+      <p class="text-xs mt-6" style="color: rgba(127, 85, 81, 0.35);">
         Manager access only
       </p>
     </div>

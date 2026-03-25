@@ -49,7 +49,7 @@
     }
     
     ::-webkit-scrollbar-track {
-      background: #060918;
+      background: rgb(30, 20, 18);
     }
     
     ::-webkit-scrollbar-thumb {
@@ -68,7 +68,7 @@
     
     /* Selection styling */
     ::selection {
-      background: rgba(255, 215, 0, 0.35);
+      background: rgba(238, 136, 138, 0.35);
       color: white;
     }
   </style>
@@ -89,7 +89,7 @@
   
   <%= content_for :head %>
 </head>
-<body class="min-h-screen bg-ideathon-navy font-lilita-one text-white antialiased m-0 p-0">
+<body class="min-h-screen font-lilita-one text-white antialiased m-0 p-0" style="background: rgb(30, 20, 18);">
 
   <% if flash[:alert].present? %>
     <div id="flash-notification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg text-sm cursor-pointer select-none" style="background: rgba(220, 38, 38, 0.9); color: white !important; transition: transform 0.3s ease, opacity 0.3s ease; touch-action: pan-x;">
