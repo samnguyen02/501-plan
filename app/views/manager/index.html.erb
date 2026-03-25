@@ -139,6 +139,11 @@
       <%= link_to "Export Teams CSV",
                   export_teams_manager_index_path(request.query_parameters.merge(format: :csv)),
                   class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
+      <button onclick="document.getElementById('manager-help-modal').classList.remove('hidden'); document.getElementById('manager-help-modal').classList.add('flex');"
+              class="text-xs px-4 py-1.5 rounded-full transition-colors cursor-pointer font-semibold"
+              style="background: rgba(238, 136, 138, 0.1); border: 1px solid rgba(238, 136, 138, 0.25); color: rgb(238, 136, 138);">
+        ? Help
+      </button>
       <%= link_to "Sign Out", destroy_admin_session_path, class: "text-white/30 hover:text-white/60 text-xs transition-colors" %>
     </div>
   </div>
@@ -326,3 +331,72 @@
   </div>
 
 </div>
+
+<!-- Manager Help Modal -->
+<div id="manager-help-modal" class="fixed inset-0 hidden items-center justify-center p-4" style="z-index: 99999; background: rgba(127, 85, 81, 0.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);"
+     onclick="if(event.target===this){this.classList.add('hidden');this.classList.remove('flex');}">
+  <div class="w-full max-w-lg rounded-3xl p-6" style="background: rgb(252, 240, 228); border: 1px solid rgba(238, 136, 138, 0.2); box-shadow: 0 40px 80px rgba(127, 85, 81, 0.25);">
+    <div class="flex items-start justify-between gap-4 mb-0.5">
+      <h2 class="font-beachday text-2xl" style="color: rgb(238, 136, 138);">Manager Guide</h2>
+      <button onclick="document.getElementById('manager-help-modal').classList.add('hidden'); document.getElementById('manager-help-modal').classList.remove('flex');"
+              class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-colors cursor-pointer text-xs font-bold"
+              style="background: rgba(238, 136, 138, 0.1); border: 1px solid rgba(238, 136, 138, 0.25); color: rgba(127, 85, 81, 0.6);">
+        ✕
+      </button>
+    </div>
+    <p class="font-lilita-one text-xs mb-6" style="color: rgba(127, 85, 81, 0.55);">Everything you need to manage the Ideathon</p>
+
+    <div class="space-y-4 mb-6">
+
+      <div class="flex gap-3 items-start">
+        <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm" style="background: rgba(238,136,138,0.15); border: 1px solid rgba(238,136,138,0.35); color: rgb(238,136,138);">1</div>
+        <div>
+          <p class="font-semibold text-sm" style="color: rgb(127, 85, 81);">Attendees Tab</p>
+          <p class="text-xs mt-0.5" style="color: rgba(127, 85, 81, 0.65);">Search attendees by name or team. Sort by team (collapsible groups) or by name. Use <strong>Add Attendee</strong> to register someone directly.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3 items-start">
+        <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm" style="background: rgba(158,194,191,0.2); border: 1px solid rgba(158,194,191,0.4); color: rgb(100, 155, 151);">2</div>
+        <div>
+          <p class="font-semibold text-sm" style="color: rgb(127, 85, 81);">Edit an Attendee</p>
+          <p class="text-xs mt-0.5" style="color: rgba(127, 85, 81, 0.65);">Click the <strong>edit (pencil)</strong> button on an attendee card to update their name, email, major, classification, or team. No team size restriction for managers.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3 items-start">
+        <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm" style="background: rgba(238,136,138,0.12); border: 1px solid rgba(238,136,138,0.28); color: rgb(200, 100, 102);">3</div>
+        <div>
+          <p class="font-semibold text-sm" style="color: rgb(127, 85, 81);">Delete an Attendee</p>
+          <p class="text-xs mt-0.5" style="color: rgba(127, 85, 81, 0.65);">Click the <strong>delete (trash)</strong> button. A confirmation popup will appear before permanently removing the attendee.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3 items-start">
+        <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm" style="background: rgba(158,194,191,0.15); border: 1px solid rgba(158,194,191,0.35); color: rgb(100, 155, 151);">4</div>
+        <div>
+          <p class="font-semibold text-sm" style="color: rgb(127, 85, 81);">Events Tab</p>
+          <p class="text-xs mt-0.5" style="color: rgba(127, 85, 81, 0.65);">Switch to the <strong>Events</strong> tab to view, add, edit, or delete schedule items that appear on the landing page.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-3 items-start">
+        <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm" style="background: rgba(238,136,138,0.15); border: 1px solid rgba(238,136,138,0.35); color: rgb(238,136,138);">5</div>
+        <div>
+          <p class="font-semibold text-sm" style="color: rgb(127, 85, 81);">Export CSV</p>
+          <p class="text-xs mt-0.5" style="color: rgba(127, 85, 81, 0.65);">Use <strong>Export Participants CSV</strong> or <strong>Export Teams CSV</strong> at the top to download attendee or team data as a spreadsheet.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var m = document.getElementById('manager-help-modal');
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    }
+  });
+</script>

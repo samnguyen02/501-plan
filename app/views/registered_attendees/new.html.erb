@@ -211,7 +211,7 @@
               <span class="text-white text-sm">Join an existing team</span>
               <p class="subtle-text text-xs mt-0.5">Pick a team with space available (max 4 per team)</p>
               <div id="existing_team_input" class="mt-2 <%= params[:team_choice] == 'existing' ? '' : 'hidden' %>">
-                <% existing_teams = @teams.reject { |t| t.unassigned } %>
+                <% existing_teams = @teams.reject { |t| t.unassigned }.select { |t| t.registered_attendees.count < 4 } %>
                 <%= select_tag "existing_team_id",
                   options_for_select(
                     [["-- Select a team --", ""]] + existing_teams.map { |t| ["#{t.team_name} (#{t.registered_attendees.count}/4 members)", t.id] },
