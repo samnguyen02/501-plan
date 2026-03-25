@@ -38,6 +38,8 @@
 <style>
   * { -webkit-font-smoothing: antialiased; }
 
+  html { font-size: 103%; }
+
   /* Glass Effects */
   .glass {
     background: rgba(255, 255, 255, 0.15);
@@ -148,6 +150,16 @@
     color: white;
     font-size: 0.8125rem;
     letter-spacing: 0.05em;
+  }
+
+  .text-white {
+    -webkit-text-stroke: 0.5px rgb(127, 85, 81);
+    text-stroke: 0.5px rgb(127, 85, 81);
+  }
+
+  svg {
+    stroke: rgb(127, 85, 81);
+    stroke-width: 0.5px;
   }
 
   /* Animations */
@@ -339,8 +351,7 @@
           </span>
           <!-- Year Badge - positioned at bottom right of IDEATHON -->
           <span class="absolute bottom-0 right-0 font-titan-one text-sm sm:text-base
-                       px-3 py-0.5 rounded-full shadow-dark transform rotate-3" style="color: rgb(127, 85, 81);"
-                style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
+                       px-3 py-0.5 rounded-full shadow-dark transform rotate-3" style="color: rgb(127, 85, 81); background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
             2026
           </span>
         </span>
