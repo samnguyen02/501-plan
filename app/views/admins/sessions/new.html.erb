@@ -1,7 +1,12 @@
 <% content_for :title, "Sign In - TAMU Ideathon 2026" %>
 
 <% content_for :head do %>
+<meta name="turbo-cache-control" content="no-cache">
+
 <style>
+  body {
+    background-color: rgb(45, 28, 25) !important;
+  }
   .login-card {
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(16px);
@@ -14,9 +19,9 @@
     transition: all 0.3s ease;
   }
   .btn-google:hover {
-    background: rgba(255, 215, 0, 0.15);
-    border-color: rgba(255, 215, 0, 0.4);
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+    background: rgba(238, 136, 138, 0.2);
+    border-color: rgba(238, 136, 138, 0.5);
+    box-shadow: 0 0 25px rgba(238, 136, 138, 0.15);
   }
 </style>
 <% end %>
@@ -36,9 +41,11 @@
     <!-- Login card -->
     <div class="login-card rounded-2xl p-8 sm:p-10 text-center">
       <!-- Title -->
-      <h1 class="font-beachday text-3xl sm:text-4xl tracking-wide mb-2" style="color: rgb(238, 136, 138);">
-        TAMU IDEATHON
-      </h1>
+      <%= link_to root_path do %>
+        <h1 class="font-beachday text-3xl sm:text-4xl tracking-wide mb-2 hover:opacity-80 transition-opacity" style="color: rgb(238, 136, 138);">
+          TAMU IDEATHON
+        </h1>
+      <% end %>
       <p class="text-white/40 text-sm mb-8">
         Sign in to access the Manager Dashboard
       </p>
