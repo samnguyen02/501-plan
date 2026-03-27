@@ -269,7 +269,9 @@
         <a href="#schedule" class="nav-link">Schedule</a>
         <a href="#prizes" class="nav-link">Prizes</a>
         <a href="#judges" class="nav-link">Judges</a>
+        <a href="#judging-criteria" class="nav-link">Judging Criteria</a>
         <a href="#rules" class="nav-link">Rules</a>
+        <a href='#deliverables' class="nav-link">Deliverables</a>
         <a href="#sponsors" class="nav-link">Sponsors</a>
         <a href="#faq" class="nav-link">FAQ</a>
       </div>
@@ -322,7 +324,9 @@
         <a href="#schedule" class="nav-link" data-action="click->ideathon-nav#closeMobile">Schedule</a>
         <a href="#prizes" class="nav-link" data-action="click->ideathon-nav#closeMobile">Prizes</a>
         <a href="#judges" class="nav-link" data-action="click->ideathon-nav#closeMobile">Judges</a>
+        <a href="#judging-criteria" class="nav-link" data-action="click->ideathon-nav#closeMobile">Judging Criteria</a>
         <a href="#rules" class="nav-link" data-action="click->ideathon-nav#closeMobile">Rules</a>
+        <a href='#deliverables' class="nav-link" data-action="click->ideathon-nav#closeMobile">Deliverables</a>
         <a href="#sponsors" class="nav-link" data-action="click->ideathon-nav#closeMobile">Sponsors</a>
         <a href="#faq" class="nav-link" data-action="click->ideathon-nav#closeMobile">FAQ</a>
         <div class="border-t border-white/10 my-2"></div>
@@ -929,6 +933,48 @@
 </section>
 
 
+<%# Judging Criteria section %>
+<section id="judging-criteria" class="relative z-10 py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="text-center mb-16">
+      <h2 class="section-heading">
+        <span style="color: rgb(228, 240, 171);">JUDGING</span> CRITERIA
+      </h2>
+      <p class="font-lilita-one text-lg text-white">
+        How submissions are evaluated during the competition
+      </p>
+    </div>
+
+    <div class="space-y-3">
+      <% [
+        { title: "Innovation", description: "Originality and creativity of the idea." },
+        { title: "Feasibility", description: "Can the solution realistically be implemented?" },
+        { title: "Impact", description: "Potential to solve a meaningful problem." },
+        { title: "User-Centric Thinking", description: "Understanding of the target audience." },
+        { title: "Business Viability", description: "Scalability and sustainability." },
+        { title: "Presentation Quality", description: "Clarity, storytelling, and persuasion." }
+      ].each_with_index do |criterion, index| %>
+        <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0">
+              <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(228, 240, 171, 0.15); border-color: rgba(228, 240, 171, 0.25);">
+                <span class="font-titan-one text-xs" style="color: rgb(228, 240, 171);"><%= index + 1 %></span>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-titan-one text-white text-sm mb-1"><%= criterion[:title] %></h3>
+              <p class="font-lilita-one text-white text-sm"><%= criterion[:description] %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
+
+
 <%# Rules section %>
 <section id="rules" class="relative z-10 py-20 px-4">
   <div class="max-w-4xl mx-auto">
@@ -971,33 +1017,48 @@
         </div>
       </div>
 
-      <div>
-        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(228, 240, 171);">Required Deliverables</h3>
-        <div class="space-y-2">
-          <% [
-            "Pitch deck (PDF)",
-            "Problem statement",
-            "Prototype",
-            "Proposed solution (video)",
-            "Basic implementation plan",
-            "Market or impact potential"
-          ].each_with_index do |deliverable, index| %>
-            <div class="bento-card backdrop-blur-md rounded-xl p-6 border border-white/30 transition-all duration-300" style="background: rgb(252, 240, 228);">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center justify-center h-5 w-5 rounded-full border flex-shrink-0" style="background-color: rgba(228, 240, 171, 0.2); border-color: rgba(228, 240, 171, 0.3);">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" style="color: rgb(228, 240, 171);">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                  </svg>
-                </div>
-                <p class="font-lilita-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);"><%= deliverable %></p>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
     </div>
     
     <!-- Important Notice -->
+  </div>
+</section>
+
+
+<%# Deliverables section %>
+<section id="deliverables" class="relative z-10 py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="text-center mb-16">
+      <h2 class="section-heading">
+        REQUIRED <span style="color: rgb(228, 240, 171);">DELIVERABLES</span>
+      </h2>
+      <p class="font-lilita-one text-lg text-white">
+        Submit all required materials on Devpost before the deadline!
+      </p>
+    </div>
+
+    <div class="space-y-2">
+      <% [
+        "Pitch deck (PDF)",
+        "Problem statement",
+        "Prototype",
+        "Proposed solution (video)",
+        "Basic implementation plan",
+        "Market or impact potential"
+      ].each_with_index do |deliverable, index| %>
+        <div class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 transition-all duration-300">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center h-5 w-5 rounded-full border flex-shrink-0" style="background-color: rgba(228, 240, 171, 0.2); border-color: rgba(228, 240, 171, 0.3);">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" style="color: rgb(228, 240, 171);">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="font-lilita-one text-white text-sm"><%= deliverable %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
   </div>
 </section>
 
