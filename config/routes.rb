@@ -11,6 +11,7 @@ Rails.application.routes.draw do
           collection do
                get :export_participants
                get :export_teams
+               get :view_pdf
           end
      end
 
