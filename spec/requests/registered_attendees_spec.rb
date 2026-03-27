@@ -49,7 +49,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                    ideathon_year_id: ideathon_year.id,
                    attendee_name: "Jane Doe",
                    attendee_phone: "979-555-1234",
-                   attendee_email: "jane@gmail.com",
+                   attendee_email: "jane@tamu.edu",
                    attendee_major: "CS",
                    attendee_class: "Senior"
                  },
@@ -61,7 +61,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                post registered_attendees_path, params: valid_params
                expect(RegisteredAttendee.count).to eq(1)
                expect(response).to redirect_to(success_registered_attendees_path)
-               expect(RegisteredAttendee.last.attendee_email).to eq("jane@gmail.com")
+               expect(RegisteredAttendee.last.attendee_email).to eq("jane@tamu.edu")
           end
 
           context "with invalid params (missing required name)" do
@@ -71,7 +71,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                         ideathon_year_id: ideathon_year.id,
                         attendee_name: "",
                         attendee_phone: "979-555-1234",
-                        attendee_email: "jane@example.com",
+                        attendee_email: "jane@tamu.edu",
                         attendee_major: "CS",
                         attendee_class: "Senior"
                       },
@@ -92,7 +92,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                         ideathon_year_id: ideathon_year.id,
                         attendee_name: "New Member",
                         attendee_phone: "979-555-0000",
-                        attendee_email: "new@example.com",
+                        attendee_email: "new@tamu.edu",
                         attendee_major: "CS",
                         attendee_class: "Freshman"
                       },
@@ -111,7 +111,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                         ideathon_year_id: ideathon_year.id,
                         attendee_name: "X",
                         attendee_phone: "979-555-0000",
-                        attendee_email: "x@example.com",
+                        attendee_email: "x@tamu.edu",
                         attendee_major: "CS",
                         attendee_class: "Sr"
                       },
@@ -119,6 +119,26 @@ RSpec.describe "RegisteredAttendees", type: :request do
                       existing_team_id: ""
                     }
                     expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
+               end
+
+               it "re-renders new when existing_team_id is for another year" do
+                    other_year = IdeathonYear.create!(name: "2027", start_date: 3.weeks.from_now, end_date: 4.weeks.from_now, is_active: false)
+                    other_team = Team.create!(ideathon_year: other_year, team_name: "Other", unassigned: false)
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "X",
+                        attendee_phone: "979-555-0000",
+                        attendee_email: "x@tamu.edu",
+                        attendee_major: "CS",
+                        attendee_class: "Sr"
+                      },
+                      team_choice: "existing",
+                      existing_team_id: other_team.id
+                    }
+
+                    post registered_attendees_path, params: params
                     expect(response).to have_http_status(422)
                end
           end
@@ -130,7 +150,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                         ideathon_year_id: ideathon_year.id,
                         attendee_name: "Captain",
                         attendee_phone: "979-555-9999",
-                        attendee_email: "cap@example.com",
+                        attendee_email: "cap@tamu.edu",
                         attendee_major: "CS",
                         attendee_class: "Senior"
                       },
@@ -139,6 +159,56 @@ RSpec.describe "RegisteredAttendees", type: :request do
                     }
                     expect { post registered_attendees_path, params: params }.to change(RegisteredAttendee, :count).by(1)
                     expect(RegisteredAttendee.last.team.team_name).to eq("New Team Name")
+               end
+
+               it "re-renders new when new team name is blank" do
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "Captain",
+                        attendee_phone: "979-555-9999",
+                        attendee_email: "cap@tamu.edu",
+                        attendee_major: "CS",
+                        attendee_class: "Senior"
+                      },
+                      team_choice: "new",
+                      new_team_name: "   "
+                    }
+                    expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
+               end
+          end
+
+          context "when team is full" do
+               it "re-renders new and does not create attendee" do
+                    full_team = Team.create!(ideathon_year: ideathon_year, team_name: "Full Team", unassigned: false)
+                    4.times do |idx|
+                         RegisteredAttendee.create!(
+                           ideathon_year: ideathon_year,
+                           team: full_team,
+                           attendee_name: "Member #{idx}",
+                           attendee_phone: "979-555-12#{format('%02d', idx)}",
+                           attendee_email: "member#{idx}@tamu.edu",
+                           attendee_major: "CS",
+                           attendee_class: "Senior"
+                         )
+                    end
+
+                    params = {
+                      registered_attendee: {
+                        ideathon_year_id: ideathon_year.id,
+                        attendee_name: "Overflow",
+                        attendee_phone: "979-555-8888",
+                        attendee_email: "overflow@tamu.edu",
+                        attendee_major: "CS",
+                        attendee_class: "Senior"
+                      },
+                      team_choice: "existing",
+                      existing_team_id: full_team.id
+                    }
+
+                    expect { post registered_attendees_path, params: params }.not_to change(RegisteredAttendee, :count)
+                    expect(response).to have_http_status(422)
                end
           end
      end
@@ -150,7 +220,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
           end
 
           context "when signed in as admin" do
-               before { sign_in admin }
+               before { sign_in admin, scope: :admin }
 
                it "returns success" do
                     get registered_attendees_path
@@ -166,7 +236,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                  team: unassigned_team,
                  attendee_name: "Jane",
                  attendee_phone: "979-555-1234",
-                 attendee_email: "jane@example.com",
+                 attendee_email: "jane@tamu.edu",
                  attendee_major: "CS",
                  attendee_class: "Senior"
                )
@@ -185,7 +255,7 @@ RSpec.describe "RegisteredAttendees", type: :request do
                  team: unassigned_team,
                  attendee_name: "Jane",
                  attendee_phone: "979-555-1234",
-                 attendee_email: "jane@example.com",
+                 attendee_email: "jane@tamu.edu",
                  attendee_major: "CS",
                  attendee_class: "Senior"
                )
@@ -207,14 +277,14 @@ RSpec.describe "RegisteredAttendees", type: :request do
           end
 
           context "when signed in as admin" do
-               before { sign_in admin }
+               before { sign_in admin, scope: :admin }
 
                it "edit returns success" do
                     get edit_registered_attendee_path(attendee)
                     expect(response).to have_http_status(:ok)
                end
 
-               it "update succeeds and redirects to show" do
+               it "update succeeds and logs attendee update" do
                     patch registered_attendee_path(attendee), params: {
                       registered_attendee: {
                         ideathon_year_id: ideathon_year.id,
@@ -226,14 +296,16 @@ RSpec.describe "RegisteredAttendees", type: :request do
                       },
                       team_choice: "unassigned"
                     }
-                    expect(response).to redirect_to(registered_attendee_path(attendee))
+                    expect(response).to redirect_to(manager_index_path)
                     expect(attendee.reload.attendee_name).to eq("Jane Updated")
+                    expect(ManagerActionLog.last&.action).to eq("attendee.updated")
                end
 
-               it "destroy deletes and redirects to index" do
+               it "destroy deletes, logs action, and redirects to index" do
                     delete registered_attendee_path(attendee)
                     expect(response).to redirect_to(registered_attendees_path)
                     expect(RegisteredAttendee.find_by(id: attendee.id)).to be_nil
+                    expect(ManagerActionLog.last&.action).to eq("attendee.deleted")
                end
 
                it "update with invalid params re-renders edit" do

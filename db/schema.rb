@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_27_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "manager_action_logs", force: :cascade do |t|
+    t.string "action", null: false
+    t.bigint "admin_id", null: false
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.jsonb "metadata", default: {}, null: false
+    t.bigint "record_id"
+    t.string "record_type"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.index ["action"], name: "index_manager_action_logs_on_action"
+    t.index ["admin_id"], name: "index_manager_action_logs_on_admin_id"
+    t.index ["created_at"], name: "index_manager_action_logs_on_created_at"
+    t.index ["record_type", "record_id"], name: "index_manager_action_logs_on_record_type_and_record_id"
+  end
+
   create_table "registered_attendees", force: :cascade do |t|
     t.string "attendee_class"
     t.string "attendee_email"
@@ -84,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_15_000000) do
   end
 
   add_foreign_key "ideathon_events", "ideathon_years"
+  add_foreign_key "manager_action_logs", "admins"
   add_foreign_key "registered_attendees", "ideathon_years"
   add_foreign_key "registered_attendees", "teams"
   add_foreign_key "teams", "ideathon_years"

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+     include ManagerActionLogging
      before_action :authenticate_admin!, unless: :public_page?
 
      rescue_from ActionController::InvalidAuthenticityToken do

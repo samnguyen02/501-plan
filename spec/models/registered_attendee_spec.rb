@@ -28,7 +28,7 @@ RSpec.describe RegisteredAttendee, type: :model do
                  team: team,
                  attendee_name: "Jane",
                  attendee_phone: "979-555-1234",
-                 attendee_email: "jane@example.com",
+                 attendee_email: "jane@tamu.edu",
                  attendee_major: "CS",
                  attendee_class: "Senior"
                )
@@ -40,7 +40,7 @@ RSpec.describe RegisteredAttendee, type: :model do
           let(:ideathon_year) { IdeathonYear.create!(name: "2026", start_date: 1.week.from_now, end_date: 2.weeks.from_now) }
           let(:team) { Team.create!(ideathon_year: ideathon_year, team_name: "Team A", unassigned: false) }
 
-          it "is valid with external email domain" do
+          it "is invalid with external email domain" do
                attendee = RegisteredAttendee.new(
                  ideathon_year: ideathon_year,
                  team: team,
@@ -50,16 +50,17 @@ RSpec.describe RegisteredAttendee, type: :model do
                  attendee_major: "CS",
                  attendee_class: "Senior"
                )
-               expect(attendee).to be_valid
+               expect(attendee).not_to be_valid
+               expect(attendee.errors[:attendee_email]).to include("must be a @tamu.edu address")
           end
 
-          it "is valid with institutional email domain" do
+          it "is valid with tamu email domain" do
                attendee = RegisteredAttendee.new(
                  ideathon_year: ideathon_year,
                  team: team,
                  attendee_name: "Bob",
                  attendee_phone: "979-555-5678",
-                 attendee_email: "bob@example.edu",
+                 attendee_email: "bob@tamu.edu",
                  attendee_major: "EE",
                  attendee_class: "Junior"
                )
@@ -73,9 +74,9 @@ RSpec.describe RegisteredAttendee, type: :model do
           let(:team_b) { Team.create!(ideathon_year: ideathon_year, team_name: "Team B", unassigned: false) }
 
           before do
-               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Alice", attendee_phone: "1", attendee_email: "a@x.com", attendee_major: "CS", attendee_class: "Sr")
-               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Bob", attendee_phone: "2", attendee_email: "b@x.com", attendee_major: "EE", attendee_class: "Jr")
-               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_b, attendee_name: "Carol", attendee_phone: "3", attendee_email: "c@x.com", attendee_major: "CS", attendee_class: "Sr")
+               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Alice", attendee_phone: "979-555-0001", attendee_email: "alice@tamu.edu", attendee_major: "CS", attendee_class: "Sr")
+               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_a, attendee_name: "Bob", attendee_phone: "979-555-0002", attendee_email: "bob@tamu.edu", attendee_major: "EE", attendee_class: "Jr")
+               RegisteredAttendee.create!(ideathon_year: ideathon_year, team: team_b, attendee_name: "Carol", attendee_phone: "979-555-0003", attendee_email: "carol@tamu.edu", attendee_major: "CS", attendee_class: "Sr")
           end
 
           it "search_by_name filters by name" do

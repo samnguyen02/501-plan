@@ -1,11 +1,17 @@
 class Admin < ApplicationRecord
      devise :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
+     has_many :manager_action_logs, dependent: :nullify
+
      # Only emails in the allowlist can sign in as admin.
      def self.allowed_email?(email)
-          return false if email.blank?
-          list = ENV.fetch("ALLOWED_ADMIN_EMAILS", "").split(",").map(&:strip).reject(&:blank?)
-          list.include?(email)
+          normalized_email = email.to_s.strip.downcase
+          return false if normalized_email.blank?
+
+          # Accept comma, semicolon, or newline separated env values
+          raw = ENV.fetch("ALLOWED_ADMIN_EMAILS", "")
+          list = raw.split(/[,\n;]+/).map { |e| e.to_s.strip.downcase }.reject(&:blank?)
+          list.include?(normalized_email)
      end
 
      def self.from_google(email:, full_name:, uid:, avatar_url:)
@@ -16,4 +22,3 @@ class Admin < ApplicationRecord
           admin
      end
 end
-2

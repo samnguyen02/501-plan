@@ -1,6 +1,7 @@
 class RegisteredAttendeesController < ApplicationController
      skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
      before_action :set_registered_attendee, only: %i[show edit update destroy]
+     before_action :set_active_year, only: %i[new create edit update]
      before_action :load_teams, only: %i[new create edit update]
      layout "ideathon", only: %i[new create success edit update]
 
@@ -15,7 +16,7 @@ class RegisteredAttendeesController < ApplicationController
   # GET /registered_attendees/new
      def new
           @registered_attendee = RegisteredAttendee.new
-          @registered_attendee.ideathon_year = active_year
+          @registered_attendee.ideathon_year = @active_year
           load_teams
      end
 
@@ -28,7 +29,7 @@ class RegisteredAttendeesController < ApplicationController
   # POST /registered_attendees
      def create
           @registered_attendee = RegisteredAttendee.new(registered_attendee_params)
-          @registered_attendee.ideathon_year = active_year
+          @registered_attendee.ideathon_year = @active_year
 
           apply_team_selection!(@registered_attendee, enforce_limit: true)
 
@@ -38,6 +39,13 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :new, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
+                    if admin_signed_in? && params[:return_to] == "manager"
+                         log_manager_action(
+                           action: "attendee.created",
+                           record: @registered_attendee,
+                           metadata: { record_name: @registered_attendee.attendee_name, attendee_email: @registered_attendee.attendee_email, source: "manager" }
+                         )
+                    end
                     format.html { redirect_to params[:return_to] == "manager" ? manager_index_path : success_registered_attendees_path, status: :see_other }
                     format.json { render :show, status: :created, location: @registered_attendee }
                else
@@ -59,6 +67,19 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :edit, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
+                    changes = @registered_attendee.saved_changes.slice(
+                      "attendee_name",
+                      "attendee_phone",
+                      "attendee_email",
+                      "attendee_major",
+                      "attendee_class",
+                      "team_id"
+                    )
+                    log_manager_action(
+                      action: "attendee.updated",
+                      record: @registered_attendee,
+                      metadata: { record_name: @registered_attendee.attendee_name, changes: changes }
+                    )
                     format.html { redirect_to manager_index_path, notice: "Attendee updated successfully.", status: :see_other }
                     format.json { render :show, status: :ok, location: @registered_attendee }
                else
@@ -72,6 +93,11 @@ class RegisteredAttendeesController < ApplicationController
   # DELETE /registered_attendees/1
      def destroy
           @registered_attendee.destroy!
+          log_manager_action(
+            action: "attendee.deleted",
+            record: @registered_attendee,
+            metadata: { record_name: @registered_attendee.attendee_name, attendee_email: @registered_attendee.attendee_email }
+          )
           respond_to do |format|
                format.html { redirect_to registered_attendees_path, notice: "Registered attendee was successfully destroyed.", status: :see_other }
                format.json { head :no_content }
@@ -106,12 +132,24 @@ class RegisteredAttendeesController < ApplicationController
        end
 
        def active_year
-            @active_year ||= IdeathonYear.find_by!(is_active: true)
+            IdeathonYear.find_by(is_active: true) ||
+              IdeathonYear.order(start_date: :desc, created_at: :desc).first ||
+              IdeathonYear.create!(
+                name: Time.zone.today.year.to_s,
+                start_date: Time.zone.today,
+                end_date: Time.zone.today + 1.day,
+                is_active: true,
+                description: "Auto-generated default year"
+              )
+       end
+
+       def set_active_year
+            @active_year = active_year
        end
 
   # Teams list for the active year (used by the form)
        def load_teams
-            @teams = Team.where(ideathon_year: active_year).order(:unassigned, :team_name)
+            @teams = Team.where(ideathon_year: @active_year).order(:unassigned, :team_name)
        end
 
        def registered_attendee_params
