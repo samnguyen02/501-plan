@@ -24,14 +24,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_120000) do
     t.index ["email"], name: "index_admins_on_email", unique: true
   end
 
-  create_table "attendees", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "email", null: false
-    t.string "name", null: false
-    t.string "phone_number"
-    t.datetime "updated_at", null: false
-  end
-
   create_table "books", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "title"
