@@ -42,7 +42,7 @@
 
   /* Glass Effects */
   .glass {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.40);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -51,7 +51,7 @@
   }
 
   .glass-solid {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.40);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
@@ -73,7 +73,7 @@
   }
 
   .glass-card-subtle {
-    background: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.40);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.35);
@@ -157,6 +157,31 @@
     text-stroke: 0.5px rgb(127, 85, 81);
   }
 
+  .no-text-stroke {
+    -webkit-text-stroke: 0 !important;
+    text-stroke: 0 !important;
+  }
+
+  [style*="background: rgb(238, 136, 138)"],
+  [style*="background-color: rgb(238, 136, 138)"] {
+    -webkit-text-stroke: 0 !important;
+    text-stroke: 0 !important;
+  }
+
+  [style*="background: rgb(238, 136, 138)"] *,
+  [style*="background-color: rgb(238, 136, 138)"] * {
+    -webkit-text-stroke: 0 !important;
+    text-stroke: 0 !important;
+  }
+
+  [style*="background: rgb(238, 136, 138)"] svg,
+  [style*="background: rgb(238, 136, 138)"] svg *,
+  [style*="background-color: rgb(238, 136, 138)"] svg,
+  [style*="background-color: rgb(238, 136, 138)"] svg * {
+    stroke: none !important;
+    stroke-width: 0 !important;
+  }
+
   svg {
     stroke: rgb(127, 85, 81);
     stroke-width: 0.5px;
@@ -233,7 +258,7 @@
         <div class="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg transform group-hover:scale-110 transition-all duration-300">
           <img src="/images/logo.png" alt="TAMU Ideathon" class="w-full h-full object-cover" />
         </div>
-        <span class="font-beachday text-xl hidden sm:block trackinsg-wide transition-colors" style="color: rgb(238, 136, 138);">
+        <span class="font-beachday text-xl hidden sm:block trackinsg-wide transition-colors no-text-stroke" style="color: rgb(238, 136, 138); -webkit-text-stroke: 0; text-stroke: 0;">
           TAMU IDEATHON
         </span>
       </a>
@@ -256,7 +281,7 @@
                 style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);">
           ?
         </button>
-        <%= link_to new_registered_attendee_path, class: "text-white font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2", style: "background: rgb(238, 136, 138);" do %>
+        <%= link_to new_registered_attendee_path, class: "text-black no-text-stroke font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2", style: "background: rgb(238, 136, 138); color: black;" do %>
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
           </svg>
@@ -268,7 +293,7 @@
             Dashboard
           <% end %>
         <% else %>
-          <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "bg-white text-gray-800 font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
+          <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "bg-white text-gray-800 no-text-stroke font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
             <svg class="w-4 h-4" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -304,11 +329,11 @@
         <% if admin_signed_in? %>
           <%= link_to "Dashboard", manager_index_path, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", data: { action: "click->ideathon-nav#closeMobile" } %>
         <% else %>
-          <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false", action: "click->ideathon-nav#closeMobile" }, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full" do %>
+          <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false", action: "click->ideathon-nav#closeMobile" }, class: "bg-white text-gray-800 no-text-stroke font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full" do %>
             Login
           <% end %>
         <% end %>
-        <%= link_to "Register", new_registered_attendee_path, class: "text-white font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", style: "background: rgb(238, 136, 138);", data: { action: "click->ideathon-nav#closeMobile" } %>
+        <%= link_to "Register", new_registered_attendee_path, class: "text-black no-text-stroke font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", style: "background: rgb(238, 136, 138); color: black;", data: { action: "click->ideathon-nav#closeMobile" } %>
       </div>
     </div>
   </div>
@@ -380,7 +405,7 @@
           <span style="font-weight: normal;">Dashboard</span>
         <% end %>
       <% else %>
-        <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "group relative bg-white text-gray-800 font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
+        <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "group relative bg-white text-gray-800 no-text-stroke font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
           <svg class="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -391,7 +416,7 @@
         <% end %>
       <% end %>
       
-      <%= link_to new_registered_attendee_path, class: "group relative text-white font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2", style: "background: rgb(238, 136, 138); border-color: rgb(238, 136, 138);" do %>
+      <%= link_to new_registered_attendee_path, class: "group relative text-black no-text-stroke font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2", style: "background: rgb(238, 136, 138); border-color: rgb(238, 136, 138); color: black;" do %>
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
         </svg>
@@ -400,9 +425,9 @@
       
       <!-- Learn More -->
       <a href="#about" 
-        class="backdrop-blur-sm font-titan-one text-xs px-4 py-2 rounded-lg
+        class="backdrop-blur-sm no-text-stroke font-titan-one text-xs px-4 py-2 rounded-lg
              border-2 border-white/30 transition-all duration-300 flex items-center gap-1.5"
-        style="background-color: rgb(252, 240, 228); color: rgb(215, 129, 112); --hover-color: rgb(252, 240, 228);" onmouseover="this.style.borderColor='rgb(252, 240, 228)'; this.style.color='rgb(252, 240, 228)'" onmouseout="this.style.borderColor=''; this.style.color='rgb(215, 129, 112)';"
+        style="background-color: rgb(252, 240, 228); color: rgb(67, 116, 136); --hover-color: rgb(252, 240, 228);" onmouseover="this.style.borderColor='rgb(252, 240, 228)'; this.style.color='rgb(215, 129, 112)'" onmouseout="this.style.borderColor=''; this.style.color='rgb(67, 116, 136)';"
       >
         Learn More
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -415,22 +440,22 @@
     <div class="inline-flex flex-wrap justify-center items-center gap-0 animate-init animate-fade-up-delay-4 rounded-lg border border-white/20 overflow-hidden" style="background-color: rgb(252, 240, 228); backdrop-filter: blur(12px);">
       <div class="text-center px-3 sm:px-4 py-1.5">
         <div class="font-titan-one text-lg sm:text-xl leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]" style="color: rgb(158, 194, 191);">24</div>
-        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5" style="color: rgb(215, 129, 112);">Hours</div>
+        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5 no-text-stroke" style="color: rgb(67, 116, 136);">Hours</div>
       </div>
       <div class="hidden sm:block w-px h-6 bg-white/10"></div>
       <div class="text-center px-3 sm:px-4 py-1.5">
         <div class="font-titan-one text-lg sm:text-xl leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]" style="color: rgb(215, 129, 112);">$5K+</div>
-        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5" style="color: rgb(215, 129, 112);">In Prizes</div>
+        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5 no-text-stroke" style="color: rgb(67, 116, 136);">In Prizes</div>
       </div>
       <div class="hidden sm:block w-px h-6 bg-white/10"></div>
       <div class="text-center px-3 sm:px-4 py-1.5">
         <div class="font-titan-one text-lg sm:text-xl leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]" style="color: rgb(228, 240, 171);">200+</div>
-        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5" style="color: rgb(215, 129, 112);">Participants</div>
+        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5 no-text-stroke" style="color: rgb(67, 116, 136);">Participants</div>
       </div>
       <div class="hidden sm:block w-px h-6 bg-white/10"></div>
       <div class="text-center px-3 sm:px-4 py-1.5">
         <div class="font-titan-one text-lg sm:text-xl leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]" style="color: rgb(192, 220, 238);">50+</div>
-        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5" style="color: rgb(215, 129, 112);">Teams</div>
+        <div class="font-lilita-one text-[9px] tracking-widest uppercase mt-0.5 no-text-stroke" style="color: rgb(67, 116, 136);">Teams</div>
       </div>
     </div>
     
@@ -468,16 +493,16 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Large Feature Card -->
-        <div class="bento-card md:col-span-2 lg:col-span-2 bg-white/20 
-          backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-dark">
+           <div class="bento-card md:col-span-2 lg:col-span-2 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-dark"
+             style="background: rgb(252, 240, 228);">
         <div class="flex flex-col lg:flex-row gap-6 items-start">
           <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-lg shrink-0">
             <img src="/images/logo.png" alt="TAMU Ideathon" class="w-full h-full object-cover" />
           </div>
           <div>
-            <h3 class="font-titan-one text-2xl text-white mb-3">Innovate Without Limits</h3>
-            <p class="font-lilita-one text-white text-base leading-relaxed">
-              Unlike traditional hackathons, TAMU Ideathon focuses on <span class="font-bold" style="color: rgb(238, 136, 138);">ideas first, code second</span>. 
+            <h3 class="font-titan-one text-2xl mb-3 no-text-stroke" style="color: rgb(127, 85, 81);">Innovate Without Limits</h3>
+            <p class="font-lilita-one text-base leading-relaxed no-text-stroke" style="color: rgb(127, 85, 81);">
+              Unlike traditional hackathons, TAMU Ideathon focuses on <span class="font-bold no-text-stroke" style="color: rgb(67, 116, 136);">ideas first, code second</span>. 
               Whether you're a developer, designer, business major, or dreamer - your unique perspective is what we need. 
               Form teams, brainstorm solutions, and pitch your vision to industry judges.
             </p>
@@ -491,49 +516,49 @@
            style="background: rgb(238, 136, 138); border-color: rgba(238, 136, 138);">
         <div>
           <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: rgba(127, 85, 81, 0.25);">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(127, 85, 81);">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(67, 116, 136);">
               <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="font-titan-one text-xl mb-2" style="color: rgb(127, 85, 81);">24 Hours</h3>
-          <p class="font-lilita-one text-white text-sm">
+          <h3 class="font-titan-one text-xl mb-2" style="color: rgb(59, 89, 106);">24 Hours</h3>
+          <p class="font-lilita-one text-sm no-text-stroke" style="color: black;">
             One weekend. Unlimited potential. Food, mentors, and workshops provided throughout.
           </p>
         </div>
-        <div class="font-beachday text-6xl text-right" style="color: white;">24H</div>
+        <div class="font-beachday text-6xl text-right no-text-stroke" style="color: black;">24H</div>
       </div>
       
       <!-- Team Formation -->
-        <div class="bento-card bg-white/20 backdrop-blur-md rounded-3xl p-6 
-          border border-white/30 shadow-dark">
+           <div class="bento-card backdrop-blur-md rounded-3xl p-6 border border-white/30 shadow-dark"
+             style="background: rgb(252, 240, 228);">
         <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background-color: rgba(228, 240, 171, 0.15);">
           <svg class="w-6 h-6" fill="currentColor" style="color: rgb(228, 240, 171);" viewBox="0 0 24 24">
             <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
         </div>
-        <h3 class="font-titan-one text-xl text-white mb-2">Team Formation</h3>
-        <p class="font-lilita-one text-white text-sm">
+        <h3 class="font-titan-one text-xl mb-2 no-text-stroke" style="color: rgb(127, 85, 81);">Team Formation</h3>
+        <p class="font-lilita-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);">
           Teams of 2-4 members. Don't have one? We'll help you find your perfect match!
         </p>
       </div>
       
       <!-- Workshops -->
-        <div class="bento-card bg-white/20 backdrop-blur-md rounded-3xl p-6 
-          border border-white/30 shadow-dark">
+           <div class="bento-card backdrop-blur-md rounded-3xl p-6 border border-white/30 shadow-dark"
+             style="background: rgb(252, 240, 228);">
         <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background-color: rgba(192, 220, 238, 0.15);">
           <svg class="w-6 h-6" fill="currentColor" style="color: rgb(192, 220, 238);" viewBox="0 0 24 24">
             <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
           </svg>
         </div>
-        <h3 class="font-titan-one text-xl text-white mb-2">Workshops & Mentors</h3>
-        <p class="font-lilita-one text-white text-sm">
+        <h3 class="font-titan-one text-xl mb-2 no-text-stroke" style="color: rgb(127, 85, 81);">Workshops & Mentors</h3>
+        <p class="font-lilita-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);">
           Learn from industry professionals. Workshops on pitching, design thinking, and more.
         </p>
       </div>
       
       <!-- Wide CTA Card -->
-      <div class="bento-card md:col-span-2 lg:col-span-3 bg-white/20 
-          backdrop-blur-md rounded-3xl p-8 border border-white/30 glow-gold">
+       <div class="bento-card md:col-span-2 lg:col-span-3 backdrop-blur-md rounded-3xl p-8 border border-white/30 glow-gold"
+         style="background: rgb(252, 240, 228);">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-4">
             <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="background-color: rgb(158, 194, 191);">
@@ -543,13 +568,13 @@
               </svg>
             </div>
             <div>
-              <h3 class="font-titan-one text-2xl text-white">Open to All TAMU Students</h3>
-              <p class="font-lilita-one text-white">Must have a valid @tamu.edu email to participate</p>
+              <h3 class="font-titan-one text-2xl no-text-stroke" style="color: rgb(127, 85, 81);">Open to All TAMU Students</h3>
+              <p class="font-lilita-one no-text-stroke" style="color: rgb(127, 85, 81);">Must have a valid @tamu.edu email to participate</p>
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <span class="font-lilita-one text-lg" style="color: rgb(252, 240, 228);">Ready to join?</span>
-            <a href="#register" class="text-white font-titan-one px-6 py-3 rounded-xl" style="background-color: rgb(238, 136, 138);"
+            <span class="font-lilita-one text-lg" style="color: rgb(127, 85, 81);">Ready to join?</span>
+            <a href="#register" class="font-titan-one px-6 py-3 rounded-xl no-text-stroke" style="background-color: rgb(238, 136, 138); color: black;"
                                        shadow-lg hover:shadow-game-glow transform hover:scale-105 transition-all">
               Register Now
             </a>
@@ -596,7 +621,7 @@
                 <% if index.even? %>
                   <!-- Left side (desktop) -->
                   <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
-                    <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
+                    <div class="bento-card inline-block backdrop-blur-md rounded-2xl p-5 border border-white/20" style="background: rgb(252, 240, 228);">
                       <div class="font-titan-one text-lg" style="color: rgb(238, 136, 138);"><%= event.event_time.strftime("%l:%M %p") %></div>
                       <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                       <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
@@ -613,7 +638,7 @@
                 </div>
                 
                 <!-- Mobile version -->
-                <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1">
+                <div class="md:hidden ml-12 bento-card backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1" style="background: rgb(252, 240, 228);">
                   <div class="font-titan-one text-lg" style="color: rgb(238, 136, 138);"><%= event.event_time.strftime("%l:%M %p") %></div>
                   <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                   <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
@@ -625,7 +650,7 @@
                 <% else %>
                   <!-- Right side (desktop) -->
                   <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8">
-                    <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
+                    <div class="bento-card inline-block backdrop-blur-md rounded-2xl p-5 border border-white/20" style="background: rgb(252, 240, 228);">
                       <div class="font-titan-one text-lg" style="color: rgb(215, 129, 112);"><%= event.event_time.strftime("%l:%M %p") %></div>
                       <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                       <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
@@ -663,52 +688,52 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       
       <!-- 2nd Place -->
-      <div class="bento-card order-2 md:order-1 bg-white/20 backdrop-blur-md rounded-3xl p-6 border border-white/30
-                  transform md:translate-y-8">
-        <div class="text-center">
+       <div class="bento-card order-2 md:order-1 backdrop-blur-md rounded-3xl p-6 border border-white/30 transform md:translate-y-8"
+         style="background: rgb(252, 240, 228);">
+        <div class="text-center no-text-stroke">
           <div class="w-16 h-16 mx-auto bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
-            <span class="font-beachday text-3xl" style="color: rgb(238, 136, 138);">2</span>
+            <span class="font-beachday text-3xl no-text-stroke" style="color: rgb(238, 136, 138);">2</span>
           </div>
-          <h3 class="font-titan-one text-xl text-white mb-2">2nd Place</h3>
-          <div class="font-beachday text-4xl mb-4" style="color: rgb(238, 136, 138);">Coming Soon</div>
-          <ul class="font-lilita-one text-white text-sm space-y-2">
+          <h3 class="font-titan-one text-xl mb-2 no-text-stroke" style="color: rgb(127, 85, 81);">2nd Place</h3>
+          <div class="font-beachday text-4xl mb-4 no-text-stroke" style="color: rgb(67, 116, 136);">Coming Soon</div>
+          <ul class="font-lilita-one text-sm space-y-2 no-text-stroke" style="color: rgb(127, 85, 81);">
             <li>Details coming soon</li>
           </ul>
         </div>
       </div>
       
       <!-- Grand Prize - center, glowing -->
-      <div class="bento-card order-1 md:order-2 bg-white/20 backdrop-blur-md rounded-3xl p-8 
-                  border border-white/30 glow-gold relative overflow-hidden">
+      <div class="bento-card order-1 md:order-2 backdrop-blur-md rounded-3xl p-8 
+          border border-white/30 glow-gold relative overflow-hidden" style="background: rgb(252, 240, 228);">
         <!-- Crown -->
         <div class="absolute -top-4 left-1/2 -translate-x-1/2">
           <svg class="w-12 h-12 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(252, 240, 228);">
             <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/>
           </svg>
         </div>
-        <div class="text-center pt-4">
+        <div class="text-center pt-4 no-text-stroke">
           <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 shadow-xl animate-float"
                style="background: linear-gradient(to bottom right, rgb(252, 240, 228), rgb(238, 136, 138));">
-            <span class="font-beachday text-4xl" style="color: rgb(238, 136, 138);">1</span>
+            <span class="font-beachday text-4xl no-text-stroke" style="color: rgb(238, 136, 138);">1</span>
           </div>
-          <h3 class="font-titan-one text-2xl text-white mb-2">Grand Prize</h3>
-          <div class="font-beachday text-5xl mb-4" style="color: rgb(238, 136, 138);">Coming Soon</div>
-          <ul class="font-lilita-one text-white text-sm space-y-2">
+          <h3 class="font-titan-one text-2xl mb-2 no-text-stroke" style="color: rgb(127, 85, 81);">Grand Prize</h3>
+          <div class="font-beachday text-5xl mb-4 no-text-stroke" style="color: rgb(67, 116, 136);">Coming Soon</div>
+          <ul class="font-lilita-one text-sm space-y-2 no-text-stroke" style="color: rgb(127, 85, 81);">
             <li>Details coming soon</li>
           </ul>
         </div>
       </div>
       
       <!-- 3rd Place -->
-      <div class="bento-card order-3 bg-white/20 backdrop-blur-md rounded-3xl p-6 border border-white/30
-                  transform md:translate-y-8">
-        <div class="text-center">
+      <div class="bento-card order-3 backdrop-blur-md rounded-3xl p-6 border border-white/30
+          transform md:translate-y-8" style="background: rgb(252, 240, 228);">
+        <div class="text-center no-text-stroke">
           <div class="w-16 h-16 mx-auto bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center mb-4 shadow-lg">
-            <span class="font-beachday text-3xl" style="color: rgb(238, 136, 138);">3</span>
+            <span class="font-beachday text-3xl no-text-stroke" style="color: rgb(238, 136, 138);">3</span>
           </div>
-          <h3 class="font-titan-one text-xl text-white mb-2">3rd Place</h3>
-          <div class="font-beachday text-4xl mb-4" style="color: rgb(238, 136, 138);">Coming Soon</div>
-          <ul class="font-lilita-one text-white text-sm space-y-2">
+          <h3 class="font-titan-one text-xl mb-2 no-text-stroke" style="color: rgb(127, 85, 81);">3rd Place</h3>
+          <div class="font-beachday text-4xl mb-4 no-text-stroke" style="color: rgb(67, 116, 136);">Coming Soon</div>
+          <ul class="font-lilita-one text-sm space-y-2 no-text-stroke" style="color: rgb(127, 85, 81);">
             <li>Details coming soon</li>
           </ul>
         </div>
@@ -717,41 +742,41 @@
     
     <!-- Category Prizes - each a different accent color -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
-      <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center">
+      <div class="bento-card backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center" style="background: rgb(252, 240, 228);">
         <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center mb-3" style="background-color: rgba(192, 220, 238, 0.15);">
           <svg class="w-5 h-5" fill="currentColor" style="color: rgb(192, 220, 238);" viewBox="0 0 24 24">
             <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
           </svg>
         </div>
-        <h4 class="font-titan-one text-white text-sm">Best Technical</h4>
-        <div class="font-lilita-one" style="color: rgb(192, 220, 238);">Coming Soon</div>
+        <h4 class="font-titan-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);">Best Technical</h4>
+        <div class="font-lilita-one no-text-stroke" style="color: rgb(54, 114, 164);">Coming Soon</div>
       </div>
-      <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center">
+      <div class="bento-card backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center" style="background: rgb(252, 240, 228);">
         <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center mb-3" style="background-color: rgba(215, 129, 112, 0.15);">
           <svg class="w-5 h-5" style="color: rgb(215, 129, 112);" fill="currentColor" viewBox="0 0 24 24">
             <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
           </svg>
         </div>
-        <h4 class="font-titan-one text-white text-sm">Best Design</h4>
-        <div class="font-lilita-one" style="color: rgb(215, 129, 112);">Coming Soon</div>
+        <h4 class="font-titan-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);">Best Design</h4>
+        <div class="font-lilita-one no-text-stroke" style="color: rgb(198, 62, 57);">Coming Soon</div>
       </div>
-      <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center">
+      <div class="bento-card backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center" style="background: rgb(252, 240, 228);">
         <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center mb-3" style="background-color: rgba(228, 240, 171, 0.15);">
           <svg class="w-5 h-5" fill="currentColor" style="color: rgb(228, 240, 171);" viewBox="0 0 24 24">
             <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
-        <h4 class="font-titan-one text-white text-sm">Best Social Impact</h4>
-        <div class="font-lilita-one" style="color: rgb(228, 240, 171);">Coming Soon</div>
+        <h4 class="font-titan-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);">Best Social Impact</h4>
+        <div class="font-lilita-one no-text-stroke" style="color: rgb(103, 114, 36);">Coming Soon</div>
       </div>
-      <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center">
+      <div class="bento-card backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center" style="background: rgb(252, 240, 228);">
         <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center mb-3" style="background-color: rgba(158, 194, 191, 0.15);">
           <svg class="w-5 h-5" style="color: rgb(158, 194, 191);" fill="currentColor" viewBox="0 0 24 24">
             <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
           </svg>
         </div>
-        <h4 class="font-titan-one text-white text-sm">People's Choice</h4>
-        <div class="font-lilita-one" style="color: rgb(158, 194, 191);">Coming Soon</div>
+        <h4 class="font-titan-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);">People's Choice</h4>
+        <div class="font-lilita-one no-text-stroke" style="color: rgb(80, 116, 117);">Coming Soon</div>
       </div>
     </div>
     
@@ -779,16 +804,16 @@
         ["Is it free to attend?", "Yes! TAMU Ideathon is completely free for all participants. Food, swag, and all workshop materials are provided at no cost."],
         ["Do I need to know how to code?", "No coding experience required! This is an <strong>ideathon</strong>, not just a hackathon. We value creative problem-solving, design thinking, business acumen, and presentation skills just as much as technical ability."]
       ].each do |question, answer| %>
-      <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 overflow-hidden">
+      <div class="bento-card backdrop-blur-md rounded-2xl border border-white/30 overflow-hidden" style="background: rgb(252, 240, 228);">
         <button class="w-full px-6 py-5 flex items-center justify-between text-left" 
                 data-action="click->ideathon-faq#toggle" data-ideathon-faq-target="button">
-          <span class="font-titan-one text-white text-lg"><%= question %></span>
+          <span class="font-titan-one text-lg no-text-stroke" style="color: rgb(127, 85, 81);"><%= question %></span>
           <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(238, 136, 138);">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
         <div class="px-6 pb-5 hidden" data-ideathon-faq-target="content">
-          <p class="font-lilita-one text-white"><%= answer.html_safe %></p>
+          <p class="font-lilita-one no-text-stroke" style="color: rgb(127, 85, 81);"><%= answer.html_safe %></p>
         </div>
       </div>
       <% end %>
@@ -817,14 +842,14 @@
         <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(238, 136, 138);">Presenting Sponsors</span>
       </div>
       <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
+        <a href="#" class="bento-card backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="background: rgb(252, 240, 228); --sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
           <div class="w-48 h-16 flex items-center justify-center">
-            <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
+            <div class="font-beachday text-3xl transition-colors no-text-stroke" style="color: rgb(127, 85, 81);">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
+        <a href="#" class="bento-card backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="background: rgb(252, 240, 228); --sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
           <div class="w-48 h-16 flex items-center justify-center">
-            <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
+            <div class="font-beachday text-3xl transition-colors no-text-stroke" style="color: rgb(127, 85, 81);">COMING SOON</div>
           </div>
         </a>
       </div>
@@ -836,19 +861,19 @@
         <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(215, 129, 112);">Gold Sponsors</span>
       </div>
       <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
+        <a href="#" class="bento-card backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group" style="background: rgb(252, 240, 228);">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl transition-colors no-text-stroke" style="color: rgb(127, 85, 81);">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
+        <a href="#" class="bento-card backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group" style="background: rgb(252, 240, 228);">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl transition-colors no-text-stroke" style="color: rgb(127, 85, 81);">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
+        <a href="#" class="bento-card backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group" style="background: rgb(252, 240, 228);">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl transition-colors no-text-stroke" style="color: rgb(127, 85, 81);">COMING SOON</div>
           </div>
         </a>
       </div>
@@ -861,8 +886,8 @@
       </div>
       <div class="flex flex-wrap justify-center items-center gap-4 md:gap-6">
         <% ["Texas A&M University", "Others coming soon!"].each do |partner| %>
-        <a href="#" class="px-5 py-3 bg-white/20 rounded-lg border border-white/30 hover:border-white/40 transition-all">
-          <span class="font-lilita-one text-white hover:text-white transition-colors"><%= partner %></span>
+        <a href="#" class="px-5 py-3 rounded-lg border border-white/30 hover:border-white/40 transition-all" style="background: rgb(252, 240, 228);">
+          <span class="font-lilita-one no-text-stroke transition-colors" style="color: rgb(127, 85, 81);"><%= partner %></span>
         </a>
         <% end %>
       </div>
@@ -887,16 +912,16 @@
     <!-- Judges Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% 6.times do %>
-        <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-          <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
+        <div class="bento-card backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg" style="background: rgb(252, 240, 228);">
+          <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(67, 116, 136));">
             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
           </div>
-          <h3 class="font-titan-one text-white text-lg mb-1">TBD</h3>
-          <p class="font-lilita-one text-sm mb-2" style="color: rgb(238, 136, 138);">TBD</p>
-          <p class="font-lilita-one text-white text-xs mb-3">TBD</p>
-          <p class="font-lilita-one text-white text-sm leading-relaxed">Judge information coming soon</p>
+          <h3 class="font-titan-one text-lg mb-1 no-text-stroke" style="color: rgb(127, 85, 81);">TBD</h3>
+          <p class="font-lilita-one text-sm mb-2 no-text-stroke" style="color: rgb(67, 116, 136);">TBD</p>
+          <p class="font-lilita-one text-xs mb-3 no-text-stroke" style="color: rgb(127, 85, 81);">TBD</p>
+          <p class="font-lilita-one text-sm leading-relaxed no-text-stroke" style="color: rgb(127, 85, 81);">Judge information coming soon</p>
         </div>
       <% end %>
     </div>
@@ -920,7 +945,7 @@
     <!-- Rules List -->
     <div class="space-y-4">
       <div class="mb-8">
-        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(238, 136, 138);">Competition Rules</h3>
+        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(152, 194, 192);">Competition Rules</h3>
         <div class="space-y-3">
           <% [
             { title: "Original Work", description: "All work must be created during the Ideathon." },
@@ -929,16 +954,16 @@
             { title: "No Late Submissions", description: "Late submissions will not be judged." },
             { title: "One Presentation", description: "One presentation per team." }
           ].each_with_index do |rule, index| %>
-            <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
+            <div class="bento-card backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300" style="background: rgb(252, 240, 228);">
               <div class="flex items-start gap-3">
                 <div class="flex-shrink-0">
                   <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(238, 136, 138, 0.15); border-color: rgba(238, 136, 138, 0.25);">
-                    <span class="font-titan-one text-xs" style="color: rgb(238, 136, 138);"><%= index + 1 %></span>
+                    <span class="font-titan-one text-xs" style="color: rgb(152, 194, 192);"><%= index + 1 %></span>
                   </div>
                 </div>
                 <div>
-                  <h4 class="font-titan-one text-white text-sm mb-1"><%= rule[:title] %></h4>
-                  <p class="font-lilita-one text-white text-sm"><%= rule[:description] %></p>
+                  <h4 class="font-titan-one text-sm mb-1 no-text-stroke" style="color: rgb(127, 85, 81);"><%= rule[:title] %></h4>
+                  <p class="font-lilita-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);"><%= rule[:description] %></p>
                 </div>
               </div>
             </div>
@@ -957,14 +982,14 @@
             "Basic implementation plan",
             "Market or impact potential"
           ].each_with_index do |deliverable, index| %>
-            <div class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 transition-all duration-300">
+            <div class="bento-card backdrop-blur-md rounded-xl p-6 border border-white/30 transition-all duration-300" style="background: rgb(252, 240, 228);">
               <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center h-5 w-5 rounded-full border flex-shrink-0" style="background-color: rgba(228, 240, 171, 0.2); border-color: rgba(228, 240, 171, 0.3);">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" style="color: rgb(228, 240, 171);">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
                 </div>
-                <p class="font-lilita-one text-white text-sm"><%= deliverable %></p>
+                <p class="font-lilita-one text-sm no-text-stroke" style="color: rgb(127, 85, 81);"><%= deliverable %></p>
               </div>
             </div>
           <% end %>
@@ -996,7 +1021,7 @@
         </p>
         
         <div class="text-center my-8">
-          <span class="block text-4xl font-titan-one text-white drop-shadow-lg">Register Now!</span>
+          <span class="block text-4xl font-titan-one no-text-stroke drop-shadow-lg" style="color: black;">Register Now!</span>
         </div>
         
         <p class="font-lilita-one text-white text-sm mt-6">
@@ -1012,21 +1037,21 @@
 </div> <!-- Close sections wrapper -->
 
 <%# Footer %>
-<footer class="relative py-16 px-4" style="background: rgb(252, 240, 228); border-top: 1px solid rgba(238, 136, 138, 0.2);">
+<footer class="relative py-16 px-4 no-text-stroke" style="background: rgb(252, 240, 228); border-top: 1px solid rgba(238, 136, 138, 0.2);">
   <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(to right, transparent, rgba(238, 136, 138, 0.3), transparent);"></div>
 
   <div class="max-w-6xl mx-auto">
 
     <div class="text-center mb-10">
-      <div class="font-beachday text-3xl mb-2" style="color: rgb(238, 136, 138);">TAMU IDEATHON</div>
-      <p class="font-lilita-one text-sm max-w-md mx-auto" style="color: rgba(127, 85, 81, 0.7);">
+      <div class="font-beachday text-3xl mb-2" style="color: rgb(221, 101, 101);">TAMU IDEATHON</div>
+      <p class="font-lilita-one text-sm max-w-md mx-auto" style="color: rgb(127, 85, 81);">
         Where Texas A&M students turn bold ideas into reality. 24 hours of innovation, collaboration, and fun.
       </p>
     </div>
 
     <!-- Contact productTAMU -->
     <div class="text-center mb-10 pb-10" style="border-bottom: 1px solid rgba(127, 85, 81, 0.15);">
-      <p class="font-titan-one text-xs uppercase tracking-widest mb-6" style="color: rgba(127, 85, 81, 0.5);">Contact productTAMU</p>
+      <p class="font-titan-one text-xs uppercase tracking-widest mb-6" style="color: rgb(127, 85, 81);">Contact productTAMU</p>
       <div class="flex flex-wrap items-center justify-center gap-3">
         <a href="https://discord.com/invite/ESucN2Mq6u" target="_blank" rel="noopener"
            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-lilita-one transition-all duration-200"
@@ -1076,7 +1101,7 @@
         </div>
         <div>
           <div class="font-titan-one text-sm" style="color: rgb(127, 85, 81);">TAMU IDEATHON 2026</div>
-          <div class="font-lilita-one text-xs" style="color: rgba(127, 85, 81, 0.6);">Copyright <%= Date.current.year %> All rights reserved</div>
+          <div class="font-lilita-one text-xs" style="color: rgb(127, 85, 81);">Copyright <%= Date.current.year %> All rights reserved</div>
         </div>
       </div>
 
