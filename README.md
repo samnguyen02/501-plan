@@ -117,6 +117,43 @@ Elastic Beanstalk, DigitalOcean, etc.). A typical workflow:
 
 A `Dockerfile` and `Procfile.dev` are included for containerized deployments.
 
+### Deploying to Heroku
+
+You can deploy this Rails app to [Heroku](https://heroku.com) with the following steps:
+
+1. **Create a Heroku app** (if you haven't already):
+   ```sh
+   heroku create your-app-name
+   ```
+2. **Set required environment variables** (replace values as needed):
+   ```sh
+   heroku config:set SECRET_KEY_BASE=... DATABASE_URL=... GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=...
+   ```
+3. **Provision a database** (if not auto-created):
+   ```sh
+   heroku addons:create heroku-postgresql:hobby-dev
+   ```
+4. **Deploy your code:**
+   ```sh
+   git push heroku main
+   # or, if using 'master' branch:
+   # git push heroku master
+   ```
+5. **Run database migrations:**
+   ```sh
+   heroku run bundle exec rails db:migrate
+   ```
+6. **(Optional) Seed initial data:**
+   ```sh
+   heroku run bundle exec rails db:seed
+   ```
+7. **Open your app:**
+   ```sh
+   heroku open
+   ```
+
+For more details, see the [Heroku Ruby on Rails guide](https://devcenter.heroku.com/articles/getting-started-with-rails6).
+
 ### Health and Monitoring
 
 The `/up` endpoint returns `200` when the app boots successfully. Use this in
