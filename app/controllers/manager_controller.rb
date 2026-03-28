@@ -17,6 +17,8 @@ class ManagerController < ApplicationController
 
           active_year = IdeathonYear.find_by(is_active: true)
           @events = active_year ? IdeathonEvent.where(ideathon_year: active_year).order(event_date: :asc, event_time: :asc) : IdeathonEvent.none
+
+          @action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)
      end
 
      # DELETE /manager/:id
@@ -25,8 +27,20 @@ class ManagerController < ApplicationController
           @registered_attendee = RegisteredAttendee.find(params[:id])
           @registered_attendee.destroy
 
+          log_manager_action(
+            action: "attendee.deleted",
+            record: @registered_attendee,
+            metadata: { record_name: @registered_attendee.attendee_name, attendee_email: @registered_attendee.attendee_email }
+          )
+
           respond_to do |format|
-               format.turbo_stream { render turbo_stream: turbo_stream.remove("registered_attendee_#{@registered_attendee.id}") }
+               format.turbo_stream do
+                    @action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)
+                    render turbo_stream: [
+                      turbo_stream.remove("registered_attendee_#{@registered_attendee.id}"),
+                      turbo_stream.replace("action_logs", partial: "manager/action_logs", locals: { action_logs: @action_logs })
+                    ]
+               end
                format.html { redirect_to manager_index_path, notice: "Attendee removed." }
           end
      end
@@ -35,6 +49,11 @@ class ManagerController < ApplicationController
      # Export all participants as a CSV file
      def export_participants
           attendees = base_scope.includes(:team, :ideathon_year)
+
+          log_manager_action(
+            action: "export.participants_csv",
+            metadata: { export: "participants_csv", query: params[:query].to_s, sort: params[:sort].to_s, count: attendees.count }
+          )
 
           csv = CSV.generate(headers: true) do |rows|
                rows << [ "Name", "Email", "Phone", "Major", "Class", "Team", "Year" ]
@@ -59,6 +78,11 @@ class ManagerController < ApplicationController
      def export_teams
           attendees = base_scope.includes(:team, :ideathon_year)
           grouped = attendees.group_by { |a| a.team&.team_name || "Unassigned" }
+
+          log_manager_action(
+            action: "export.teams_csv",
+            metadata: { export: "teams_csv", query: params[:query].to_s, sort: params[:sort].to_s, count: attendees.count }
+          )
 
           csv = CSV.generate(headers: true) do |rows|
                rows << [ "Team", "Year", "Member Name", "Email", "Major", "Class" ]

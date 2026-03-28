@@ -2,7 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Google OAuth sign-in (admin)", type: :system do
      before { OmniAuth.config.test_mode = true }
-     after { OmniAuth.config.mock_auth[:google_oauth2] = nil }
+     after do
+          OmniAuth.config.mock_auth[:google_oauth2] = nil
+          OmniAuth.config.test_mode = false
+     end
 
      context "when user is not signed in" do
           it "shows home page with login and register options" do
@@ -16,7 +19,8 @@ RSpec.describe "Google OAuth sign-in (admin)", type: :system do
                @orig_allowlist = ENV["ALLOWED_ADMIN_EMAILS"]
                ENV["ALLOWED_ADMIN_EMAILS"] = "admin@example.com"
                mock_google_oauth2(email: "admin@example.com", full_name: "Admin User", uid: "123", avatar_url: "https://example.com/a.jpg")
-               visit "/admins/auth/google_oauth2/callback"
+               visit new_admin_session_path
+               click_button "Sign in with Google"
           end
 
           after do
@@ -29,7 +33,8 @@ RSpec.describe "Google OAuth sign-in (admin)", type: :system do
 
           it "signs them in as admin and redirects to admin dashboard" do
                expect(Admin.find_by(email: "admin@example.com")).to be_present
-               expect(page).to have_current_path(manager_index_path)
+               expect(page).to have_current_path(manager_index_path, ignore_query: true)
+               expect(page).to have_content("Manager Dashboard")
           end
      end
 
@@ -38,7 +43,8 @@ RSpec.describe "Google OAuth sign-in (admin)", type: :system do
                @orig_allowlist = ENV["ALLOWED_ADMIN_EMAILS"]
                ENV["ALLOWED_ADMIN_EMAILS"] = "other@example.com"
                mock_google_oauth2(email: "user@gmail.com", full_name: "Regular User", uid: "456", avatar_url: nil)
-               visit "/admins/auth/google_oauth2/callback"
+               visit new_admin_session_path
+               click_button "Sign in with Google"
           end
 
           after do

@@ -12,7 +12,7 @@ RSpec.describe "Manager", type: :request do
             team: team,
             attendee_name: "Jane Doe",
             attendee_phone: "979-555-1234",
-            attendee_email: "jane@example.com",
+            attendee_email: "jane@tamu.edu",
             attendee_major: "CS",
             attendee_class: "Senior"
           )
@@ -27,7 +27,7 @@ RSpec.describe "Manager", type: :request do
           end
 
           context "when signed in as admin" do
-               before { sign_in admin }
+               before { sign_in admin, scope: :admin }
 
                it "returns success" do
                     get manager_index_path
@@ -52,38 +52,52 @@ RSpec.describe "Manager", type: :request do
      end
 
      describe "DELETE /manager/:id" do
-          before { sign_in admin }
+          before { sign_in admin, scope: :admin }
 
-          it "removes attendee and redirects to manager index" do
-               expect { delete manager_path(attendee) }.to change(RegisteredAttendee, :count).by(-1)
+          it "removes attendee, logs action, and redirects to manager index" do
+               expect { delete manager_path(attendee) }
+                 .to change(RegisteredAttendee, :count).by(-1)
+                 .and change(ManagerActionLog, :count).by(1)
                expect(response).to redirect_to(manager_index_path)
+               expect(ManagerActionLog.last.action).to eq("attendee.deleted")
                follow_redirect!
                expect(response).to have_http_status(:ok)
           end
      end
 
      describe "GET /manager/export_participants" do
-          before { sign_in admin }
+          before { sign_in admin, scope: :admin }
 
-          it "returns CSV for participants" do
+          it "returns CSV for participants and logs export" do
                get export_participants_manager_index_path(format: :csv)
                expect(response).to have_http_status(:ok)
                expect(response.media_type).to include("text/csv")
                expect(response.body).to include("Name,Email,Phone,Major,Class,Team,Year")
                expect(response.body).to include("Jane Doe")
+               expect(ManagerActionLog.last&.action).to eq("export.participants_csv")
+          end
+
+          it "still returns CSV when action logging raises" do
+               allow(ManagerActionLog).to receive(:create!).and_raise(StandardError.new("log failure"))
+
+               get export_participants_manager_index_path(format: :csv)
+
+               expect(response).to have_http_status(:ok)
+               expect(response.media_type).to include("text/csv")
           end
      end
 
      describe "GET /manager/export_teams" do
-          before { sign_in admin }
+          before { sign_in admin, scope: :admin }
 
-          it "returns CSV for teams" do
+          it "returns CSV for teams and logs export" do
                get export_teams_manager_index_path(format: :csv)
                expect(response).to have_http_status(:ok)
                expect(response.media_type).to include("text/csv")
                expect(response.body).to include("Team,Year,Member Name,Email,Major,Class")
                expect(response.body).to include("Team A")
                expect(response.body).to include("Jane Doe")
+               expect(ManagerActionLog.last&.action).to eq("export.teams_csv")
           end
      end
 end

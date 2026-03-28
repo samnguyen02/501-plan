@@ -2,6 +2,7 @@
 # Base controller for the application.
 # Handles authentication, session security, and public page logic.
 class ApplicationController < ActionController::Base
+     include ManagerActionLogging
      # Require admin authentication for all pages except public ones
      before_action :authenticate_admin!, unless: :public_page?
 

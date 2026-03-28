@@ -39,9 +39,12 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
        # Extracts parameters from Google OAuth response
        def from_google_params
+            email = auth&.info&.email
+            email = auth&.dig("extra", "raw_info", "email") if email.blank?
+
             @from_google_params ||= {
               uid: auth.uid,
-              email: auth.info.email,
+              email: email,
               full_name: auth.info.name,
               avatar_url: auth.info.image
             }

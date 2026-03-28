@@ -136,9 +136,12 @@
     <div class="flex items-center gap-4">
       <%= link_to "Export Participants CSV",
                   export_participants_manager_index_path(request.query_parameters.merge(format: :csv)),
-                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
+                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors",
+                  data: { turbo: false, turbo_prefetch: false } %>
       <%= link_to "Export Teams CSV",
                   export_teams_manager_index_path(request.query_parameters.merge(format: :csv)),
+                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors",
+                  data: { turbo: false, turbo_prefetch: false } %>
                   class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
       <%= link_to "Heroku Documentation", view_pdf_manager_index_path, target: "_blank",
                   class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
@@ -197,6 +200,15 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
         Events
+      </button>
+      <button class="tab-btn rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2"
+              data-manager-tabs-target="tab" data-tab="activity"
+              data-action="click->manager-tabs#switch"
+              data-tooltip="View recent manager actions">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+        </svg>
+        Activity
       </button>
     </div>
 
@@ -335,6 +347,24 @@
           <p class="text-white/40 text-sm">No events scheduled yet.</p>
         </div>
       <% end %>
+    </div>
+
+    <!-- Activity Panel -->
+    <div data-manager-tabs-target="panel" data-tab="activity"
+         class="transition-all duration-200 ease-out hidden opacity-0 translate-y-2">
+      <div class="glass-card rounded-2xl p-5 sm:p-6">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <h2 class="accent-text text-lg font-semibold">Action Log</h2>
+            <p class="text-white/40 text-xs mt-0.5">Most recent manager actions across all admins</p>
+          </div>
+          <span class="badge rounded-full px-3 py-1 accent-text text-xs font-semibold">
+            <%= @action_logs.size %> shown
+          </span>
+        </div>
+
+        <%= render partial: "manager/action_logs", locals: { action_logs: @action_logs } %>
+      </div>
     </div>
   </div>
 
