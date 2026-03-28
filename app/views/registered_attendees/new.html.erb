@@ -32,10 +32,7 @@
   input[type="time"].reg-input::-webkit-outer-spin-button {
     color: rgba(127, 85, 81, 0.7) !important;
   }
-  body {
-    background-color: rgb(255, 249, 246);
-    color: rgb(127, 85, 81);
-  }
+  /* body background moved to ideathon layout for consistency */
   .reg-card {
     background: rgb(252, 240, 228);
     border: 1px solid rgba(238, 136, 138, 0.15);
@@ -211,14 +208,17 @@
               <span class="text-white text-sm">Join an existing team</span>
               <p class="subtle-text text-xs mt-0.5">Pick a team with space available (max 4 per team)</p>
               <div id="existing_team_input" class="mt-2 <%= params[:team_choice] == 'existing' ? '' : 'hidden' %>">
-                <% existing_teams = @teams.reject { |t| t.unassigned }.select { |t| t.registered_attendees.count < 4 } %>
-                <%= select_tag "existing_team_id",
-                  options_for_select(
-                    [["-- Select a team --", ""]] + existing_teams.map { |t| ["#{t.team_name} (#{t.registered_attendees.count}/4 members)", t.id] },
-                    params[:existing_team_id]
-                  ),
-                  class: "reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm",
-                  id: "existing_team_select" %>
+                <% # Group teams by name to avoid duplicates (e.g., if there are multiple 'bello' teams in DB) %>
+                <% unique_teams = @teams.reject(&:unassigned).group_by(&:team_name).map { |_, v| v.first } %>
+                <select name="existing_team_id" id="existing_team_select" class="reg-input w-full rounded-lg px-4 py-2.5 text-white text-sm">
+                  <option value="">-- Select a team --</option>
+                  <% unique_teams.each do |t| %>
+                    <% member_count = t.registered_attendees.count %>
+                    <option value="<%= t.id %>" <%= params[:existing_team_id].to_s == t.id.to_s ? 'selected' : '' %> <%= member_count >= 4 ? 'disabled style="color:gray;background:#444;"' : '' %>>
+                      <%= "#{t.team_name} (#{member_count}/4 members)" %>
+                    </option>
+                  <% end %>
+                </select>
               </div>
             </div>
           </label>

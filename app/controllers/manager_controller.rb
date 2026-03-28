@@ -103,6 +103,17 @@ class ManagerController < ApplicationController
           send_data csv, filename: "teams-#{Time.zone.today}.csv", type: "text/csv; charset=utf-8"
      end
 
+     # GET /manager/view_pdf
+     # Serves the Heroku documentation PDF for download or inline viewing
+     def view_pdf
+          pdf_path = Rails.root.join("public", "heroku_documentation.pdf")
+          if File.exist?(pdf_path)
+               send_file pdf_path, filename: "heroku_documentation.pdf", type: "application/pdf", disposition: "inline"
+          else
+               redirect_to manager_index_path, alert: "Heroku documentation PDF not found."
+          end
+     end
+
   private
 
        # Returns the attendee scope for dashboard and exports, filtered and sorted

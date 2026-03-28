@@ -142,7 +142,6 @@
                   export_teams_manager_index_path(request.query_parameters.merge(format: :csv)),
                   class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors",
                   data: { turbo: false, turbo_prefetch: false } %>
-                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
       <%= link_to "Heroku Documentation", view_pdf_manager_index_path, target: "_blank",
                   class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
       <button onclick="document.getElementById('dev-contacts-modal').classList.remove('hidden'); document.getElementById('dev-contacts-modal').classList.add('flex');"
