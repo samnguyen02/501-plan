@@ -1,17 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
-  location: MyString
+  name: Ideathon 2026
+  description: Main ideathon event
+  location: College Station
   start_date: 2026-02-13
-  end_date: 2026-02-13
-  is_active: false
+  end_date: 2026-02-14
+  is_active: true
 
 two:
-  name: MyString
-  description: MyText
-  location: MyString
-  start_date: 2026-02-13
-  end_date: 2026-02-13
+  name: Ideathon 2025
+  description: Previous ideathon event
+  location: College Station
+  start_date: 2025-02-13
+  end_date: 2025-02-14
   is_active: false

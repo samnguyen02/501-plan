@@ -1,8 +1,14 @@
 require "csv"
 
+##
+# Controller for admin management of registered attendees and teams.
+# Provides dashboard, deletion, and CSV export for participants and teams.
 class ManagerController < ApplicationController
+     # Use the ideathon layout for all actions
      layout "ideathon"
 
+     # GET /manager
+     # Dashboard: list attendees, teams, and events for the active year
      def index
           @sort = params[:sort] == "name" ? "name" : "team"
 
@@ -15,6 +21,8 @@ class ManagerController < ApplicationController
           @action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)
      end
 
+     # DELETE /manager/:id
+     # Remove a registered attendee (admin only)
      def destroy
           @registered_attendee = RegisteredAttendee.find(params[:id])
           @registered_attendee.destroy
@@ -37,6 +45,8 @@ class ManagerController < ApplicationController
           end
      end
 
+     # GET /manager/export_participants
+     # Export all participants as a CSV file
      def export_participants
           attendees = base_scope.includes(:team, :ideathon_year)
 
@@ -63,6 +73,8 @@ class ManagerController < ApplicationController
           send_data csv, filename: "participants-#{Time.zone.today}.csv", type: "text/csv; charset=utf-8"
      end
 
+     # GET /manager/export_teams
+     # Export all teams and their members as a CSV file
      def export_teams
           attendees = base_scope.includes(:team, :ideathon_year)
           grouped = attendees.group_by { |a| a.team&.team_name || "Unassigned" }
@@ -93,6 +105,7 @@ class ManagerController < ApplicationController
 
   private
 
+       # Returns the attendee scope for dashboard and exports, filtered and sorted
        def base_scope
             sort = params[:sort] == "name" ? "name" : "team"
 

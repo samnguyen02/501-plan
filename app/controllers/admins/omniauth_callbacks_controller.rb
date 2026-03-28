@@ -1,4 +1,8 @@
+##
+# Controller for handling admin authentication via Google OAuth.
+# Customizes Devise Omniauth callbacks for admin sign-in and error handling.
 class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+     # Handles callback from Google OAuth2
      def google_oauth2
           unless auth.present?
                flash[:alert] = "Authentication failed. Please try again."
@@ -21,16 +25,19 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   protected
 
+       # Redirect to login page on Omniauth failure
        def after_omniauth_failure_path_for(_scope)
             new_admin_session_path
        end
 
+       # After successful sign-in, redirect to manager dashboard
        def after_sign_in_path_for(resource_or_scope)
             stored_location_for(resource_or_scope) || manager_index_path
        end
 
   private
 
+       # Extracts parameters from Google OAuth response
        def from_google_params
             email = auth&.info&.email
             email = auth&.dig("extra", "raw_info", "email") if email.blank?
@@ -43,6 +50,7 @@ class Admins::OmniauthCallbacksController < Devise::OmniauthCallbacksController
             }
        end
 
+       # Returns the Omniauth auth hash
        def auth
             @auth ||= request.env["omniauth.auth"]
        end
