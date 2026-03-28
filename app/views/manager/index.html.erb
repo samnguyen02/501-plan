@@ -140,6 +140,8 @@
       <%= link_to "Export Teams CSV",
                   export_teams_manager_index_path(request.query_parameters.merge(format: :csv)),
                   class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
+      <%= link_to "Heroku Documentation", view_pdf_manager_index_path, target: "_blank",
+                  class: "text-xs px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors" %>
       <button onclick="document.getElementById('dev-contacts-modal').classList.remove('hidden'); document.getElementById('dev-contacts-modal').classList.add('flex');"
               class="text-xs px-3 py-1.5 rounded-full transition-colors cursor-pointer font-semibold"
               style="background: rgba(158, 194, 191, 0.1); border: 1px solid rgba(158, 194, 191, 0.3); color: rgb(100, 155, 151);">

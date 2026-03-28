@@ -23,6 +23,11 @@ class ManagerController < ApplicationController
           end
      end
 
+     def view_pdf
+          pdf_path = Rails.root.join("private", "documents", "document.pdf")
+          send_file pdf_path, type: "application/pdf", disposition: "inline"
+     end
+
      def export_participants
           attendees = base_scope.includes(:team, :ideathon_year)
 
