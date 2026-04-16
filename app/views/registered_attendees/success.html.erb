@@ -9,13 +9,13 @@
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
     .btn-home {
-      background: rgba(255, 215, 0, 0.15);
-      border: 1px solid rgba(255, 215, 0, 0.4);
+      background: rgba(238, 136, 138, 0.15);
+      border: 1px solid rgba(238, 136, 138, 0.4);
       transition: all 0.3s ease;
     }
     .btn-home:hover {
-      background: rgba(255, 215, 0, 0.25);
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+      background: rgba(238, 136, 138, 0.25);
+      box-shadow: 0 0 25px rgba(238, 136, 138, 0.15);
     }
   </style>
 <% end %>
@@ -32,15 +32,15 @@
       <h1 class="font-beachday text-3xl sm:text-4xl tracking-wide mb-2" style="color: rgb(238, 136, 138);">
         YOU'RE IN
       </h1>
-      <p class="text-white/60 text-sm mb-6">
+      <p class="text-xs mb-6" style="color: rgb(127, 85, 81);">
         Thank you for registering. You're all set for Ideathon 2026.
       </p>
 
-      <p class="text-white/30 text-xs mb-6">
-        Redirecting to Home in <span id="countdown" class="text-white/50">4</span> seconds...
+      <p class="text-xs mb-6" style="color: rgb(127, 85, 81);">
+        Redirecting to Home in <span id="countdown" style="color: rgb(238, 136, 138);">4</span> seconds...
       </p>
 
-      <%= link_to "Go to Home now", root_path, class: "btn-home inline-block rounded-xl px-6 py-3 text-ideathon-yellow font-semibold text-sm" %>
+      <%= link_to "Go to Home now", root_path, class: "btn-home inline-block rounded-xl px-6 py-3 font-semibold text-sm", style: "color: rgb(238, 136, 138);" %>
     </div>
   </div>
 </div>

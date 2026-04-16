@@ -40,16 +40,16 @@
 
   /* Glass Effects */
   .glass {
-    background: rgba(249, 225, 143, 0.30);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(249, 225, 143, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     transform: translateZ(0);
   }
 
   .glass-solid {
-    background: rgba(249, 225, 143, 0.40);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
@@ -83,12 +83,12 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 30px rgba(255,215,0,0.3);
+    box-shadow: 0 0 30px rgba(238, 136, 138, 0.3);
   }
 
   /* Glows */
   .glow-gold {
-    box-shadow: 0 0 15px rgba(255,215,0,0.2);
+    box-shadow: 0 0 15px rgba(238, 136, 138, 0.2);
   }
 
   .glow-green {
@@ -125,7 +125,7 @@
   }
 
   .nav-link:hover {
-    color: #FFD700;
+    color: rgb(238, 136, 138);
     background-color: rgba(255, 255, 255, 0.05);
   }
 
@@ -232,27 +232,41 @@
         <a href="#schedule" class="nav-link">Schedule</a>
         <a href="#prizes" class="nav-link">Prizes</a>
         <a href="#judges" class="nav-link">Judges</a>
+        <a href="#judging-criteria" class="nav-link">Judging Criteria</a>
         <a href="#rules" class="nav-link">Rules</a>
+        <a href='#deliverables' class="nav-link">Deliverables</a>
         <a href="#sponsors" class="nav-link">Sponsors</a>
         <a href="#faq" class="nav-link">FAQ</a>
       </div>
       
       <!-- CTA Buttons (Desktop) -->
       <div class="hidden sm:flex items-center gap-2">
-        <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "bg-white text-gray-800 font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
-          <svg class="w-4 h-4" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          Login
-        <% end %>
+        <button onclick="document.getElementById('help-modal').classList.remove('hidden'); document.getElementById('help-modal').classList.add('flex');"
+                class="text-white font-titan-one text-sm w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer hover:scale-105"
+                style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);">
+          ?
+        </button>
         <%= link_to new_registered_attendee_path, class: "text-white font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2", style: "background: rgb(238, 136, 138);" do %>
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
           </svg>
           Register
+        <% end %>
+        <% if admin_signed_in? %>
+          <%= link_to manager_index_path, class: "bg-white text-gray-800 font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            Dashboard
+          <% end %>
+        <% else %>
+          <%= button_to admin_google_oauth2_omniauth_authorize_path(prompt: "select_account"), method: :post, data: { turbo: "false" }, class: "bg-white text-gray-800 font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Login
+          <% end %>
         <% end %>
       </div>
       
@@ -273,12 +287,18 @@
         <a href="#schedule" class="nav-link" data-action="click->ideathon-nav#closeMobile">Schedule</a>
         <a href="#prizes" class="nav-link" data-action="click->ideathon-nav#closeMobile">Prizes</a>
         <a href="#judges" class="nav-link" data-action="click->ideathon-nav#closeMobile">Judges</a>
+        <a href="#judging-criteria" class="nav-link" data-action="click->ideathon-nav#closeMobile">Judging Criteria</a>
         <a href="#rules" class="nav-link" data-action="click->ideathon-nav#closeMobile">Rules</a>
+        <a href='#deliverables' class="nav-link" data-action="click->ideathon-nav#closeMobile">Deliverables</a>
         <a href="#sponsors" class="nav-link" data-action="click->ideathon-nav#closeMobile">Sponsors</a>
         <a href="#faq" class="nav-link" data-action="click->ideathon-nav#closeMobile">FAQ</a>
         <div class="border-t border-white/10 my-2"></div>
-        <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false", action: "click->ideathon-nav#closeMobile" }, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full" do %>
-          Login
+        <% if admin_signed_in? %>
+          <%= link_to "Dashboard", manager_index_path, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", data: { action: "click->ideathon-nav#closeMobile" } %>
+        <% else %>
+          <%= button_to admin_google_oauth2_omniauth_authorize_path(prompt: "select_account"), method: :post, data: { turbo: "false", action: "click->ideathon-nav#closeMobile" }, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full" do %>
+            Login
+          <% end %>
         <% end %>
         <%= link_to "Register", new_registered_attendee_path, class: "text-white font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", style: "background: rgb(238, 136, 138);", data: { action: "click->ideathon-nav#closeMobile" } %>
       </div>
@@ -293,7 +313,7 @@
   <!-- Background Image - fixed to extend behind nav -->
   <div class="fixed inset-0 z-0">
     <img src="/images/background.jpeg" 
-         alt="Subway Surfers" 
+         alt="Sakura Background"
          class="w-full h-full object-cover object-center"
          loading="eager" />
   </div>
@@ -322,8 +342,8 @@
             IDEATHON
           </span>
           <!-- Year Badge - positioned at bottom right of IDEATHON -->
-          <span class="absolute bottom-0 right-0 font-titan-one text-sm sm:text-base text-ideathon-navy 
-                       px-3 py-0.5 rounded-full shadow-dark transform rotate-3"
+          <span class="absolute bottom-0 right-0 font-titan-one text-sm sm:text-base
+                       px-3 py-0.5 rounded-full shadow-dark transform rotate-3" style="color: rgb(127, 85, 81);"
                 style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
             2026
           </span>
@@ -347,14 +367,21 @@
     <!-- CTA Buttons -->
     <div class="flex flex-col sm:flex-row items-center justify-center gap-2 animate-init animate-fade-up-delay-4 mb-3" id="register">
       
-      <%= button_to admin_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: "false" }, class: "group relative bg-white text-gray-800 font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
-        <svg class="w-4 h-4" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        <span style="font-weight: normal;">Login</span>
+      <% if admin_signed_in? %>
+        <%= link_to manager_index_path, class: "group relative bg-white text-gray-800 font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span style="font-weight: normal;">Dashboard</span>
+        <% end %>
+      <% else %>
+        <%= button_to admin_google_oauth2_omniauth_authorize_path(prompt: "select_account"), method: :post, data: { turbo: "false" }, class: "group relative bg-white text-gray-800 font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          <span style="font-weight: normal;">Login</span>
+        <% end %>
       <% end %>
       
       <%= link_to new_registered_attendee_path, class: "group relative text-white font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2", style: "background: rgb(238, 136, 138); border-color: rgb(238, 136, 138);" do %>
@@ -407,7 +434,7 @@
 <%# Sections with background %>
 <div class="relative" style="background: url('/images/cherry blossom landscape bg.png'); background-attachment: fixed; background-size: cover; background-position: top center;">
   <!-- Dark overlay to focus on content -->
-  <div class="absolute inset-0 bg-ideathon-navy/30 z-0"></div>
+  <div class="absolute inset-0 z-0" style="background: rgba(0, 0, 0, 0.15);"></div>
   
   <div class="leaves relative z-5">
     <% 10.times do %>
@@ -423,7 +450,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        WHAT IS <span style="color: rgb(249, 225, 143);">IDEATHON?</span>
+        WHAT IS <span style="color: rgb(238, 136, 138);">IDEATHON?</span>
       </h2>
       <p class="section-subheading">
         More than a hackathon - it's where creativity meets innovation
@@ -443,7 +470,7 @@
           <div>
             <h3 class="font-titan-one text-2xl text-white mb-3">Innovate Without Limits</h3>
             <p class="font-lilita-one text-white text-base leading-relaxed">
-              Unlike traditional hackathons, TAMU Ideathon focuses on <span class="font-bold" style="color: rgb(249, 225, 143);">ideas first, code second</span>. 
+              Unlike traditional hackathons, TAMU Ideathon focuses on <span class="font-bold" style="color: rgb(238, 136, 138);">ideas first, code second</span>. 
               Whether you're a developer, designer, business major, or dreamer - your unique perspective is what we need. 
               Form teams, brainstorm solutions, and pitch your vision to industry judges.
             </p>
@@ -456,12 +483,12 @@
                   border shadow-lg row-span-2 flex flex-col justify-between"
            style="background: rgb(238, 136, 138); border-color: rgba(238, 136, 138);">
         <div>
-          <div class="w-12 h-12 bg-ideathon-navy/30 rounded-xl flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: rgba(127, 85, 81, 0.25);">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(127, 85, 81);">
               <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="font-titan-one text-xl text-ideathon-navy mb-2">24 Hours</h3>
+          <h3 class="font-titan-one text-xl mb-2" style="color: rgb(127, 85, 81);">24 Hours</h3>
           <p class="font-lilita-one text-white text-sm">
             One weekend. Unlimited potential. Food, mentors, and workshops provided throughout.
           </p>
@@ -502,8 +529,8 @@
           backdrop-blur-md rounded-3xl p-8 border border-white/30 glow-gold">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="background-color: rgb(249, 225, 143);">
-              <svg class="w-7 h-7 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+            <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg animate-float" style="background-color: rgb(158, 194, 191);">
+              <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 14l9-5-9-5-9 5 9 5z"/>
                 <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
               </svg>
@@ -514,8 +541,8 @@
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <span class="font-lilita-one text-lg" style="color: rgb(249, 225, 143);">Ready to join?</span>
-            <a href="#register" class="text-ideathon-navy font-titan-one px-6 py-3 rounded-xl" style="background-color: rgb(249, 225, 143);"
+            <span class="font-lilita-one text-lg" style="color: rgb(252, 240, 228);">Ready to join?</span>
+            <a href="#register" class="text-white font-titan-one px-6 py-3 rounded-xl" style="background-color: rgb(238, 136, 138);"
                                        shadow-lg hover:shadow-game-glow transform hover:scale-105 transition-all">
               Register Now
             </a>
@@ -563,7 +590,7 @@
                   <!-- Left side (desktop) -->
                   <div class="hidden md:block md:w-1/2 md:pr-8 md:text-right">
                     <div class="bento-card inline-block bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20">
-                      <div class="font-titan-one text-lg" style="color: rgb(249, 225, 143);"><%= event.event_time.strftime("%l:%M %p") %></div>
+                      <div class="font-titan-one text-lg" style="color: rgb(238, 136, 138);"><%= event.event_time.strftime("%l:%M %p") %></div>
                       <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                       <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
                     </div>
@@ -580,7 +607,7 @@
                 
                 <!-- Mobile version -->
                 <div class="md:hidden ml-12 bento-card bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 flex-1">
-                  <div class="font-titan-one text-lg" style="color: rgb(249, 225, 143);"><%= event.event_time.strftime("%l:%M %p") %></div>
+                  <div class="font-titan-one text-lg" style="color: rgb(238, 136, 138);"><%= event.event_time.strftime("%l:%M %p") %></div>
                   <div class="font-lilita-one text-white text-base"><%= event.event_name %></div>
                   <div class="font-lilita-one text-white text-sm"><%= event.event_description %></div>
                 </div>
@@ -618,7 +645,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        <span style="color: rgb(249, 225, 143);">PRIZES</span> & REWARDS
+        <span style="color: rgb(238, 136, 138);">PRIZES</span> & REWARDS
       </h2>
       <p class="section-subheading">
         Prize details coming soon
@@ -648,7 +675,7 @@
                   border border-white/30 glow-gold relative overflow-hidden">
         <!-- Crown -->
         <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-          <svg class="w-12 h-12 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(249, 225, 143);">
+          <svg class="w-12 h-12 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" style="color: rgb(252, 240, 228);">
             <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/>
           </svg>
         </div>
@@ -731,7 +758,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        <span style="color: rgb(228, 240, 171);">FAQ</span>
+        <span style="color: rgb(238, 136, 138);">FAQ</span>
       </h2>
       <p class="section-subheading">Got questions? We've got answers.</p>
     </div>
@@ -749,7 +776,7 @@
         <button class="w-full px-6 py-5 flex items-center justify-between text-left" 
                 data-action="click->ideathon-faq#toggle" data-ideathon-faq-target="button">
           <span class="font-titan-one text-white text-lg"><%= question %></span>
-          <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(249, 225, 143);">
+          <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(238, 136, 138);">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
@@ -770,7 +797,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        OUR <span style="color: rgb(249, 225, 143);">SPONSORS</span>
+        OUR <span style="color: rgb(238, 136, 138);">SPONSORS</span>
       </h2>
       <p class="section-subheading">
         Powered by industry leaders who believe in student innovation
@@ -780,15 +807,15 @@
     <!-- Presenting Sponsors -->
     <div class="mb-12">
       <div class="text-center mb-6">
-        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(249, 225, 143);">Presenting Sponsors</span>
+        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(238, 136, 138);">Presenting Sponsors</span>
       </div>
       <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(249, 225, 143); --sponsor-hover-opacity: rgba(249, 225, 143, 0.3);">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
           <div class="w-48 h-16 flex items-center justify-center">
             <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(249, 225, 143); --sponsor-hover-opacity: rgba(249, 225, 143, 0.3);">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
           <div class="w-48 h-16 flex items-center justify-center">
             <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
           </div>
@@ -799,22 +826,22 @@
     <!-- Gold Sponsors -->
     <div class="mb-12">
       <div class="text-center mb-6">
-        <span class="font-titan-one text-ideathon-orange text-sm tracking-widest uppercase">Gold Sponsors</span>
+        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(215, 129, 112);">Gold Sponsors</span>
       </div>
       <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-ideathon-orange/30 transition-all group">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-ideathon-orange transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-ideathon-orange/30 transition-all group">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-ideathon-orange transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
           </div>
         </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-ideathon-orange/30 transition-all group">
+        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
           <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-ideathon-orange transition-colors text-white">COMING SOON</div>
+            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
           </div>
         </a>
       </div>
@@ -843,7 +870,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        MEET THE <span style="color: rgb(249, 225, 143);">JUDGES</span>
+        MEET THE <span style="color: rgb(238, 136, 138);">JUDGES</span>
       </h2>
       <p class="font-lilita-one text-lg text-white">
         Experienced professionals and industry leaders evaluating your innovations
@@ -855,17 +882,59 @@
       <% 6.times do %>
         <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
           <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
-            <svg class="w-8 h-8 text-ideathon-navy" fill="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
           </div>
           <h3 class="font-titan-one text-white text-lg mb-1">TBD</h3>
-          <p class="font-lilita-one text-sm mb-2" style="color: rgb(249, 225, 143);">TBD</p>
+          <p class="font-lilita-one text-sm mb-2" style="color: rgb(238, 136, 138);">TBD</p>
           <p class="font-lilita-one text-white text-xs mb-3">TBD</p>
           <p class="font-lilita-one text-white text-sm leading-relaxed">Judge information coming soon</p>
         </div>
       <% end %>
     </div>
+  </div>
+</section>
+
+
+<%# Judging Criteria section %>
+<section id="judging-criteria" class="relative z-10 py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="text-center mb-16">
+      <h2 class="section-heading">
+        <span style="color: rgb(228, 240, 171);">JUDGING</span> CRITERIA
+      </h2>
+      <p class="font-lilita-one text-lg text-white">
+        How submissions are evaluated during the competition
+      </p>
+    </div>
+
+    <div class="space-y-3">
+      <% [
+        { title: "Innovation", description: "Originality and creativity of the idea." },
+        { title: "Feasibility", description: "Can the solution realistically be implemented?" },
+        { title: "Impact", description: "Potential to solve a meaningful problem." },
+        { title: "User-Centric Thinking", description: "Understanding of the target audience." },
+        { title: "Business Viability", description: "Scalability and sustainability." },
+        { title: "Presentation Quality", description: "Clarity, storytelling, and persuasion." }
+      ].each_with_index do |criterion, index| %>
+        <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0">
+              <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(228, 240, 171, 0.15); border-color: rgba(228, 240, 171, 0.25);">
+                <span class="font-titan-one text-xs" style="color: rgb(228, 240, 171);"><%= index + 1 %></span>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-titan-one text-white text-sm mb-1"><%= criterion[:title] %></h3>
+              <p class="font-lilita-one text-white text-sm"><%= criterion[:description] %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
   </div>
 </section>
 
@@ -876,7 +945,7 @@
     
     <div class="text-center mb-16">
       <h2 class="section-heading">
-        CONTEST <span style="color: rgb(249, 225, 143);">RULES</span>
+        CONTEST <span style="color: rgb(238, 136, 138);">RULES</span>
       </h2>
       <p class="font-lilita-one text-lg text-white">
         Make sure you understand all the requirements before competing
@@ -886,7 +955,7 @@
     <!-- Rules List -->
     <div class="space-y-4">
       <div class="mb-8">
-        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(249, 225, 143);">Competition Rules</h3>
+        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(238, 136, 138);">Competition Rules</h3>
         <div class="space-y-3">
           <% [
             { title: "Original Work", description: "All work must be created during the Ideathon." },
@@ -898,8 +967,8 @@
             <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
               <div class="flex items-start gap-3">
                 <div class="flex-shrink-0">
-                  <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(249, 225, 143, 0.2); border-color: rgba(249, 225, 143, 0.3);">
-                    <span class="font-titan-one text-xs" style="color: rgb(249, 225, 143);"><%= index + 1 %></span>
+                  <div class="flex items-center justify-center h-6 w-6 rounded-lg border" style="background-color: rgba(238, 136, 138, 0.15); border-color: rgba(238, 136, 138, 0.25);">
+                    <span class="font-titan-one text-xs" style="color: rgb(238, 136, 138);"><%= index + 1 %></span>
                   </div>
                 </div>
                 <div>
@@ -912,33 +981,48 @@
         </div>
       </div>
 
-      <div>
-        <h3 class="font-titan-one text-xl mb-4" style="color: rgb(228, 240, 171);">Required Deliverables</h3>
-        <div class="space-y-2">
-          <% [
-            "Pitch deck (PDF)",
-            "Problem statement",
-            "Prototype",
-            "Proposed solution (video)",
-            "Basic implementation plan",
-            "Market or impact potential"
-          ].each_with_index do |deliverable, index| %>
-            <div class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 transition-all duration-300">
-              <div class="flex items-center gap-3">
-                <div class="flex items-center justify-center h-5 w-5 rounded-full border flex-shrink-0" style="background-color: rgba(228, 240, 171, 0.2); border-color: rgba(228, 240, 171, 0.3);">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" style="color: rgb(228, 240, 171);">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                  </svg>
-                </div>
-                <p class="font-lilita-one text-white text-sm"><%= deliverable %></p>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
     </div>
     
     <!-- Important Notice -->
+  </div>
+</section>
+
+
+<%# Deliverables section %>
+<section id="deliverables" class="relative z-10 py-20 px-4">
+  <div class="max-w-4xl mx-auto">
+
+    <div class="text-center mb-16">
+      <h2 class="section-heading">
+        REQUIRED <span style="color: rgb(228, 240, 171);">DELIVERABLES</span>
+      </h2>
+      <p class="font-lilita-one text-lg text-white">
+        Submit all required materials on Devpost before the deadline!
+      </p>
+    </div>
+
+    <div class="space-y-2">
+      <% [
+        "Pitch deck (PDF)",
+        "Problem statement",
+        "Prototype",
+        "Proposed solution (video)",
+        "Basic implementation plan",
+        "Market or impact potential"
+      ].each_with_index do |deliverable, index| %>
+        <div class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 transition-all duration-300">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center h-5 w-5 rounded-full border flex-shrink-0" style="background-color: rgba(228, 240, 171, 0.2); border-color: rgba(228, 240, 171, 0.3);">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" style="color: rgb(228, 240, 171);">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <p class="font-lilita-one text-white text-sm"><%= deliverable %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
   </div>
 </section>
 
@@ -947,14 +1031,14 @@
 <section class="relative z-10 py-20 px-4">
   <div class="max-w-4xl mx-auto">
     
-    <div class="bento-card backdrop-blur-sm rounded-3xl p-10 text-center relative overflow-hidden glow-gold" style="background: linear-gradient(to bottom right, rgba(249, 225, 143, 0.15), rgba(238, 136, 138, 0.12)); border: 1px solid rgba(249, 225, 143, 0.4);">
+    <div class="bento-card backdrop-blur-sm rounded-3xl p-10 text-center relative overflow-hidden glow-gold" style="background: linear-gradient(to bottom right, rgba(238, 136, 138, 0.12), rgba(158, 194, 191, 0.1)); border: 1px solid rgba(238, 136, 138, 0.3);">
       
-      <div class="absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl" style="background-color: rgba(249, 225, 143, 0.05);"></div>
+      <div class="absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl" style="background-color: rgba(238, 136, 138, 0.05);"></div>
       <div class="absolute bottom-0 left-0 w-40 h-40 rounded-full blur-3xl" style="background-color: rgba(215, 129, 112, 0.05);"></div>
       
       <div class="relative z-10">
         <h2 class="font-beachday text-4xl sm:text-5xl mb-4" style="color: rgb(238, 136, 138);">
-          READY TO <span style="color: rgb(249, 225, 143);">INNOVATE</span>?
+          READY TO <span style="color: rgb(238, 136, 138);">INNOVATE</span>?
         </h2>
         <p class="font-lilita-one text-lg text-white mb-8 max-w-xl mx-auto">
           Join 200+ fellow Aggies for 24 hours of creativity, collaboration, and competition. 
@@ -978,54 +1062,92 @@
 </div> <!-- Close sections wrapper -->
 
 <%# Footer %>
-<footer class="relative py-16 px-4 border-t border-white/20 bg-ideathon-navy">
-  <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(to right, transparent, rgba(249, 225, 143, 0.2), transparent);"></div>
-  
+<footer class="relative py-16 px-4" style="background: rgb(252, 240, 228); border-top: 1px solid rgba(238, 136, 138, 0.2);">
+  <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(to right, transparent, rgba(238, 136, 138, 0.3), transparent);"></div>
+
   <div class="max-w-6xl mx-auto">
-    
+
     <div class="text-center mb-10">
       <div class="font-beachday text-3xl mb-2" style="color: rgb(238, 136, 138);">TAMU IDEATHON</div>
-      <p class="font-lilita-one text-white text-sm max-w-md mx-auto">
+      <p class="font-lilita-one text-sm max-w-md mx-auto" style="color: rgba(127, 85, 81, 0.7);">
         Where Texas A&M students turn bold ideas into reality. 24 hours of innovation, collaboration, and fun.
       </p>
     </div>
-    
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-white/15">
-      
+
+    <!-- Contact productTAMU -->
+    <div class="text-center mb-10 pb-10" style="border-bottom: 1px solid rgba(127, 85, 81, 0.15);">
+      <p class="font-titan-one text-xs uppercase tracking-widest mb-6" style="color: rgba(127, 85, 81, 0.5);">Contact productTAMU</p>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <a href="https://discord.com/invite/ESucN2Mq6u" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-lilita-one transition-all duration-200"
+           style="background: rgba(158,194,191,0.15); border: 1px solid rgba(158,194,191,0.35); color: rgb(100, 155, 151);"
+           onmouseover="this.style.borderColor='rgba(158,194,191,0.6)'; this.style.background='rgba(158,194,191,0.25)';"
+           onmouseout="this.style.borderColor='rgba(158,194,191,0.35)'; this.style.background='rgba(158,194,191,0.15)';">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.031.053a19.9 19.9 0 005.993 3.03.077.077 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+          </svg>
+          Discord
+        </a>
+        <a href="https://www.instagram.com/tamuproduct/" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-lilita-one transition-all duration-200"
+           style="background: rgba(238,136,138,0.12); border: 1px solid rgba(238,136,138,0.3); color: rgb(200, 100, 102);"
+           onmouseover="this.style.borderColor='rgba(238,136,138,0.6)'; this.style.background='rgba(238,136,138,0.22)';"
+           onmouseout="this.style.borderColor='rgba(238,136,138,0.3)'; this.style.background='rgba(238,136,138,0.12)';">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          @tamuproduct
+        </a>
+        <a href="https://www.linkedin.com/company/productattamu/" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-lilita-one transition-all duration-200"
+           style="background: rgba(158,194,191,0.15); border: 1px solid rgba(158,194,191,0.35); color: rgb(100, 155, 151);"
+           onmouseover="this.style.borderColor='rgba(158,194,191,0.6)'; this.style.background='rgba(158,194,191,0.25)';"
+           onmouseout="this.style.borderColor='rgba(158,194,191,0.35)'; this.style.background='rgba(158,194,191,0.15)';">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+        <button onclick="navigator.clipboard.writeText('product.tamu@gmail.com').then(() => { const el = this; const orig = el.innerHTML; el.textContent = '✓ Copied!'; setTimeout(() => { el.innerHTML = orig; }, 2000) })"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-lilita-one transition-all duration-200 cursor-pointer"
+                style="background: rgba(127,85,81,0.08); border: 1px solid rgba(127,85,81,0.2); color: rgba(127, 85, 81, 0.7);"
+                onmouseover="this.style.borderColor='rgba(127,85,81,0.4)'; this.style.background='rgba(127,85,81,0.15)';"
+                onmouseout="this.style.borderColor='rgba(127,85,81,0.2)'; this.style.background='rgba(127,85,81,0.08)';">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          product.tamu@gmail.com
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
           <img src="/images/logo.png" alt="TAMU Ideathon" class="w-full h-full object-cover" />
         </div>
         <div>
-          <div class="font-titan-one text-white text-sm">TAMU IDEATHON 2026</div>
-          <div class="font-lilita-one text-white text-xs">Copyright <%= Date.current.year %> All rights reserved</div>
+          <div class="font-titan-one text-sm" style="color: rgb(127, 85, 81);">TAMU IDEATHON 2026</div>
+          <div class="font-lilita-one text-xs" style="color: rgba(127, 85, 81, 0.6);">Copyright <%= Date.current.year %> All rights reserved</div>
         </div>
       </div>
-      
-      <!-- Social Links -->
-      <div class="flex items-center gap-4">
-        <a href="#" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white transition-all" style="color: white;" onmouseover="this.style.color='rgb(249, 225, 143)';" onmouseout="this.style.color='white';">
+
+      <div class="flex items-center gap-3">
+        <a href="https://discord.com/invite/ESucN2Mq6u" target="_blank" rel="noopener" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background: rgba(158,194,191,0.15); color: rgb(100, 155, 151);" onmouseover="this.style.background='rgba(158,194,191,0.3)';" onmouseout="this.style.background='rgba(158,194,191,0.15)';">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.031.053a19.9 19.9 0 005.993 3.03.077.077 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
           </svg>
         </a>
-        <a href="#" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white transition-all" style="color: white;" onmouseover="this.style.color='rgb(249, 225, 143)';" onmouseout="this.style.color='white';">
+        <a href="https://www.instagram.com/tamuproduct/" target="_blank" rel="noopener" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background: rgba(238,136,138,0.12); color: rgb(200, 100, 102);" onmouseover="this.style.background='rgba(238,136,138,0.25)';" onmouseout="this.style.background='rgba(238,136,138,0.12)';">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
           </svg>
         </a>
-        <a href="#" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white transition-all" style="color: white;" onmouseover="this.style.color='rgb(249, 225, 143)';" onmouseout="this.style.color='white';">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-          </svg>
-        </a>
-        <a href="mailto:ideathon@tamu.edu" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white transition-all" style="color: white;" onmouseover="this.style.color='rgb(249, 225, 143)';" onmouseout="this.style.color='white';">
+        <button onclick="navigator.clipboard.writeText('product.tamu@gmail.com').then(() => { this.style.color='rgb(238,136,138)'; setTimeout(() => { this.style.color='rgba(127,85,81,0.6)'; }, 2000) })" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer" style="background: rgba(127,85,81,0.08); color: rgba(127,85,81,0.6);" onmouseover="this.style.background='rgba(127,85,81,0.18)';" onmouseout="this.style.background='rgba(127,85,81,0.08)';">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
           </svg>
-        </a>
+        </button>
       </div>
-      
     </div>
   </div>
 </footer>
+

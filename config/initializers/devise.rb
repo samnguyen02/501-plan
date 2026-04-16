@@ -271,7 +271,14 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-     config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH_CLIENT_ID'], ENV['GOOGLE_OAUTH_CLIENT_SECRET']
+     config.omniauth :google_oauth2,
+                     ENV["GOOGLE_OAUTH_CLIENT_ID"],
+                     ENV["GOOGLE_OAUTH_CLIENT_SECRET"],
+                     {
+                       prompt: "select_account consent",
+                       scope: "openid,email,profile",
+                       hd: "tamu.edu"
+                     }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

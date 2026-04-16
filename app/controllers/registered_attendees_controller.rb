@@ -1,36 +1,53 @@
+##
+# Controller for managing registered attendees in the Ideathon event.
+# Handles attendee registration, editing, team assignment, and related AJAX endpoints.
+# Follows Rails RESTful conventions and includes custom logic for team selection.
 class RegisteredAttendeesController < ApplicationController
+     # Allow public access to registration and info pages
      skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
+     # Load attendee for actions that require an existing record
      before_action :set_registered_attendee, only: %i[show edit update destroy]
+     before_action :set_active_year, only: %i[new create edit update]
+     # Load teams for forms where team selection is needed
      before_action :load_teams, only: %i[new create edit update]
-     layout "ideathon", only: %i[new create success]
+     # Use the ideathon layout for registration-related pages
+     layout "ideathon", only: %i[new create success edit update]
 
-  # GET /registered_attendees
+
+  # List all registered attendees (admin only)
      def index
           @registered_attendees = RegisteredAttendee.all
      end
 
-  # GET /registered_attendees/1
+
+  # Show a single registered attendee (public for confirmation)
      def show; end
 
-  # GET /registered_attendees/new
+
+  # Display the registration form for a new attendee
      def new
           @registered_attendee = RegisteredAttendee.new
-          @registered_attendee.ideathon_year = active_year
+          @registered_attendee.ideathon_year = @active_year
           load_teams
      end
 
-  # GET /registered_attendees/1/edit
+
+  # Edit an existing attendee (admin only)
      def edit; end
 
-  # GET /registered_attendees/success
+
+  # Show registration success page
      def success; end
 
-  # POST /registered_attendees
+
+  # Create a new registered attendee from form input
+  # Handles team assignment and validation, responds to HTML/JSON
      def create
           @registered_attendee = RegisteredAttendee.new(registered_attendee_params)
-          @registered_attendee.ideathon_year = active_year
+          @registered_attendee.ideathon_year = @active_year
 
-          apply_team_selection!(@registered_attendee)
+          # Assign team based on form selection, enforcing team size limit
+          apply_team_selection!(@registered_attendee, enforce_limit: true)
 
           respond_to do |format|
                if @registered_attendee.errors.any?
@@ -38,7 +55,14 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :new, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
-                    format.html { redirect_to success_registered_attendees_path, status: :see_other }
+                    if admin_signed_in? && params[:return_to] == "manager"
+                         log_manager_action(
+                           action: "attendee.created",
+                           record: @registered_attendee,
+                           metadata: { record_name: @registered_attendee.attendee_name, attendee_email: @registered_attendee.attendee_email, source: "manager" }
+                         )
+                    end
+                    format.html { redirect_to params[:return_to] == "manager" ? manager_index_path : success_registered_attendees_path, status: :see_other }
                     format.json { render :show, status: :created, location: @registered_attendee }
                else
                     load_teams
@@ -48,7 +72,9 @@ class RegisteredAttendeesController < ApplicationController
           end
      end
 
-  # PATCH/PUT /registered_attendees/1
+
+  # Update an existing registered attendee (admin only)
+  # Handles team reassignment and validation
      def update
           @registered_attendee.assign_attributes(registered_attendee_params)
           apply_team_selection!(@registered_attendee)
@@ -59,7 +85,20 @@ class RegisteredAttendeesController < ApplicationController
                     format.html { render :edit, status: :unprocessable_entity }
                     format.json { render json: @registered_attendee.errors, status: :unprocessable_entity }
                elsif @registered_attendee.save
-                    format.html { redirect_to @registered_attendee, notice: "Registered attendee was successfully updated.", status: :see_other }
+                    changes = @registered_attendee.saved_changes.slice(
+                      "attendee_name",
+                      "attendee_phone",
+                      "attendee_email",
+                      "attendee_major",
+                      "attendee_class",
+                      "team_id"
+                    )
+                    log_manager_action(
+                      action: "attendee.updated",
+                      record: @registered_attendee,
+                      metadata: { record_name: @registered_attendee.attendee_name, changes: changes }
+                    )
+                    format.html { redirect_to manager_index_path, notice: "Attendee updated successfully.", status: :see_other }
                     format.json { render :show, status: :ok, location: @registered_attendee }
                else
                     load_teams
@@ -69,16 +108,23 @@ class RegisteredAttendeesController < ApplicationController
           end
      end
 
-  # DELETE /registered_attendees/1
+
+  # Delete a registered attendee (admin only)
      def destroy
           @registered_attendee.destroy!
+          log_manager_action(
+            action: "attendee.deleted",
+            record: @registered_attendee,
+            metadata: { record_name: @registered_attendee.attendee_name, attendee_email: @registered_attendee.attendee_email }
+          )
           respond_to do |format|
                format.html { redirect_to registered_attendees_path, notice: "Registered attendee was successfully destroyed.", status: :see_other }
                format.json { head :no_content }
           end
      end
 
-  # GET /registered_attendees/teams_for_year.json
+
+  # AJAX endpoint: Return teams for a given year as JSON (for dynamic form updates)
      def teams_for_year
           year_id = params[:year_id]
           if year_id.blank?
@@ -101,19 +147,35 @@ class RegisteredAttendeesController < ApplicationController
 
   private
 
+       # Finds the registered attendee for actions that require an existing record
        def set_registered_attendee
             @registered_attendee = RegisteredAttendee.find(params[:id])
        end
 
+       # Returns the currently active Ideathon year
        def active_year
-            @active_year ||= IdeathonYear.find_by!(is_active: true)
+            IdeathonYear.find_by(is_active: true) ||
+              IdeathonYear.order(start_date: :desc, created_at: :desc).first ||
+              IdeathonYear.create!(
+                name: Time.zone.today.year.to_s,
+                start_date: Time.zone.today,
+                end_date: Time.zone.today + 1.day,
+                is_active: true,
+                description: "Auto-generated default year"
+              )
        end
 
-  # Teams list for the active year (used by the form)
+       def set_active_year
+            @active_year = active_year
+       end
+
+       # Loads teams for the active year, ordered for form display
        def load_teams
-            @teams = Team.where(ideathon_year: active_year).order(:unassigned, :team_name)
+            @teams = Team.where(ideathon_year: @active_year).order(:unassigned, :team_name)
        end
 
+       # Strong parameters: only allow trusted fields from the form
+       # Note: :team_id is NOT trusted from the form, set in apply_team_selection!
        def registered_attendee_params
             params.require(:registered_attendee).permit(
               :ideathon_year_id,
@@ -122,16 +184,20 @@ class RegisteredAttendeesController < ApplicationController
               :attendee_email,
               :attendee_major,
               :attendee_class
-              # IMPORTANT: we do NOT trust :team_id from the form anymore;
-              # we set it ourselves in apply_team_selection!
+              # :team_id intentionally omitted
             )
        end
 
-  # Works with the radio form:
-  # params[:team_choice] = "existing" | "unassigned" | "new"
-  # params[:existing_team_id] = team id (string)
-  # params[:new_team_name] = name (string)
-       def apply_team_selection!(attendee)
+       # Assigns a team to the attendee based on form input.
+       # Handles three cases: existing team, new team, or unassigned.
+       # Adds errors to attendee if selection is invalid or team is full.
+       # enforce_limit: if true, prevents assigning to a full team (max 4 members)
+       #
+       # Expects params:
+       #   team_choice: "existing", "new", or "unassigned"
+       #   existing_team_id: id of selected team (if any)
+       #   new_team_name: name for new team (if any)
+       def apply_team_selection!(attendee, enforce_limit: false)
          # year must be selected first
             if attendee.ideathon_year_id.blank?
                  attendee.errors.add(:ideathon_year_id, "must be selected")
@@ -155,6 +221,11 @@ class RegisteredAttendeesController < ApplicationController
                       return
                  end
 
+                 if enforce_limit && team.registered_attendees.count >= 4
+                      attendee.errors.add(:base, "That team is already full (max 4 members).")
+                      return
+                 end
+
                  attendee.team_id = team.id
 
             when "new"
@@ -171,7 +242,7 @@ class RegisteredAttendeesController < ApplicationController
 
                  unless team.save
                       team.errors.full_messages.each do |msg|
-                           # Make error messages more user-friendly
+                           # Make error messages more user-friendly for the form
                            friendly_msg = msg.include?("already exists") ? "Team name \"#{new_team_name}\" already exists" : msg
                            attendee.errors.add(:base, friendly_msg)
                       end
@@ -181,7 +252,7 @@ class RegisteredAttendeesController < ApplicationController
                  attendee.team_id = team.id
 
             else
-              # default to unassigned if not chosen / unassigned radio
+              # Default: assign to "Unassigned" team if no valid choice
                  begin
                       unassigned = Team.find_or_create_by!(ideathon_year_id: attendee.ideathon_year_id, unassigned: true) do |t|
                            t.team_name = "Unassigned"
