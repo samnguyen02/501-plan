@@ -65,13 +65,14 @@ You may also use Rails credentials for sensitive values; see
 
 ### First-Time Setup (after clone)
 
-Recommended one-command bootstrap:
+Start PostgreSQL first, then run setup:
 
 ```sh
+bash script/start-db
 ruby bin/setup --skip-server
 ```
 
-This command is idempotent and will:
+`bin/setup` is idempotent and will:
 - verify/install gems
 - run `db:prepare`
 - clear logs/tmp files
@@ -79,7 +80,6 @@ This command is idempotent and will:
 Then start development services:
 
 ```sh
-bash script/start-db
 bin/dev
 ```
 
@@ -88,9 +88,15 @@ Open `http://localhost:3000`.
 For Windows (Git Bash/WSL), use:
 
 ```sh
+bash script/start-db
 ruby bin/setup --skip-server
 TAILWIND_WATCH=0 bash script/app-start
 ```
+
+If `bin/setup` fails with `ActiveRecord::ConnectionNotEstablished` or
+`PG::ConnectionBad` and mentions `localhost:5432 refused`, PostgreSQL is not
+running yet. Run `bash script/start-db` (or start your local Postgres service),
+then run `ruby bin/setup --skip-server` again.
 
 ### Database Setup
 
