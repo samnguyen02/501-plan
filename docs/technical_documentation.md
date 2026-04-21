@@ -34,7 +34,7 @@ Development uses **memory** cache and async-friendly defaults; production uses S
 | `app/controllers/*` under dashboard pattern | Content modules scoped to `/dashboard` |
 | `app/controllers/club_dashboard_controller.rb` | Base auth for dashboard modules |
 | `app/services/active_ideathon_year.rb` | Resolves which `IdeathonYear` drives public content |
-| `docs/` | Markdown sources for in-app documentation |
+| `docs/` | Markdown copies of documentation (in-app nav serves **`public/*.pdf`**) |
 | `script/` | Local Postgres helpers (`start-db`, `stop-db`, `app-start`) — see `script/ReadMe.md` |
 | `Procfile` | Heroku: `web`, `worker`, `release` (migrate + seed) |
 
@@ -43,7 +43,7 @@ Development uses **memory** cache and async-friendly defaults; production uses S
 ## Routes (summary)
 
 - **Public:** `GET /` → `ideathon#index`
-- **Docs (Markdown, `.pdf` URLs):** `GET /UserDocumentation.pdf`, `GET /TechnicalDocumentation.pdf` → `DocsController`
+- **Docs (PDFs):** `GET /UserDocumentation.pdf`, `GET /TechnicalDocumentation.pdf` — static files from **`public/`** (same as `501-club-staging`; no controller)
 - **Admin Devise:** `devise_for :admins`, custom `admins/sign_in`, `admins/sign_out`
 - **Manager:** `resources :manager` → index, destroy, export_participants, export_teams, view_pdf
 - **Events:** `resources :ideathon_events`
@@ -135,7 +135,7 @@ See the root **`README.md`** section **Deploying to Heroku** and **Replacing 501
 
 ## In-app documentation delivery
 
-`DocsController` sends files from **`docs/*.md`** with **`Content-Type: text/markdown; charset=utf-8`** and **`disposition: inline`**. The route names use a `.pdf` suffix only in the URL path.
+Organizer nav links point at **`/UserDocumentation.pdf`** and **`/TechnicalDocumentation.pdf`**. Rails serves them as **`application/pdf`** from **`public/UserDocumentation.pdf`** and **`public/TechnicalDocumentation.pdf`** (no custom routes). Update the PDFs in **`public/`** when you ship revised guides; keep **`docs/*.md`** in sync if you maintain Markdown sources.
 
 ---
 

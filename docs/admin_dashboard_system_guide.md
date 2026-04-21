@@ -105,5 +105,5 @@ On Windows without `bash` on PATH, use Git Bash, e.g. `"C:\Program Files\Git\bin
 
 ## Related documentation
 
-- **Organizers:** `docs/user_documentation.md` (also served at `/UserDocumentation.pdf` as Markdown).
+- **Organizers:** `docs/user_documentation.md` (editable copy); in-app **User Guide** is **`public/UserDocumentation.pdf`** at **`/UserDocumentation.pdf`**.
 - **Engineers / DevOps:** `docs/technical_documentation.md` and root **`README.md`**.

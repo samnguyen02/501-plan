@@ -33,7 +33,7 @@ The default browser **title** in `app/views/layouts/application.html.erb` may st
 | Historical merge context | [`MERGE_ADMIN_DASHBOARD_NOTES.md`](MERGE_ADMIN_DASHBOARD_NOTES.md) |
 | Local Postgres helper scripts | [`script/ReadMe.md`](script/ReadMe.md) |
 
-**In the browser (signed-in organizer nav):** **User Guide** and **Technical Documentation** open the same Markdown sources from routes **`/UserDocumentation.pdf`** and **`/TechnicalDocumentation.pdf`**. The paths end in `.pdf` for historical naming; the response is **`text/markdown`**, not a binary PDF (see `app/controllers/docs_controller.rb`).
+**In the browser (signed-in organizer nav):** **User Guide** and **Technical Documentation** open **`public/UserDocumentation.pdf`** and **`public/TechnicalDocumentation.pdf`** at **`/UserDocumentation.pdf`** and **`/TechnicalDocumentation.pdf`** (static files, same as `501-club-staging`). Markdown copies for editing in-repo remain under **`docs/`** but are not what the nav serves.
 
 ## Getting Started
 

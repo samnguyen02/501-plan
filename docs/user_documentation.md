@@ -6,10 +6,8 @@ This guide is for **organizers** who use the **Event manager** (registration), *
 
 From the organizer navigation bar you can open:
 
-- **User Guide** — this document (Markdown), served at **`/UserDocumentation.pdf`**
-- **Technical Documentation** — developer-oriented overview (Markdown), served at **`/TechnicalDocumentation.pdf`**
-
-The URLs end in `.pdf` for historical naming; the browser receives **Markdown** (`text/markdown`), not a PDF file.
+- **User Guide** — PDF at **`/UserDocumentation.pdf`** (file: **`public/UserDocumentation.pdf`**). This Markdown file is an editable copy in the repo; replace the PDF when the guide changes.
+- **Technical Documentation** — PDF at **`/TechnicalDocumentation.pdf`** (file: **`public/TechnicalDocumentation.pdf`**), same pattern.
 
 ---
 

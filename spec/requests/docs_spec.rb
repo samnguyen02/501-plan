@@ -1,27 +1,23 @@
 require "rails_helper"
 
-RSpec.describe "Docs", type: :request do
-     let(:admin) { Admin.create!(email: "admin@tamu.edu", full_name: "Admin", uid: "123") }
-
-     before { sign_in admin, scope: :admin }
-
+RSpec.describe "Documentation PDFs", type: :request do
      describe "GET /UserDocumentation.pdf" do
-          it "serves user documentation content" do
-               get user_documentation_pdf_path
+          it "serves the user guide PDF from public/" do
+               get "/UserDocumentation.pdf"
 
                expect(response).to have_http_status(:ok)
-               expect(response.content_type).to include("text/markdown")
-               expect(response.body).to include("TAMU Ideathon User Documentation")
+               expect(response.media_type).to eq("application/pdf")
+               expect(response.body.byteslice(0, 4)).to eq("%PDF")
           end
      end
 
      describe "GET /TechnicalDocumentation.pdf" do
-          it "serves technical documentation content" do
-               get technical_documentation_pdf_path
+          it "serves the technical documentation PDF from public/" do
+               get "/TechnicalDocumentation.pdf"
 
                expect(response).to have_http_status(:ok)
-               expect(response.content_type).to include("text/markdown")
-               expect(response.body).to include("TAMU Ideathon Technical Documentation")
+               expect(response.media_type).to eq("application/pdf")
+               expect(response.body.byteslice(0, 4)).to eq("%PDF")
           end
      end
 end

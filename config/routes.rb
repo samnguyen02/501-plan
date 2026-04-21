@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
      root 'ideathon#index'
-     get "UserDocumentation.pdf", to: "docs#user_documentation", as: :user_documentation_pdf, format: false
-     get "TechnicalDocumentation.pdf", to: "docs#technical_documentation", as: :technical_documentation_pdf, format: false
 
      devise_for :admins, controllers: { sessions: "admins/sessions", omniauth_callbacks: "admins/omniauth_callbacks" }
      devise_scope :admin do
