@@ -21,7 +21,7 @@ class IdeathonEventsController < ApplicationController
      # Create a new event for the active year
      def create
           @ideathon_event = IdeathonEvent.new(event_params)
-          @ideathon_event.ideathon_year = IdeathonYear.find_by(is_active: true)
+          @ideathon_event.ideathon_year = ActiveIdeathonYear.call(create_if_missing: true, prefer_content: true)
           if @ideathon_event.save
                log_manager_action(
                  action: "event.created",

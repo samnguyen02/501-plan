@@ -1,6 +1,21 @@
 
-<%# TAMU Ideathon 2026 landing page %>
-<% content_for :title, "TAMU Ideathon 2026 - Where Ideas Come to Life" %>
+<%# TAMU Ideathon landing page %>
+<% public_year_label = @ideathon_year&.year || 2026 %>
+<% public_name = @ideathon_year&.name.presence || "TAMU Ideathon #{public_year_label}" %>
+<% public_theme = @ideathon_year&.theme.presence || "Where Ideas Come to Life" %>
+<% public_date_range =
+     if @ideathon_year&.start_date.present? && @ideathon_year&.end_date.present?
+       "#{@ideathon_year.start_date.strftime('%B %-d')} - #{@ideathon_year.end_date.strftime('%B %-d, %Y')}"
+     else
+       "February 28 - March 1, 2026"
+     end %>
+<% registration_close_label =
+     if @ideathon_year&.end_date.present?
+       "Registration closes #{@ideathon_year.end_date.strftime('%B %-d, %Y')}"
+     else
+       "Registration closes March 31, 2026"
+     end %>
+<% content_for :title, "#{public_name} - #{public_theme}" %>
 
 <!-- Extra Falling Leaves -->
 <div class="absolute inset-0 w-full h-full pointer-events-none -z-10">
@@ -255,7 +270,7 @@
         <% if admin_signed_in? %>
           <%= link_to manager_index_path, class: "bg-white text-gray-800 font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            Dashboard
+            Manager Dashboard
           <% end %>
         <% else %>
           <%= button_to admin_google_oauth2_omniauth_authorize_path(prompt: "select_account"), method: :post, data: { turbo: "false" }, class: "bg-white text-gray-800 font-titan-one text-sm px-5 py-2.5 rounded-xl shadow-lg hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2" do %>
@@ -294,7 +309,7 @@
         <a href="#faq" class="nav-link" data-action="click->ideathon-nav#closeMobile">FAQ</a>
         <div class="border-t border-white/10 my-2"></div>
         <% if admin_signed_in? %>
-          <%= link_to "Dashboard", manager_index_path, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", data: { action: "click->ideathon-nav#closeMobile" } %>
+          <%= link_to "Manager Dashboard", manager_index_path, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full", data: { action: "click->ideathon-nav#closeMobile" } %>
         <% else %>
           <%= button_to admin_google_oauth2_omniauth_authorize_path(prompt: "select_account"), method: :post, data: { turbo: "false", action: "click->ideathon-nav#closeMobile" }, class: "bg-white text-gray-800 font-titan-one text-center px-4 py-3 rounded-xl shadow-lg block w-full" do %>
             Login
@@ -324,7 +339,7 @@
     <!-- Event Badge -->
     <div class="event-badge animate-init animate-fade-up">
       <span class="w-2 h-2 rounded-full animate-pulse" style="background-color: rgb(228, 240, 171);"></span>
-      <span class="event-badge-text">February 28 - March 1, 2026</span>
+      <span class="event-badge-text"><%= public_date_range %></span>
     </div>
     
     <!-- Main Title with 2026 badge positioned -->
@@ -345,7 +360,7 @@
           <span class="absolute bottom-0 right-0 font-titan-one text-sm sm:text-base
                        px-3 py-0.5 rounded-full shadow-dark transform rotate-3" style="color: rgb(127, 85, 81);"
                 style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
-            2026
+            <%= public_year_label %>
           </span>
         </span>
       </h1>
@@ -354,7 +369,7 @@
     <!-- Tagline -->
     <p class="font-lilita-one text-lg sm:text-xl md:text-2xl text-white mb-1 animate-init animate-fade-up-delay-2
               drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]">
-      Where Ideas Come to Life
+      <%= public_theme %>
     </p>
     
     <!-- Subtitle -->
@@ -370,7 +385,7 @@
       <% if admin_signed_in? %>
         <%= link_to manager_index_path, class: "group relative bg-white text-gray-800 font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-          <span style="font-weight: normal;">Dashboard</span>
+          <span style="font-weight: normal;">Manager Dashboard</span>
         <% end %>
       <% else %>
         <%= button_to admin_google_oauth2_omniauth_authorize_path(prompt: "select_account"), method: :post, data: { turbo: "false" }, class: "group relative bg-white text-gray-800 font-titan-one text-xs px-4 py-2 rounded-lg shadow-dark hover:shadow-game-glow transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 min-w-[180px] justify-center border-2 border-white/90" do %>
@@ -764,28 +779,26 @@
     </div>
     
     <div class="space-y-4" data-controller="ideathon-faq">
-      
-      <% [
-        ["Who can participate?", "Any current Texas A&M student with a valid @tamu.edu email can participate. All majors and skill levels are welcome - you don't need to be a CS major or know how to code!"],
-        ["Do I need a team?", "Teams of 2-4 are required, but you don't need one to register! We'll have team formation activities at the start of the event to help you find like-minded collaborators."],
-        ["What should I bring?", "Bring your laptop, chargers, and any hardware you want to use. We'll provide food, drinks, snacks, WiFi, and a comfortable workspace. Sleeping bags/blankets are recommended if you plan to stay overnight!"],
-        ["Is it free to attend?", "Yes! TAMU Ideathon is completely free for all participants. Food, swag, and all workshop materials are provided at no cost."],
-        ["Do I need to know how to code?", "No coding experience required! This is an <strong>ideathon</strong>, not just a hackathon. We value creative problem-solving, design thinking, business acumen, and presentation skills just as much as technical ability."]
-      ].each do |question, answer| %>
+      <% if @faqs.any? %>
+      <% @faqs.each do |faq| %>
       <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 overflow-hidden">
         <button class="w-full px-6 py-5 flex items-center justify-between text-left" 
                 data-action="click->ideathon-faq#toggle" data-ideathon-faq-target="button">
-          <span class="font-titan-one text-white text-lg"><%= question %></span>
+          <span class="font-titan-one text-white text-lg"><%= faq.question %></span>
           <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: rgb(238, 136, 138);">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
         <div class="px-6 pb-5 hidden" data-ideathon-faq-target="content">
-          <p class="font-lilita-one text-white"><%= answer.html_safe %></p>
+          <div class="font-lilita-one text-white"><%= faq_answer_html(faq.answer) %></div>
         </div>
       </div>
       <% end %>
-      
+      <% else %>
+      <div class="text-center bento-card bg-white/20 backdrop-blur-md rounded-2xl p-10 border border-white/30 max-w-xl mx-auto">
+        <p class="font-lilita-one text-white text-lg">FAQ entries will be posted here soon.</p>
+      </div>
+      <% end %>
     </div>
   </div>
 </section>
@@ -803,63 +816,114 @@
         Powered by industry leaders who believe in student innovation
       </p>
     </div>
-    
-    <!-- Presenting Sponsors -->
-    <div class="mb-12">
-      <div class="text-center mb-6">
-        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(238, 136, 138);">Presenting Sponsors</span>
+
+    <% sponsors_empty = @sponsor_presenting.empty? && @sponsor_gold.empty? && @sponsor_other.empty? && @community_partners.empty? %>
+    <% if sponsors_empty %>
+      <div class="text-center bento-card bg-white/20 backdrop-blur-md rounded-2xl p-10 border border-white/30 max-w-xl mx-auto">
+        <p class="font-lilita-one text-white text-lg">Sponsor and partner details will be posted here soon.</p>
       </div>
-      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
-          <div class="w-48 h-16 flex items-center justify-center">
-            <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
+    <% else %>
+      <% if @sponsor_presenting.any? %>
+      <div class="mb-12">
+        <div class="text-center mb-6">
+          <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(238, 136, 138);">Presenting Sponsors</span>
+        </div>
+        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+          <% @sponsor_presenting.each do |sp| %>
+          <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group">
+            <div class="w-48 h-16 flex items-center justify-center">
+              <%= sponsor_logo_or_name(
+                sp,
+                image_class: "max-h-16 max-w-[12rem] w-auto object-contain",
+                fallback_class: "font-beachday text-2xl sm:text-3xl text-white text-center transition-colors px-2",
+                fallback_tag: :div,
+                show_fallback_on_logo_error: false
+              ) %>
+            </div>
+            <% if sp.blurb.present? %>
+              <p class="font-lilita-one text-xs text-center mt-3 max-w-xs mx-auto" style="color: rgba(255,255,255,0.85);"><%= sp.blurb %></p>
+            <% end %>
           </div>
-        </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all group" style="--sponsor-hover: rgb(238, 136, 138); --sponsor-hover-opacity: rgba(238, 136, 138, 0.3);">
-          <div class="w-48 h-16 flex items-center justify-center">
-            <div class="font-beachday text-3xl text-white transition-colors">COMING SOON</div>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+
+      <% if @sponsor_gold.any? %>
+      <div class="mb-12">
+        <div class="text-center mb-6">
+          <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(215, 129, 112);">Gold Sponsors</span>
+        </div>
+        <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
+          <% @sponsor_gold.each do |sp| %>
+          <div class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
+            <div class="w-36 h-12 flex items-center justify-center">
+              <%= sponsor_logo_or_name(
+                sp,
+                image_class: "max-h-12 max-w-[9rem] w-auto object-contain",
+                fallback_class: "font-titan-one text-xl group-hover:text-white transition-colors text-white text-center px-1",
+                fallback_tag: :div,
+                show_fallback_on_logo_error: false
+              ) %>
+            </div>
           </div>
-        </a>
+          <% end %>
+        </div>
       </div>
-    </div>
-    
-    <!-- Gold Sponsors -->
-    <div class="mb-12">
-      <div class="text-center mb-6">
-        <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(215, 129, 112);">Gold Sponsors</span>
-      </div>
-      <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
-          <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
+      <% end %>
+
+      <% if @sponsor_other.any? %>
+      <div class="mb-12">
+        <div class="text-center mb-6">
+          <span class="font-titan-one text-sm tracking-widest uppercase" style="color: rgb(238, 136, 138);">Sponsors</span>
+        </div>
+        <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
+          <% @sponsor_other.each do |sp| %>
+          <div class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
+            <div class="w-36 h-12 flex items-center justify-center">
+              <%= sponsor_logo_or_name(
+                sp,
+                image_class: "max-h-12 max-w-[9rem] w-auto object-contain",
+                fallback_class: "font-titan-one text-xl group-hover:text-white transition-colors text-white text-center px-1",
+                fallback_tag: :div,
+                show_fallback_on_logo_error: false
+              ) %>
+            </div>
+            <% if sp.job_title.present? && !sp.job_title.to_s.downcase.include?("presenting") && !sp.job_title.to_s.downcase.include?("gold") %>
+              <p class="font-lilita-one text-xs text-center mt-2" style="color: rgba(255,255,255,0.75);"><%= sp.job_title %></p>
+            <% end %>
           </div>
-        </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
-          <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+
+      <% if @community_partners.any? %>
+      <div class="mb-12">
+        <div class="text-center mb-6">
+          <span class="font-lilita-one text-white text-sm tracking-widest uppercase">Community Partners</span>
+        </div>
+        <div class="flex flex-wrap justify-center items-center gap-4 md:gap-6">
+          <% @community_partners.each do |sp| %>
+          <div class="px-5 py-3 bg-white/20 rounded-lg border border-white/30 hover:border-white/40 transition-all max-w-xs text-center">
+            <%= sponsor_logo_or_name(
+              sp,
+              image_class: "max-h-10 max-w-[14rem] mx-auto object-contain mb-2",
+              fallback_class: "font-lilita-one text-white transition-colors block mb-2",
+              fallback_tag: :span,
+              show_fallback_when_logo_missing: false,
+              show_fallback_on_logo_error: false
+            ) %>
+            <span class="font-lilita-one text-white transition-colors block"><%= sp.name %></span>
+            <% if sp.blurb.present? %>
+              <span class="font-lilita-one text-xs block mt-1" style="color: rgba(255,255,255,0.8);"><%= sp.blurb %></span>
+            <% end %>
           </div>
-        </a>
-        <a href="#" class="bento-card bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/30 hover:border-white/40 transition-all group">
-          <div class="w-36 h-12 flex items-center justify-center">
-            <div class="font-titan-one text-xl group-hover:text-white transition-colors text-white">COMING SOON</div>
-          </div>
-        </a>
+          <% end %>
+        </div>
       </div>
-    </div>
-    
-    <!-- Community Partners -->
-    <div class="mb-12">
-      <div class="text-center mb-6">
-        <span class="font-lilita-one text-white text-sm tracking-widest uppercase">Community Partners</span>
-      </div>
-      <div class="flex flex-wrap justify-center items-center gap-4 md:gap-6">
-        <% ["Texas A&M University", "Others coming soon!"].each do |partner| %>
-        <a href="#" class="px-5 py-3 bg-white/20 rounded-lg border border-white/30 hover:border-white/40 transition-all">
-          <span class="font-lilita-one text-white hover:text-white transition-colors"><%= partner %></span>
-        </a>
-        <% end %>
-      </div>
-    </div>
+      <% end %>
+    <% end %>
   </div>
 </section>
 
@@ -876,25 +940,74 @@
         Experienced professionals and industry leaders evaluating your innovations
       </p>
     </div>
-    
-    <!-- Judges Grid -->
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% 6.times do %>
+      <% if @judges.any? %>
+      <% @judges.each do |judge| %>
         <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-          <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
-            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
+          <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg overflow-hidden" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(238, 136, 138));">
+            <% if judge.photo_url.present? %>
+              <%= image_tag judge.photo_url, alt: judge.name, class: "w-full h-full object-cover" %>
+            <% else %>
+              <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+            <% end %>
           </div>
-          <h3 class="font-titan-one text-white text-lg mb-1">TBD</h3>
-          <p class="font-lilita-one text-sm mb-2" style="color: rgb(238, 136, 138);">TBD</p>
-          <p class="font-lilita-one text-white text-xs mb-3">TBD</p>
-          <p class="font-lilita-one text-white text-sm leading-relaxed">Judge information coming soon</p>
+          <h3 class="font-titan-one text-white text-lg mb-1"><%= judge.name %></h3>
+          <% if judge.job_title.present? %>
+            <p class="font-lilita-one text-sm mb-2" style="color: rgb(238, 136, 138);"><%= judge.job_title %></p>
+          <% end %>
+          <% if judge.bio.present? %>
+            <p class="font-lilita-one text-white text-sm leading-relaxed"><%= judge.bio %></p>
+          <% end %>
+        </div>
+      <% end %>
+      <% else %>
+        <div class="md:col-span-2 lg:col-span-3 text-center bento-card bg-white/20 backdrop-blur-md rounded-2xl p-10 border border-white/30">
+          <p class="font-lilita-one text-white text-lg">Judge lineup will be announced soon.</p>
         </div>
       <% end %>
     </div>
   </div>
 </section>
+
+<% if @mentors.any? %>
+<section id="mentors" class="relative z-10 py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="section-heading">
+        MEET THE <span style="color: rgb(228, 240, 171);">MENTORS</span>
+      </h2>
+      <p class="font-lilita-one text-lg text-white">
+        Experts here to help you refine ideas and presentations
+      </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @mentors.each do |mentor| %>
+      <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+        <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg overflow-hidden" style="background: linear-gradient(to right, rgb(252, 240, 228), rgb(158, 194, 191));">
+          <% if mentor.photo_url.present? %>
+            <%= image_tag mentor.photo_url, alt: mentor.name, class: "w-full h-full object-cover" %>
+          <% else %>
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          <% end %>
+        </div>
+        <h3 class="font-titan-one text-white text-lg mb-1"><%= mentor.name %></h3>
+        <% if mentor.job_title.present? %>
+          <p class="font-lilita-one text-sm mb-2" style="color: rgb(228, 240, 171);"><%= mentor.job_title %></p>
+        <% end %>
+        <% if mentor.bio.present? %>
+          <p class="font-lilita-one text-white text-sm leading-relaxed"><%= mentor.bio %></p>
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
 
 
 <%# Judging Criteria section %>
@@ -957,13 +1070,9 @@
       <div class="mb-8">
         <h3 class="font-titan-one text-xl mb-4" style="color: rgb(238, 136, 138);">Competition Rules</h3>
         <div class="space-y-3">
-          <% [
-            { title: "Original Work", description: "All work must be created during the Ideathon." },
-            { title: "AI Tools Permitted", description: "Use of AI tools is permitted unless otherwise specified." },
-            { title: "Pitch Deck Required", description: "Teams must submit their pitch deck before the deadline." },
-            { title: "No Late Submissions", description: "Late submissions will not be judged." },
-            { title: "One Presentation", description: "One presentation per team." }
-          ].each_with_index do |rule, index| %>
+          <% if @rules.any? %>
+          <% @rules.each_with_index do |rule, index| %>
+            <% parsed_rule = rule_title_and_body(rule) %>
             <div class="bento-card bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 transition-all duration-300">
               <div class="flex items-start gap-3">
                 <div class="flex-shrink-0">
@@ -972,10 +1081,19 @@
                   </div>
                 </div>
                 <div>
-                  <h4 class="font-titan-one text-white text-sm mb-1"><%= rule[:title] %></h4>
-                  <p class="font-lilita-one text-white text-sm"><%= rule[:description] %></p>
+                  <% if parsed_rule[:title].present? %>
+                    <h4 class="font-titan-one text-white text-sm mb-1"><%= parsed_rule[:title] %></h4>
+                    <p class="font-lilita-one text-white text-sm whitespace-pre-line"><%= parsed_rule[:body] %></p>
+                  <% else %>
+                    <p class="font-lilita-one text-white text-sm whitespace-pre-line"><%= parsed_rule[:body] %></p>
+                  <% end %>
                 </div>
               </div>
+            </div>
+          <% end %>
+          <% else %>
+            <div class="text-center bento-card bg-white/20 backdrop-blur-md rounded-2xl p-10 border border-white/30">
+              <p class="font-lilita-one text-white text-lg">Contest rules will be posted here soon.</p>
             </div>
           <% end %>
         </div>
@@ -1050,7 +1168,7 @@
         </div>
         
         <p class="font-lilita-one text-white text-sm mt-6">
-          Registration closes March 31, 2026
+          <%= registration_close_label %>
         </p>
       </div>
     </div>
@@ -1125,7 +1243,7 @@
           <img src="/images/logo.png" alt="TAMU Ideathon" class="w-full h-full object-cover" />
         </div>
         <div>
-          <div class="font-titan-one text-sm" style="color: rgb(127, 85, 81);">TAMU IDEATHON 2026</div>
+          <div class="font-titan-one text-sm" style="color: rgb(127, 85, 81);"><%= public_name.upcase %></div>
           <div class="font-lilita-one text-xs" style="color: rgba(127, 85, 81, 0.6);">Copyright <%= Date.current.year %> All rights reserved</div>
         </div>
       </div>

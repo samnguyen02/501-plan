@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "RegisteredAttendees", type: :request do
      let(:ideathon_year) { IdeathonYear.create!(name: "2026", start_date: 1.week.from_now, end_date: 2.weeks.from_now, is_active: true) }
      let(:unassigned_team) { Team.create!(ideathon_year: ideathon_year, team_name: "Unassigned", unassigned: true) }
-     let(:admin) { Admin.create!(email: "admin@example.com", full_name: "Admin", uid: "123") }
+     let(:admin) { Admin.create!(email: "admin@tamu.edu", full_name: "Admin", uid: "123") }
 
      before { unassigned_team }
 
@@ -39,6 +39,15 @@ RSpec.describe "RegisteredAttendees", type: :request do
                expect(data.size).to eq(1)
                expect(data.first["name"]).to eq("Unassigned")
                expect(data.first["id"]).to eq(unassigned_team.id)
+          end
+
+          it "returns empty list for non-active year ids" do
+               other_year = IdeathonYear.create!(name: "2027", start_date: 3.weeks.from_now, end_date: 4.weeks.from_now, is_active: false)
+               Team.create!(ideathon_year: other_year, team_name: "Other Team", unassigned: false)
+
+               get teams_for_year_registered_attendees_path, params: { year_id: other_year.id }
+               expect(response).to have_http_status(:ok)
+               expect(JSON.parse(response.body)).to eq([])
           end
      end
 
@@ -242,9 +251,45 @@ RSpec.describe "RegisteredAttendees", type: :request do
                )
           end
 
-          it "returns success (public show)" do
+          it "redirects guests to sign-in" do
+               get registered_attendee_path(attendee)
+               expect(response).to redirect_to(new_admin_session_path)
+          end
+
+          it "returns success for signed-in admins" do
+               sign_in admin, scope: :admin
                get registered_attendee_path(attendee)
                expect(response).to have_http_status(:ok)
+          end
+     end
+
+     describe "when no ideathon year exists" do
+          before do
+               Team.delete_all
+               RegisteredAttendee.delete_all
+               IdeathonYear.delete_all
+          end
+
+          it "shows registration unavailable on new" do
+               get new_registered_attendee_path
+               expect(response).to redirect_to(root_path)
+               expect(flash[:alert]).to match(/registration is currently unavailable/i)
+          end
+
+          it "blocks create and does not persist attendee" do
+               expect do
+                    post registered_attendees_path, params: {
+                      registered_attendee: {
+                        attendee_name: "Jane Doe",
+                        attendee_phone: "979-555-1234",
+                        attendee_email: "jane@tamu.edu",
+                        attendee_major: "CS",
+                        attendee_class: "Senior"
+                      }
+                    }
+               end.not_to change(RegisteredAttendee, :count)
+
+               expect(response).to redirect_to(root_path)
           end
      end
 

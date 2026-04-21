@@ -15,7 +15,7 @@ class ManagerController < ApplicationController
           @registered_attendees = base_scope
           @teams_count = Team.where(unassigned: false).count
 
-          active_year = IdeathonYear.find_by(is_active: true)
+          active_year = ActiveIdeathonYear.call(prefer_content: true)
           @events = active_year ? IdeathonEvent.where(ideathon_year: active_year).order(event_date: :asc, event_time: :asc) : IdeathonEvent.none
 
           @action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)

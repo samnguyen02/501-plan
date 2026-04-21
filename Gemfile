@@ -32,8 +32,6 @@ gem "omniauth-google-oauth2", "~> 1.1"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
-gem "yaml_db"
-
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
 gem "solid_queue"
@@ -54,8 +52,6 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
-     # Load .env so API keys stay out of the repo
-     gem "dotenv-rails"
      # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
      gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 

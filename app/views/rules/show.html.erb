@@ -1,0 +1,10 @@
+<h1>Rule</h1>
+
+<p><strong>Year:</strong> <%= @rule.year %></p>
+<p><strong>Rule:</strong> <%= @rule.rule_text %></p>
+
+<%= link_to "Edit", edit_rule_path(@rule) %> |
+<%= link_to "Back to Rules", rules_path %>
+<% if admin? %>
+  | <%= link_to "Delete", delete_rule_path(@rule) %>
+<% end %>

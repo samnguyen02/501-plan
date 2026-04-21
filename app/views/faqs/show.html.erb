@@ -1,0 +1,11 @@
+<h1>FAQ</h1>
+
+<p><strong>Year:</strong> <%= @faq.year %></p>
+<p><strong>Question:</strong> <%= @faq.question %></p>
+<p><strong>Answer:</strong> <%= @faq.answer %></p>
+
+<%= link_to "Edit", edit_faq_path(@faq) %> |
+<%= link_to "Back to FAQs", faqs_path %>
+<% if admin? %>
+  | <%= link_to "Delete", delete_faq_path(@faq) %>
+<% end %>

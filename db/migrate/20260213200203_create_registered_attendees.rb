@@ -1,6 +1,6 @@
 class CreateRegisteredAttendees < ActiveRecord::Migration[8.1]
      def change
-          create_table :registered_attendees do |t|
+          create_table :registered_attendees, if_not_exists: true do |t|
                t.references :ideathon_year, null: false, foreign_key: true
                t.references :team, null: false, foreign_key: true
                t.string :attendee_name
