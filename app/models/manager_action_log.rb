@@ -1,5 +1,5 @@
 class ManagerActionLog < ApplicationRecord
-  belongs_to :admin
+  belongs_to :user
 
   validates :action, presence: true
 
@@ -72,7 +72,6 @@ class ManagerActionLog < ApplicationRecord
       new_str = normalize_value(new_val)
       next if new_str.blank?
 
-      # For updates we want "Old → New" so renames make sense.
       chunks << "#{label}: #{truncate_value(old_str)} → #{truncate_value(new_str)}"
     end
 
@@ -108,4 +107,3 @@ class ManagerActionLog < ApplicationRecord
     "#{s.first(77)}..."
   end
 end
-

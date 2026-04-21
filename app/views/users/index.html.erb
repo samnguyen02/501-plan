@@ -1,0 +1,71 @@
+<h1>User Management</h1>
+
+<h2>Add User by Email</h2>
+<%= form_with(model: @new_user, url: users_path, local: true) do |form| %>
+  <% if @new_user.errors.any? %>
+    <div class="form-errors" role="alert">
+      <ul>
+        <% @new_user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row form-row--end">
+    <div>
+      <%= form.label :email, "Email Address" %>
+      <%= form.email_field :email, placeholder: "user@example.com" %>
+    </div>
+    <div>
+      <%= form.label :role %>
+      <%= form.select :role, [["Editor", "editor"], ["Admin", "admin"]] %>
+    </div>
+    <div>
+      <%= form.submit "Add User" %>
+    </div>
+  </div>
+<% end %>
+
+<hr>
+
+<h2>Existing Users</h2>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Current Role</th>
+      <th>Change Role</th>
+      <th>Remove</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.name || "—" %></td>
+        <td>
+          <strong><%= user.role.capitalize %></strong>
+          <% if user == current_user %>
+            (you)
+          <% end %>
+        </td>
+        <td>
+          <%= form_with(model: user, url: user_path(user), method: :patch, local: true) do |form| %>
+            <%= form.select :role, [["Admin", "admin"], ["Editor", "editor"], ["Unauthorized", "unauthorized"]] %>
+            <%= form.submit "Update" %>
+          <% end %>
+        </td>
+        <td>
+          <% if user == current_user %>
+            —
+          <% else %>
+            <%= button_to "Delete", user_path(user), method: :delete, data: { turbo_confirm: "Remove #{user.email}?" } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

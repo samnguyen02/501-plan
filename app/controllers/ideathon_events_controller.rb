@@ -21,7 +21,7 @@ class IdeathonEventsController < ApplicationController
      # Create a new event for the active year
      def create
           @ideathon_event = IdeathonEvent.new(event_params)
-          @ideathon_event.ideathon_year = IdeathonYear.find_by(is_active: true)
+          @ideathon_event.ideathon_year = Ideathon.find_by(is_active: true)
           if @ideathon_event.save
                log_manager_action(
                  action: "event.created",
@@ -74,7 +74,7 @@ class IdeathonEventsController < ApplicationController
           )
           respond_to do |format|
                format.turbo_stream do
-                    action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)
+                    action_logs = ManagerActionLog.includes(:user).recent_first.limit(200)
                     render turbo_stream: [
                       turbo_stream.remove("ideathon_event_#{@ideathon_event.id}"),
                       turbo_stream.replace("action_logs", partial: "manager/action_logs", locals: { action_logs: action_logs })

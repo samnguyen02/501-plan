@@ -1,0 +1,85 @@
+class IdeathonsController < ClubDashboardController
+  before_action :require_admin, only: [ :destroy, :import ]
+  before_action :set_ideathon, only: [ :show, :edit, :update, :delete, :destroy ]
+  before_action :set_ideathon_overview, only: [ :overview ]
+
+  def index
+    @ideathons = Ideathon.order(year: :desc)
+  end
+
+  def show
+  end
+
+  def overview
+  end
+
+  def new
+    @ideathon = Ideathon.new
+  end
+
+  def create
+    @ideathon = Ideathon.new(ideathon_params)
+    if @ideathon.save
+      redirect_to ideathons_path, notice: "Ideathon was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @ideathon.update(ideathon_update_params)
+      redirect_to ideathons_path, notice: "Ideathon was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def delete
+  end
+
+  def destroy
+    @ideathon.destroy
+    redirect_to ideathons_path, notice: "Ideathon was successfully deleted."
+  end
+
+  def import
+    result = CsvImporter.new(
+      file: params[:file],
+      model: Ideathon,
+      attribute_map: { "year" => :year, "theme" => :theme }
+    ).import
+
+    if result[:failed] > 0
+      redirect_to ideathons_path, alert: "Imported #{result[:success]} ideathons. #{result[:failed]} failed: #{result[:errors].first(3).join(', ')}"
+    else
+      redirect_to ideathons_path, notice: "All #{result[:success]} ideathons imported successfully."
+    end
+  end
+
+  private
+
+  def set_ideathon
+    @ideathon = Ideathon.find_by!(year: params[:year].to_i)
+  end
+
+  def set_ideathon_overview
+    @ideathon = Ideathon.includes(:sponsors_partners, :mentors_judges, :faqs).find_by!(year: params[:year].to_i)
+    @sponsors_partners = @ideathon.sponsors_partners.sort_by(&:name)
+    @judges = @ideathon.mentors_judges.select(&:is_judge?).sort_by(&:name)
+    @faqs = @ideathon.faqs.sort_by(&:id)
+    @mentors_judges_with_photos = @ideathon.mentors_judges.select { |mj| mj.photo_url.present? }.sort_by(&:name)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to ideathons_path, alert: "Ideathon year #{params[:year]} was not found."
+  end
+
+  def ideathon_params
+    params.require(:ideathon).permit(:year, :theme)
+  end
+
+  def ideathon_update_params
+    params.require(:ideathon).permit(:theme)
+  end
+end

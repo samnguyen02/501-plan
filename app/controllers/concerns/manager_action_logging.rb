@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module ManagerActionLogging
   extend ActiveSupport::Concern
 
   private
 
   def log_manager_action(action:, record: nil, metadata: {})
-    return unless respond_to?(:admin_signed_in?) && admin_signed_in?
+    return unless respond_to?(:organizer_tools?, true) && organizer_tools?
     return if action.blank?
 
     ManagerActionLog.create!(
-      admin: current_admin,
+      user: current_user,
       action: action,
       record_type: record&.class&.name,
       record_id: record&.id,
@@ -21,4 +23,3 @@ module ManagerActionLogging
     nil
   end
 end
-

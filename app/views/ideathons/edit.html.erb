@@ -1,0 +1,30 @@
+<h1>Edit Ideathon <%= @ideathon.year %></h1>
+
+<%= form_with(model: @ideathon, url: ideathon_path(@ideathon), local: true) do |form| %>
+  <% if @ideathon.errors.any? %>
+    <div class="form-errors" role="alert">
+      <h3><%= pluralize(@ideathon.errors.count, "error") %> prohibited this ideathon from being saved:</h3>
+      <ul>
+        <% @ideathon.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <strong>Year:</strong> <%= @ideathon.year %>
+  </div>
+
+  <div>
+    <%= form.label :theme %>
+    <%= form.text_field :theme %>
+  </div>
+
+  <div>
+    <%= form.submit "Update Ideathon" %>
+  </div>
+<% end %>
+
+<br>
+<%= link_to "Back to Ideathons", ideathons_path %>

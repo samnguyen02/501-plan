@@ -1,0 +1,44 @@
+<h1>Rules</h1>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Rule</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rules.each do |rule| %>
+      <tr>
+        <td><%= rule.year %></td>
+        <td><%= truncate(rule.rule_text, length: 120) %></td>
+        <td>
+          <%= link_to "View", rule_path(rule) %> |
+          <%= link_to "Edit", edit_rule_path(rule) %>
+          <% if admin? %>
+            | <%= link_to "Delete", delete_rule_path(rule) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to "New Rule", new_rule_path %>
+
+<% if admin? %>
+  <hr>
+  <h2>Import Rules from CSV</h2>
+  <p>CSV columns: <code>year, rule_text</code></p>
+  <%= form_with url: import_rules_path, local: true, multipart: true do |form| %>
+    <div>
+      <%= form.label :file, "Select CSV file" %>
+      <%= form.file_field :file, accept: ".csv,text/csv" %>
+    </div>
+    <div>
+      <%= form.submit "Import" %>
+    </div>
+  <% end %>
+<% end %>

@@ -154,7 +154,7 @@
               style="background: rgba(238, 136, 138, 0.1); border: 1px solid rgba(238, 136, 138, 0.25); color: rgb(238, 136, 138);">
         ? Help
       </button>
-      <%= link_to "Sign Out", destroy_admin_session_path, class: "text-white/30 hover:text-white/60 text-xs transition-colors" %>
+      <%= button_to "Sign Out", logout_path, method: :delete, class: "text-white/30 hover:text-white/60 text-xs transition-colors bg-transparent border-0 p-0 cursor-pointer" %>
     </div>
   </div>
 

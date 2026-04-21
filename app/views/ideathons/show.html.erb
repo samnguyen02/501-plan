@@ -1,0 +1,10 @@
+<h1>Ideathon <%= @ideathon.year %></h1>
+
+<p><strong>Theme:</strong> <%= @ideathon.theme %></p>
+
+<%= link_to "Full overview", overview_ideathon_path(@ideathon) %> |
+<%= link_to "Edit", edit_ideathon_path(@ideathon) %> |
+<%= link_to "Back to Ideathons", ideathons_path %>
+<% if admin? %>
+  | <%= link_to "Delete", delete_ideathon_path(@ideathon) %>
+<% end %>

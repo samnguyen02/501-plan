@@ -3,7 +3,7 @@
 # Handles validation, search, and team association logic.
 class RegisteredAttendee < ApplicationRecord
      # Associations
-     belongs_to :ideathon_year
+     belongs_to :ideathon_year, class_name: "Ideathon", inverse_of: :registered_attendees
      belongs_to :team, optional: true
 
      # Validations

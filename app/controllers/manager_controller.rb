@@ -15,10 +15,10 @@ class ManagerController < ApplicationController
           @registered_attendees = base_scope
           @teams_count = Team.where(unassigned: false).count
 
-          active_year = IdeathonYear.find_by(is_active: true)
+          active_year = Ideathon.find_by(is_active: true)
           @events = active_year ? IdeathonEvent.where(ideathon_year: active_year).order(event_date: :asc, event_time: :asc) : IdeathonEvent.none
 
-          @action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)
+          @action_logs = ManagerActionLog.includes(:user).recent_first.limit(200)
      end
 
      # DELETE /manager/:id
@@ -35,7 +35,7 @@ class ManagerController < ApplicationController
 
           respond_to do |format|
                format.turbo_stream do
-                    @action_logs = ManagerActionLog.includes(:admin).recent_first.limit(200)
+                    @action_logs = ManagerActionLog.includes(:user).recent_first.limit(200)
                     render turbo_stream: [
                       turbo_stream.remove("registered_attendee_#{@registered_attendee.id}"),
                       turbo_stream.replace("action_logs", partial: "manager/action_logs", locals: { action_logs: @action_logs })

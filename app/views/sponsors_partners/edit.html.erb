@@ -1,0 +1,51 @@
+<h1>Edit Sponsor/Partner</h1>
+
+<%= form_with(model: @sponsors_partner, local: true) do |form| %>
+  <% if @sponsors_partner.errors.any? %>
+    <div class="form-errors" role="alert">
+      <h3><%= pluralize(@sponsors_partner.errors.count, "error") %> prohibited this record from being saved:</h3>
+      <ul>
+        <% @sponsors_partner.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :year %>
+    <%= form.select :year, @ideathon_years, prompt: "Select Ideathon Year" %>
+  </div>
+
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :job_title %>
+    <%= form.text_field :job_title %>
+  </div>
+
+  <div>
+    <%= form.label :logo_url %>
+    <%= form.text_field :logo_url %>
+  </div>
+
+  <div>
+    <%= form.label :blurb %>
+    <%= form.text_area :blurb %>
+  </div>
+
+  <div>
+    <%= form.label :is_sponsor, "Is Sponsor?" %>
+    <%= form.check_box :is_sponsor %>
+  </div>
+
+  <div>
+    <%= form.submit "Update Sponsor/Partner" %>
+  </div>
+<% end %>
+
+<br>
+<%= link_to "Back to Sponsors & Partners", sponsors_partners_path %>

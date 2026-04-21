@@ -1,30 +1,75 @@
 Rails.application.routes.draw do
-     root 'ideathon#index'
+  get "up" => "rails/health#show", as: :rails_health_check
 
-     devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
-     devise_scope :admin do
-          get 'admins/sign_in', to: 'admins/sessions#new', as: :new_admin_session
-          get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
-     end
+  root "ideathon#index"
 
-     resources :manager, only: [ :index, :destroy ], controller: 'manager' do
-          collection do
-               get :export_participants
-               get :export_teams
-               get :view_pdf
-          end
-     end
+  resources :manager, only: [ :index, :destroy ], controller: "manager" do
+    collection do
+      get :export_participants
+      get :export_teams
+      get :view_pdf
+    end
+  end
 
-     resources :ideathon_events, only: [ :new, :create, :edit, :update, :destroy ]
+  resources :ideathon_events, only: [ :new, :create, :edit, :update, :destroy ]
 
-     resources :registered_attendees do
-          collection do
-               get :teams_for_year
-               get :success
-          end
-     end
+  resources :registered_attendees do
+    collection do
+      get :teams_for_year
+      get :success
+    end
+  end
 
-     # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-     # Can be used by load balancers and uptime monitors to verify that the app is live.
-     get "up" => "rails/health#show", as: :rails_health_check
+  get "/login", to: "sessions#new", as: :login
+  get "/auth/:provider/callback", to: "sessions#create"
+  post "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/failure", to: "sessions#failure"
+  delete "/logout", to: "sessions#destroy", as: :logout
+  get "/unauthorized", to: "sessions#unauthorized", as: :unauthorized
+
+  scope path: "dashboard" do
+    resources :users, only: [ :index, :create, :update, :destroy ]
+
+    resources :activity_logs, only: [ :index ]
+
+    resources :ideathons, param: :year do
+      post :import, on: :collection
+      member do
+        get :delete
+        get :overview
+      end
+    end
+
+    resources :sponsors_partners do
+      post :import, on: :collection
+      get :export, on: :collection
+      member do
+        get :delete
+      end
+    end
+
+    resources :mentors_judges do
+      post :import, on: :collection
+      get :export, on: :collection
+      member do
+        get :delete
+      end
+    end
+
+    resources :faqs do
+      post :import, on: :collection
+      member do
+        get :delete
+      end
+    end
+
+    resources :rules do
+      post :import, on: :collection
+      member do
+        get :delete
+      end
+    end
+  end
+
+  mount LetterOpenerWeb::Engine, at: "/letter_opener"
 end

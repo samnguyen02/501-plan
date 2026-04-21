@@ -3,7 +3,7 @@
 # Each team belongs to a year and has many registered attendees.
 class Team < ApplicationRecord
      # Associations
-     belongs_to :ideathon_year
+     belongs_to :ideathon_year, class_name: "Ideathon", inverse_of: :teams
      has_many :registered_attendees
 
      # Validations

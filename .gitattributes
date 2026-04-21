@@ -1,7 +1,5 @@
 # See https://git-scm.com/docs/gitattributes for more about git attribute files.
 
-* text=auto eol=lf
-
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated
 
@@ -9,3 +7,4 @@ db/schema.rb linguist-generated
 vendor/* linguist-vendored
 config/credentials/*.yml.enc diff=rails_credentials
 config/credentials.yml.enc diff=rails_credentials
+* text=auto eol=lf
