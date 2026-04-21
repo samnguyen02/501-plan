@@ -51,7 +51,21 @@ RSpec.describe RegisteredAttendee, type: :model do
                  attendee_class: "Senior"
                )
                expect(attendee).not_to be_valid
-               expect(attendee.errors[:attendee_email]).to include("must be a @tamu.edu address")
+               expect(attendee.errors[:attendee_email]).to include("must be a valid @tamu.edu address")
+          end
+
+          it "rejects bare @tamu.edu without a local part" do
+               attendee = RegisteredAttendee.new(
+                 ideathon_year: ideathon_year,
+                 team: team,
+                 attendee_name: "NoName",
+                 attendee_phone: "979-555-1111",
+                 attendee_email: "@tamu.edu",
+                 attendee_major: "CS",
+                 attendee_class: "Senior"
+               )
+               expect(attendee).not_to be_valid
+               expect(attendee.errors[:attendee_email]).to include("must be a valid @tamu.edu address")
           end
 
           it "is valid with tamu email domain" do

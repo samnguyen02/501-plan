@@ -35,9 +35,8 @@ RSpec.describe "Admin dashboard system guide coverage", type: :request do
 
           [ manager_index_path, ideathons_path, activity_logs_path ].each do |route|
                get route
-               expect(response).to have_http_status(:redirect)
-               expect(response.location).to satisfy { |url| url.end_with?(root_path) || url.end_with?(new_admin_session_path) }
-               expect(flash[:alert]).to match(/organizer access|not authorized/i)
+               expect(response).to redirect_to(root_path)
+               expect(flash[:alert]).to match(/not authorized/i)
           end
      end
 

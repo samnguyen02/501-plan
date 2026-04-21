@@ -44,7 +44,11 @@ class ApplicationController < ActionController::Base
        def require_organizer_tools!
             return if organizer_tools?
 
-            redirect_to new_admin_session_path, alert: "Your account does not have organizer access."
+            if admin_signed_in?
+                 redirect_to root_path, alert: "Your account is not authorized for organizer tools."
+            else
+                 redirect_to new_admin_session_path, alert: "Please sign in to access organizer tools."
+            end
        end
 
        def set_current_admin

@@ -17,11 +17,6 @@ Layout/CommentIndentation:
     - 'config/environments/development.rb'
     - 'config/environments/production.rb'
     - 'config/initializers/devise.rb'
-    - 'test/models/admin_test.rb'
-    - 'test/models/ideathon_event_test.rb'
-    - 'test/models/ideathon_year_test.rb'
-    - 'test/models/registered_attendee_test.rb'
-    - 'test/models/team_test.rb'
     - 'test/test_helper.rb'
 
 # Offense count: 344
