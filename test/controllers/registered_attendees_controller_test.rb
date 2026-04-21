@@ -38,6 +38,7 @@ class RegisteredAttendeesControllerTest < ActionDispatch::IntegrationTest
      end
 
      test "should show registered_attendee" do
+          sign_in @admin
           get registered_attendee_url(@registered_attendee)
           assert_response :success
      end
