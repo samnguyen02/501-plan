@@ -1,0 +1,53 @@
+<h1>Sponsors & Partners</h1>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Name</th>
+      <th>Job Title</th>
+      <th>Type</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sponsors_partners.each do |sp| %>
+      <tr>
+        <td><%= sp.year %></td>
+        <td><%= sp.name %></td>
+        <td><%= sp.job_title.presence || "-" %></td>
+        <td><%= sp.is_sponsor? ? "Sponsor" : "Partner" %></td>
+        <td>
+          <%= link_to "View", sponsors_partner_path(sp) %> |
+          <%= link_to "Edit", edit_sponsors_partner_path(sp) %>
+          <% if admin? %>
+            | <%= link_to "Delete", delete_sponsors_partner_path(sp) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to "New Sponsor/Partner", new_sponsors_partner_path %>
+
+<% if admin? %>
+  <hr>
+  <h2>Import Sponsors/Partners from CSV</h2>
+  <p>CSV columns: <code>year, name, job_title, logo_url, blurb, is_sponsor</code> (logo_url is optional)</p>
+  <%= form_with url: import_sponsors_partners_path, local: true, multipart: true do |form| %>
+    <%= context_field_tip("import.sponsors_partners") do %>
+      <div>
+        <%= form.label :file, "Select CSV file" %>
+        <%= form.file_field :file, accept: ".csv,text/csv" %>
+      </div>
+    <% end %>
+    <div>
+      <%= form.submit "Import" %>
+    </div>
+  <% end %>
+
+  <h2>Export Sponsors to CSV</h2>
+  <%= link_to "Export", export_sponsors_partners_path(format: :csv) %>
+<% end %>

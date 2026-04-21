@@ -45,8 +45,15 @@ Copy the example environment file and fill in required secrets:
 
 ```sh
 cp .env.example .env
-# edit .env and set DATABASE_URL, SECRET_KEY_BASE, GOOGLE_CLIENT_ID, etc.
+# edit .env and set DATABASE_URL, SECRET_KEY_BASE, Google OAuth values, etc.
 ```
+
+Google OAuth env compatibility:
+
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (same naming as `501-club-staging`)
+- `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET` (also supported)
+
+`501-plan` will use either pair, so local `.env` and deployed environment variables can use either naming convention.
 
 You may also use Rails credentials for sensitive values; see
 `config/credentials.yml.enc`.
@@ -94,13 +101,40 @@ RSpec is used for model/request/system specs. To execute the suite:
 bundle exec rspec
 ```
 
+SimpleCov is enabled in `spec/spec_helper.rb` and writes output to `coverage/`.
+The test run will fail if coverage drops below the configured minimum.
+
 There are also occasional system tests under `spec/system` which require
 Chrome/Chromedriver and may be run with `bundle exec rails test:system`.
 
 ### Linting and Formatting
 
 * RuboCop for Ruby (`bundle exec rubocop`).
+* Brakeman security scan (`bundle exec brakeman -q`).
 * Tailwind classes are auto-purged during asset compilation.
+
+## Local DB Helper Scripts (Git Bash / WSL bash)
+
+For local development on Windows, helper scripts are available in `script/`:
+
+```sh
+bash script/start-db
+bash script/stop-db
+bash script/app-start
+```
+
+`script/app-start` will:
+- start local PostgreSQL
+- ensure gems are installed
+- run `bin/rails db:prepare`
+- start Rails on `http://localhost:3000`
+- start Tailwind watcher unless `TAILWIND_WATCH=0`
+
+Example:
+
+```sh
+TAILWIND_WATCH=0 bash script/app-start
+```
 
 ## Deployment
 

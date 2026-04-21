@@ -9,6 +9,13 @@ Turbo.config.forms.confirm = (message) => {
     const okBtn   = document.getElementById("turbo-confirm-ok")
     const cancelBtn = document.getElementById("turbo-confirm-cancel")
 
+    // Some layouts (e.g., dashboard/application) do not render the custom modal.
+    // Fall back to browser confirm instead of throwing on null nodes.
+    if (!modal || !msg || !okBtn || !cancelBtn) {
+      resolve(window.confirm(message))
+      return
+    }
+
     msg.textContent = message
     modal.classList.remove("hidden")
     modal.classList.add("flex")

@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
      root 'ideathon#index'
+     get "UserDocumentation.pdf", to: "docs#user_documentation", as: :user_documentation_pdf, format: false
+     get "TechnicalDocumentation.pdf", to: "docs#technical_documentation", as: :technical_documentation_pdf, format: false
 
-     devise_for :admins, controllers: { omniauth_callbacks: 'admins/omniauth_callbacks' }
+     devise_for :admins, controllers: { sessions: "admins/sessions", omniauth_callbacks: "admins/omniauth_callbacks" }
      devise_scope :admin do
-          get 'admins/sign_in', to: 'admins/sessions#new', as: :new_admin_session
-          get 'admins/sign_out', to: 'admins/sessions#destroy', as: :destroy_admin_session
+          get "admins/sign_in", to: "admins/sessions#new", as: :new_admin_session
+          delete "admins/sign_out", to: "admins/sessions#destroy", as: :destroy_admin_session
      end
 
      resources :manager, only: [ :index, :destroy ], controller: 'manager' do
@@ -21,6 +23,49 @@ Rails.application.routes.draw do
           collection do
                get :teams_for_year
                get :success
+          end
+     end
+
+     scope path: "dashboard" do
+          resources :users, only: [ :index, :create, :update, :destroy ]
+          resources :activity_logs, only: [ :index ]
+
+          resources :ideathons, param: :year do
+               post :import, on: :collection
+               member do
+                    get :delete
+                    get :overview
+               end
+          end
+
+          resources :sponsors_partners do
+               post :import, on: :collection
+               get :export, on: :collection
+               member do
+                    get :delete
+               end
+          end
+
+          resources :mentors_judges do
+               post :import, on: :collection
+               get :export, on: :collection
+               member do
+                    get :delete
+               end
+          end
+
+          resources :faqs do
+               post :import, on: :collection
+               member do
+                    get :delete
+               end
+          end
+
+          resources :rules do
+               post :import, on: :collection
+               member do
+                    get :delete
+               end
           end
      end
 

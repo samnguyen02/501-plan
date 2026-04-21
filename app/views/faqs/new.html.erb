@@ -1,0 +1,36 @@
+<h1>New FAQ</h1>
+
+<%= form_with(model: @faq, local: true) do |form| %>
+  <% if @faq.errors.any? %>
+    <div class="form-errors" role="alert">
+      <h3><%= pluralize(@faq.errors.count, "error") %> prohibited this FAQ from being saved:</h3>
+      <ul>
+        <% @faq.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :year %>
+    <%= form.select :year, @ideathon_years, prompt: "Select Ideathon Year" %>
+  </div>
+
+  <div>
+    <%= form.label :question %>
+    <%= form.text_area :question %>
+  </div>
+
+  <div>
+    <%= form.label :answer %>
+    <%= form.text_area :answer %>
+  </div>
+
+  <div>
+    <%= form.submit "Create FAQ" %>
+  </div>
+<% end %>
+
+<br>
+<%= link_to "Back to FAQs", faqs_path %>

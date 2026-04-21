@@ -3,13 +3,16 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 # Ideathon 2026
-year = IdeathonYear.find_or_create_by!(name: "Ideathon 2026") do |y|
-     y.description = "Spring ProductTAMU Ideathon"
-     y.location = "Texas A&M University"
-     y.start_date = Date.new(2026, 4, 11)
-     y.end_date = Date.new(2026, 4, 12)
-     y.is_active = true
-end
+year = IdeathonYear.find_or_initialize_by(year: 2026)
+year.assign_attributes(
+  name: "Ideathon 2026",
+  description: "Spring ProductTAMU Ideathon",
+  location: "Texas A&M University",
+  start_date: Date.new(2026, 4, 11),
+  end_date: Date.new(2026, 4, 12),
+  is_active: true
+)
+year.save!
 
 # Seed Ideathon Events
 events_data = [

@@ -1,0 +1,115 @@
+<% content_for :title, "Ideathon #{@ideathon.year} - Overview" %>
+
+<h1>Ideathon <%= @ideathon.year %> - Overview</h1>
+
+<p><strong>Theme:</strong> <%= @ideathon.theme.presence || "-" %></p>
+
+<p>
+  <%= link_to "Edit ideathon details", edit_ideathon_path(@ideathon) %> |
+  <%= link_to "Back to ideathons", ideathons_path %>
+</p>
+
+<hr>
+
+<h2>Sponsors &amp; partners</h2>
+<p><%= link_to "Edit sponsors & partners", sponsors_partners_path %></p>
+
+<% if @sponsors_partners.any? %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Logo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sponsors_partners.each do |sp| %>
+        <tr>
+          <td><%= sp.name %></td>
+          <td><%= sp.is_sponsor? ? "Sponsor" : "Partner" %></td>
+          <td>
+            <% if sp.logo_url.present? %>
+              <%= image_tag sp.logo_url, alt: sp.name, class: "thumb-logo" %>
+            <% else %>
+              -
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No sponsors or partners added yet.</p>
+<% end %>
+
+<hr>
+
+<h2>Judges</h2>
+<p><%= link_to "Edit mentors & judges", mentors_judges_path %></p>
+
+<% if @judges.any? %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Bio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @judges.each do |judge| %>
+        <tr>
+          <td><%= judge.name %></td>
+          <td><%= truncate(judge.bio.to_s, length: 200) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No judges added yet.</p>
+<% end %>
+
+<hr>
+
+<h2>FAQs</h2>
+<p><%= link_to "Edit FAQs", faqs_path %></p>
+
+<% if @faqs.any? %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Answer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @faqs.each do |faq| %>
+        <tr>
+          <td><%= faq.question %></td>
+          <td><%= truncate(faq.answer.to_s, length: 300) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No FAQs added yet.</p>
+<% end %>
+
+<hr>
+
+<h2>Photos</h2>
+<p><%= link_to "Edit mentors & judges (photos)", mentors_judges_path %></p>
+
+<% if @mentors_judges_with_photos.any? %>
+  <div class="photo-grid">
+    <% @mentors_judges_with_photos.each do |mj| %>
+      <div class="photo-card">
+        <%= image_tag mj.photo_url, alt: mj.name, class: "photo-card__img" %>
+        <div class="photo-card__name"><%= mj.name %></div>
+        <div class="photo-card__role"><%= mj.is_judge? ? "Judge" : "Mentor" %></div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No photos added yet.</p>
+<% end %>

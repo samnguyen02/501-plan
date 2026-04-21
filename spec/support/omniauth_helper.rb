@@ -1,7 +1,7 @@
 module OmniAuthHelper
      def mock_google_oauth2(admin_attributes = {})
           attrs = {
-            email: "test@example.com",
+            email: "test@tamu.edu",
             full_name: "Test User",
             uid: "123456789",
             avatar_url: "https://example.com/avatar.jpg"

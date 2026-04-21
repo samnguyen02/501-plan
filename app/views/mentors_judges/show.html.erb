@@ -1,0 +1,17 @@
+<h1><%= @mentors_judge.name %></h1>
+
+<p><strong>Year:</strong> <%= @mentors_judge.year %></p>
+<p><strong>Role:</strong> <%= @mentors_judge.is_judge? ? "Judge" : "Mentor" %></p>
+<p><strong>Job title:</strong> <%= @mentors_judge.job_title.presence || "-" %></p>
+<% if @mentors_judge.photo_url.present? %>
+  <p><strong>Photo:</strong> <%= image_tag @mentors_judge.photo_url, alt: @mentors_judge.name, class: "detail-photo" %></p>
+<% end %>
+<% if @mentors_judge.bio.present? %>
+  <p><strong>Bio:</strong> <%= @mentors_judge.bio %></p>
+<% end %>
+
+<%= link_to "Edit", edit_mentors_judge_path(@mentors_judge) %> |
+<%= link_to "Back to Mentors & Judges", mentors_judges_path %>
+<% if admin? %>
+  | <%= link_to "Delete", delete_mentors_judge_path(@mentors_judge) %>
+<% end %>

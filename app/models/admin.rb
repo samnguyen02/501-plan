@@ -6,6 +6,10 @@ class Admin < ApplicationRecord
      devise :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
      has_many :manager_action_logs, dependent: :nullify
+     has_many :activity_logs, dependent: :nullify
+
+     enum :role, { admin: "admin", editor: "editor", unauthorized: "unauthorized" }, prefix: :role
+     validates :email, format: { with: /\A[^@\s]+@tamu\.edu\z/i, message: "must end with @tamu.edu" }, allow_blank: true
 
      # Only emails in the allowlist can sign in as admin.
      # Returns true if the email is in the allowed admin list (from ENV)
@@ -24,7 +28,12 @@ class Admin < ApplicationRecord
           return nil unless allowed_email?(email)
           admin = find_or_initialize_by(email: email)
           admin.assign_attributes(uid: uid, full_name: full_name, avatar_url: avatar_url)
+          admin.role = "editor" if admin.new_record?
           admin.save!
           admin
+     end
+
+     def authorized?
+          !role_unauthorized?
      end
 end

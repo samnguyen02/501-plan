@@ -4,10 +4,11 @@
 # Follows Rails RESTful conventions and includes custom logic for team selection.
 class RegisteredAttendeesController < ApplicationController
      # Allow public access to registration and info pages
-     skip_before_action :authenticate_admin!, only: %i[new create show success teams_for_year]
+     skip_before_action :authenticate_admin!, only: %i[new create success teams_for_year]
      # Load attendee for actions that require an existing record
      before_action :set_registered_attendee, only: %i[show edit update destroy]
-     before_action :set_active_year, only: %i[new create edit update]
+     before_action :set_active_year, only: %i[new create edit update teams_for_year]
+     before_action :ensure_active_year!, only: %i[new create edit update]
      # Load teams for forms where team selection is needed
      before_action :load_teams, only: %i[new create edit update]
      # Use the ideathon layout for registration-related pages
@@ -132,7 +133,9 @@ class RegisteredAttendeesController < ApplicationController
                return
           end
 
-          teams = Team.where(ideathon_year_id: year_id).order(:unassigned, :team_name)
+          return render json: [] unless @active_year && year_id.to_i == @active_year.id
+
+          teams = Team.where(ideathon_year_id: @active_year.id).order(:unassigned, :team_name)
           team_list = teams.map do |team|
                member_count = team.registered_attendees.count
                {
@@ -154,19 +157,21 @@ class RegisteredAttendeesController < ApplicationController
 
        # Returns the currently active Ideathon year
        def active_year
-            IdeathonYear.find_by(is_active: true) ||
-              IdeathonYear.order(start_date: :desc, created_at: :desc).first ||
-              IdeathonYear.create!(
-                name: Time.zone.today.year.to_s,
-                start_date: Time.zone.today,
-                end_date: Time.zone.today + 1.day,
-                is_active: true,
-                description: "Auto-generated default year"
-              )
+            active = IdeathonYear.find_by(is_active: true)
+            active || IdeathonYear.order(start_date: :desc, created_at: :desc).first
        end
 
        def set_active_year
             @active_year = active_year
+       end
+
+       def ensure_active_year!
+            return if @active_year.present?
+
+            respond_to do |format|
+                 format.html { redirect_to root_path, alert: "Registration is currently unavailable. Please contact organizers." }
+                 format.json { render json: { error: "Registration is currently unavailable." }, status: :service_unavailable }
+            end
        end
 
        # Loads teams for the active year, ordered for form display

@@ -9,6 +9,9 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+     google_client_id = ENV["GOOGLE_OAUTH_CLIENT_ID"].presence || ENV["GOOGLE_CLIENT_ID"].presence
+     google_client_secret = ENV["GOOGLE_OAUTH_CLIENT_SECRET"].presence || ENV["GOOGLE_CLIENT_SECRET"].presence
+
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
@@ -272,8 +275,8 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
      config.omniauth :google_oauth2,
-                     ENV["GOOGLE_OAUTH_CLIENT_ID"],
-                     ENV["GOOGLE_OAUTH_CLIENT_SECRET"],
+                    google_client_id,
+                    google_client_secret,
                      {
                        prompt: "select_account consent",
                        scope: "openid,email,profile",

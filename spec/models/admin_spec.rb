@@ -11,34 +11,42 @@ RSpec.describe Admin, type: :model do
 
           it "returns false when ALLOWED_ADMIN_EMAILS is not set" do
                allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("")
-               expect(Admin.allowed_email?("any@example.com")).to eq(false)
+               expect(Admin.allowed_email?("any@tamu.edu")).to eq(false)
           end
 
           it "returns true when email is in the allowlist (comma-separated)" do
-               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com, other@example.com")
-               expect(Admin.allowed_email?("admin@example.com")).to eq(true)
-               expect(Admin.allowed_email?("other@example.com")).to eq(true)
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu, other@tamu.edu")
+               expect(Admin.allowed_email?("admin@tamu.edu")).to eq(true)
+               expect(Admin.allowed_email?("other@tamu.edu")).to eq(true)
           end
 
           it "returns false when email is not in the allowlist" do
-               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com")
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu")
                expect(Admin.allowed_email?("user@gmail.com")).to eq(false)
           end
      end
 
+     describe "email domain validation" do
+          it "requires @tamu.edu emails" do
+               admin = Admin.new(email: "user@gmail.com")
+               admin.valid?
+               expect(admin.errors[:email]).to include("must end with @tamu.edu")
+          end
+     end
+
      describe ".from_google" do
-          let(:email) { "admin@example.com" }
+          let(:email) { "admin@tamu.edu" }
           let(:full_name) { "Test Admin" }
           let(:uid) { "123456789" }
           let(:avatar_url) { "https://example.com/avatar.jpg" }
 
           before do
-               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@example.com")
+               allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu")
           end
 
           context "when email is not in allowlist" do
                before do
-                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@example.com")
+                    allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@tamu.edu")
                end
 
                it "returns nil and does not create an admin" do
@@ -62,6 +70,7 @@ RSpec.describe Admin, type: :model do
                     expect(admin.full_name).to eq(full_name)
                     expect(admin.uid).to eq(uid)
                     expect(admin.avatar_url).to eq(avatar_url)
+                    expect(admin.role).to eq("editor")
                end
           end
 
