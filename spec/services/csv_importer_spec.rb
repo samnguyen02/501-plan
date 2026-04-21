@@ -40,6 +40,7 @@ RSpec.describe CsvImporter do
                result = described_class.new(file: upload, model: model, attribute_map: attribute_map).import
                expect(result[:success]).to eq(1)
                expect(result[:failed]).to eq(1)
+               expect(result[:errors].first).to match(/\ARow 3:/)
                expect(Ideathon.find_by(year: 2027)).to be_present
           end
      end

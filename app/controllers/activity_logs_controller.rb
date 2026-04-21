@@ -22,8 +22,8 @@ class ActivityLogsController < ClubDashboardController
        def invalid_date_range?
             return false unless @filters[:date_range] == "custom"
 
-            start_on = Date.iso8601(@filters[:start_date]) rescue nil
-            end_on = Date.iso8601(@filters[:end_date]) rescue nil
+            start_on = ActivityLog.parse_filter_date(@filters[:start_date])
+            end_on = ActivityLog.parse_filter_date(@filters[:end_date])
             start_on.present? && end_on.present? && end_on < start_on
        end
 end

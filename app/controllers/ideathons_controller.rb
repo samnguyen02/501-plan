@@ -95,6 +95,9 @@ class IdeathonsController < ClubDashboardController
        end
 
        def activate_year_exclusively!(active_ideathon)
-            Ideathon.where.not(id: active_ideathon.id).where(is_active: true).update_all(is_active: false)
+            # Keep this as a bulk update to avoid logging noise on every historical year,
+            # but still update timestamps for accurate "recently updated" ordering.
+            Ideathon.where.not(id: active_ideathon.id).where(is_active: true)
+                    .update_all(is_active: false, updated_at: Time.current)
        end
 end

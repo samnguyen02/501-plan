@@ -14,13 +14,13 @@ class CsvImporter
           return fatal_result(error_message) if error_message.present?
 
           results = { success: 0, failed: 0, errors: [] }
-          CSV.foreach(@file.path, headers: true) do |row|
+          CSV.foreach(@file.path, headers: true).with_index(2) do |row, line_number|
                begin
                     @model.create!(map_attributes(row))
                     results[:success] += 1
                rescue StandardError => e
                     results[:failed] += 1
-                    results[:errors] << e.message
+                    results[:errors] << "Row #{line_number}: #{e.message}"
                end
           end
 
