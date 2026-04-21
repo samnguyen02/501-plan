@@ -40,7 +40,7 @@ RSpec.describe "Ideathons dashboard", type: :request do
 
           it "renders new on invalid create" do
                post ideathons_path, params: { ideathon: { year: 20, name: "Bad Year" } }
-               expect(response).to have_http_status(:unprocessable_entity)
+               expect(response).to have_http_status(:unprocessable_content)
           end
      end
 

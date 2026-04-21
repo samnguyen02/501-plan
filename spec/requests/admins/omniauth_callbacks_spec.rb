@@ -19,7 +19,7 @@ RSpec.describe "Admins::OmniauthCallbacks", type: :request do
           context "when the email is in the admin allowlist" do
                before do
                     allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("admin@tamu.edu")
-                    OmniAuth.config.mock_auth[:google_oauth2] = auth_hash
+                    allow_any_instance_of(Admins::OmniauthCallbacksController).to receive(:auth).and_return(auth_hash)
                end
 
                it "creates a new admin when one does not exist" do
@@ -35,7 +35,7 @@ RSpec.describe "Admins::OmniauthCallbacks", type: :request do
           context "when the email is not in the admin allowlist" do
                before do
                     allow(ENV).to receive(:fetch).with("ALLOWED_ADMIN_EMAILS", "").and_return("other@tamu.edu")
-                    OmniAuth.config.mock_auth[:google_oauth2] = auth_hash
+                    allow_any_instance_of(Admins::OmniauthCallbacksController).to receive(:auth).and_return(auth_hash)
                end
 
                it "does not create an admin" do

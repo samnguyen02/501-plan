@@ -32,7 +32,7 @@ RSpec.describe "FAQs dashboard", type: :request do
 
           it "renders validation errors for invalid input" do
                post faqs_path, params: { faq: { year: 2026, question: "", answer: "" } }
-               expect(response).to have_http_status(:unprocessable_entity)
+               expect(response).to have_http_status(:unprocessable_content)
           end
      end
 
@@ -94,7 +94,7 @@ RSpec.describe "FAQs dashboard", type: :request do
                expect(faq.reload.question).to eq("Updated?")
 
                patch faq_path(faq), params: { faq: { year: 2026, question: "", answer: "" } }
-               expect(response).to have_http_status(:unprocessable_entity)
+               expect(response).to have_http_status(:unprocessable_content)
           end
      end
 end

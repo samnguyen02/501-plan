@@ -25,11 +25,13 @@ class MentorsJudge < ApplicationRecord
        def photo_url_must_be_http_or_https
             return if photo_url.blank?
 
-            uri = URI.parse(photo_url)
-            return if uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+            begin
+                 uri = URI.parse(photo_url)
+            rescue URI::InvalidURIError
+                 errors.add(:photo_url, "must be a valid URL")
+                 return
+            end
 
-            errors.add(:photo_url, "must be a valid HTTP or HTTPS URL")
-          rescue URI::InvalidURIError
-               errors.add(:photo_url, "must be a valid URL")
+            errors.add(:photo_url, "must be a valid HTTP or HTTPS URL") unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
        end
 end

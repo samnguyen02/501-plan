@@ -42,7 +42,7 @@ RSpec.describe "Users", type: :request do
                     post users_path, params: { admin: { email: "bad@gmail.com", role: "editor" } }
                end.not_to change(Admin, :count)
 
-               expect(response).to have_http_status(:unprocessable_entity)
+               expect(response).to have_http_status(:unprocessable_content)
           end
      end
 

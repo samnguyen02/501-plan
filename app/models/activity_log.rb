@@ -57,9 +57,9 @@ class ActivityLog < ApplicationRecord
 
      def self.safe_record(**attributes)
           record!(**attributes)
-        rescue StandardError => error
-             Rails.logger.error("Activity log failed: #{error.class}: #{error.message}")
-             nil
+     rescue StandardError => error
+          Rails.logger.error("Activity log failed: #{error.class}: #{error.message}")
+          nil
      end
 
      def self.record_change(record:, action:, saved_changes: nil, admin: Current.admin)
@@ -169,8 +169,8 @@ class ActivityLog < ApplicationRecord
           return if value.blank?
 
           Date.iso8601(value)
-        rescue ArgumentError
-             nil
+     rescue ArgumentError
+          nil
      end
 
   private
@@ -197,8 +197,8 @@ class ActivityLog < ApplicationRecord
                    item_name: item_name,
                    changed_at: created_at
                  ).record_change_email.deliver_later
-               rescue StandardError => error
-                    Rails.logger.error("Activity log email failed for admin #{recipient.id}: #{error.class}: #{error.message}")
+            rescue StandardError => error
+                 Rails.logger.error("Activity log email failed for admin #{recipient.id}: #{error.class}: #{error.message}")
             end
        end
 end

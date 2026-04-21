@@ -88,8 +88,8 @@ class MentorsJudgesController < ClubDashboardController
                     filename: "judges_#{Time.current.strftime('%Y%m%d_%H%M%S')}.csv",
                     type: "text/csv",
                     disposition: "attachment"
-        rescue StandardError
-             redirect_to mentors_judges_path, alert: "Export failed. Please try again."
+     rescue StandardError
+          redirect_to mentors_judges_path, alert: "Export failed. Please try again."
      end
 
   private

@@ -22,8 +22,8 @@ class IdeathonsController < ClubDashboardController
                activate_year_exclusively!(@ideathon) if @ideathon.is_active?
           end
           redirect_to ideathons_path, notice: "Ideathon was successfully created."
-        rescue ActiveRecord::RecordInvalid
-             render :new, status: :unprocessable_entity
+     rescue ActiveRecord::RecordInvalid
+          render :new, status: :unprocessable_entity
      end
 
      def edit; end
@@ -34,8 +34,8 @@ class IdeathonsController < ClubDashboardController
                activate_year_exclusively!(@ideathon) if @ideathon.is_active?
           end
           redirect_to ideathons_path, notice: "Ideathon was successfully updated."
-        rescue ActiveRecord::RecordInvalid
-             render :edit, status: :unprocessable_entity
+     rescue ActiveRecord::RecordInvalid
+          render :edit, status: :unprocessable_entity
      end
 
      def delete; end
@@ -47,9 +47,9 @@ class IdeathonsController < ClubDashboardController
                message = @ideathon.errors.full_messages.to_sentence.presence || "Unable to delete ideathon."
                redirect_to ideathons_path, alert: message
           end
-        rescue ActiveRecord::InvalidForeignKey => e
-             Rails.logger.error("Ideathon delete FK violation: #{e.message}")
-             redirect_to ideathons_path, alert: "Unable to delete ideathon because related records still exist."
+     rescue ActiveRecord::InvalidForeignKey => e
+          Rails.logger.error("Ideathon delete FK violation: #{e.message}")
+          redirect_to ideathons_path, alert: "Unable to delete ideathon because related records still exist."
      end
 
      def import
@@ -73,13 +73,17 @@ class IdeathonsController < ClubDashboardController
        end
 
        def set_ideathon_overview
-            @ideathon = Ideathon.includes(:sponsors_partners, :mentors_judges, :faqs).find_by!(year: params[:year].to_i)
+            begin
+                 @ideathon = Ideathon.includes(:sponsors_partners, :mentors_judges, :faqs).find_by!(year: params[:year].to_i)
+            rescue ActiveRecord::RecordNotFound
+                 redirect_to ideathons_path, alert: "Ideathon year #{params[:year]} was not found."
+                 return
+            end
+
             @sponsors_partners = @ideathon.sponsors_partners.sort_by(&:name)
             @judges = @ideathon.mentors_judges.select(&:is_judge?).sort_by(&:name)
             @faqs = @ideathon.faqs.sort_by(&:id)
             @mentors_judges_with_photos = @ideathon.mentors_judges.select { |mj| mj.photo_url.present? }.sort_by(&:name)
-          rescue ActiveRecord::RecordNotFound
-               redirect_to ideathons_path, alert: "Ideathon year #{params[:year]} was not found."
        end
 
        def ideathon_params

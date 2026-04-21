@@ -26,11 +26,13 @@ class SponsorsPartner < ApplicationRecord
        def logo_url_must_be_http_or_https
             return if logo_url.blank?
 
-            uri = URI.parse(logo_url)
-            return if uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+            begin
+                 uri = URI.parse(logo_url)
+            rescue URI::InvalidURIError
+                 errors.add(:logo_url, "must be a valid URL")
+                 return
+            end
 
-            errors.add(:logo_url, "must be a valid HTTP or HTTPS URL")
-          rescue URI::InvalidURIError
-               errors.add(:logo_url, "must be a valid URL")
+            errors.add(:logo_url, "must be a valid HTTP or HTTPS URL") unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
        end
 end

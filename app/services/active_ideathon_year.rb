@@ -37,10 +37,10 @@ class ActiveIdeathonYear
                       ideathon.name = "Ideathon #{today.year}"
                       ideathon.description = "Auto-generated default year"
                  end
-               rescue ActiveRecord::RecordNotUnique
-                    IdeathonYear.find_by(is_active: true) ||
-                      IdeathonYear.order(year: :desc, created_at: :desc).first ||
-                      IdeathonYear.find_by!(year: today.year)
+            rescue ActiveRecord::RecordNotUnique
+                 IdeathonYear.find_by(is_active: true) ||
+                   IdeathonYear.order(year: :desc, created_at: :desc).first ||
+                   IdeathonYear.find_by!(year: today.year)
             end
      end
 end

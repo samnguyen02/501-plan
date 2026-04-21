@@ -263,7 +263,7 @@ class RegisteredAttendeesController < ApplicationController
                            t.team_name = "Unassigned"
                       end
                       attendee.team_id = unassigned.id
-                 rescue => e
+                 rescue StandardError
                       attendee.errors.add(:base, "Unable to create or find unassigned team. Please contact support.")
                       nil
                  end

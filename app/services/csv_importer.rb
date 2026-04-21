@@ -14,22 +14,20 @@ class CsvImporter
           return fatal_result(error_message) if error_message.present?
 
           results = { success: 0, failed: 0, errors: [] }
-          begin
-               CSV.foreach(@file.path, headers: true) do |row|
-                    begin
-                         @model.create!(map_attributes(row))
-                         results[:success] += 1
-                       rescue StandardError => e
-                            results[:failed] += 1
-                            results[:errors] << e.message
-                    end
+          CSV.foreach(@file.path, headers: true) do |row|
+               begin
+                    @model.create!(map_attributes(row))
+                    results[:success] += 1
+               rescue StandardError => e
+                    results[:failed] += 1
+                    results[:errors] << e.message
                end
-             rescue CSV::MalformedCSVError
-                  return fatal_result("Invalid CSV format")
           end
 
           ActivityLog.record_import(model: @model, count: results[:success])
           results
+     rescue CSV::MalformedCSVError
+          fatal_result("Invalid CSV format")
      end
 
   private
@@ -58,14 +56,17 @@ class CsvImporter
        end
 
        def expected_headers_present?
-            headers = CSV.open(@file.path, headers: true, return_headers: true) { |csv| csv.first&.headers }
+            headers =
+              begin
+                   CSV.open(@file.path, headers: true, return_headers: true) { |csv| csv.first&.headers }
+              rescue CSV::MalformedCSVError
+                   return false
+              end
             normalized_headers = headers&.map { |header| header.to_s.strip }
             return false if normalized_headers.blank?
 
             expected_headers = @attribute_map.keys.map(&:to_s)
             (expected_headers - normalized_headers).empty?
-          rescue CSV::MalformedCSVError
-               false
        end
 
        def map_attributes(row)

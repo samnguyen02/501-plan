@@ -34,7 +34,7 @@ RSpec.describe "Rules dashboard", type: :request do
                expect(rule.reload.rule_text).to eq("Updated rule")
 
                patch rule_path(rule), params: { rule: { year: 2026, rule_text: "" } }
-               expect(response).to have_http_status(:unprocessable_entity)
+               expect(response).to have_http_status(:unprocessable_content)
           end
      end
 
