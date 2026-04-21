@@ -7,7 +7,9 @@ class UsersController < ClubDashboardController
      end
 
      def create
-          @new_user = Admin.new(email: admin_params[:email], role: normalized_role(admin_params[:role], allow_unauthorized: false))
+          requested_role = admin_params[:role]
+          normalized = normalized_role(requested_role, allow_unauthorized: false)
+          @new_user = Admin.new(email: admin_params[:email], role: normalized)
           @new_user.full_name = admin_params[:email].to_s.split("@").first
           @new_user.uid = "invited:#{SecureRandom.uuid}"
           if @new_user.save
@@ -20,7 +22,8 @@ class UsersController < ClubDashboardController
 
      def update
           @user = Admin.find(params[:id])
-          new_role = normalized_role(admin_params[:role], allow_unauthorized: true)
+          requested_role = admin_params[:role]
+          new_role = normalized_role(requested_role, allow_unauthorized: true)
           if new_role.blank?
                redirect_to users_path, alert: "Invalid role selected."
                return
