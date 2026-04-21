@@ -16,11 +16,24 @@ The goal of this project is to provide a full-featured landing site and
 enrollment system for the ideathon. It includes:
 
 * Public-facing landing page with event details, schedule, rules, and FAQs.
-* Registration workflow for attendees (Google OAuth & email).
-* Admin interface (Devise/Omniauth) to manage registrations, teams, and export
-  data.
+* Public registration for attendees (web form; **@tamu.edu** email validation).
+* Staff sign-in and dashboards (**Devise** + **Google OAuth2** for `Admin` users) to manage registrations, teams, exports, and content.
 * Static asset pipeline powered by TailwindCSS and importmap.
 * Basic health check endpoint (`/up`) for deployment monitoring.
+
+The default browser **title** in `app/views/layouts/application.html.erb` may still say **“501 Club - Ideathon Manager”**; the product is the **TAMU Ideathon** site and organizer tools described here.
+
+## Documentation (in this repo and in the app)
+
+| Audience | Location |
+|----------|-----------|
+| Organizers (how to use dashboards, roles, publishing) | [`docs/user_documentation.md`](docs/user_documentation.md) |
+| Engineers / DevOps (stack, env, CI, deployment) | [`docs/technical_documentation.md`](docs/technical_documentation.md) |
+| Architecture map (public vs dashboard vs shared data) | [`docs/admin_dashboard_system_guide.md`](docs/admin_dashboard_system_guide.md) |
+| Historical merge context | [`MERGE_ADMIN_DASHBOARD_NOTES.md`](MERGE_ADMIN_DASHBOARD_NOTES.md) |
+| Local Postgres helper scripts | [`script/ReadMe.md`](script/ReadMe.md) |
+
+**In the browser (signed-in organizer nav):** **User Guide** and **Technical Documentation** open the same Markdown sources from routes **`/UserDocumentation.pdf`** and **`/TechnicalDocumentation.pdf`**. The paths end in `.pdf` for historical naming; the response is **`text/markdown`**, not a binary PDF (see `app/controllers/docs_controller.rb`).
 
 ## Getting Started
 
@@ -144,8 +157,13 @@ bundle exec rspec
 SimpleCov is enabled in `spec/spec_helper.rb` and writes output to `coverage/`.
 The test run will fail if coverage drops below the configured minimum.
 
-There are also occasional system tests under `spec/system` which require
-Chrome/Chromedriver and may be run with `bundle exec rails test:system`.
+System-style browser specs live under **`spec/system`** (RSpec). Run them with:
+
+```sh
+bundle exec rspec spec/system
+```
+
+They require **Chrome** and a matching **ChromeDriver** on your PATH (same as typical Capybara + Selenium setups).
 
 ### Linting and Formatting
 
@@ -272,6 +290,10 @@ load balancer health checks or uptime monitors.
 * `heroku ps` – verify web/worker process state
 * `heroku logs --tail` – stream production logs
 
+## Continuous integration
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on **push** and **pull_request** to **`main`**: Brakeman, importmap audit, RuboCop, `db:test:prepare`, and the full **RSpec** suite. Keep CI green before merging.
+
 ## Contribution
 
 Fork the repository, create a feature branch, and open a Pull Request. Run
@@ -284,4 +306,4 @@ This project is licensed under the MIT License – see `LICENSE` for details.
 
 
 ---
-Updated as of 3/1/2026
+Documentation in this file was last reviewed for accuracy in **April 2026**.
