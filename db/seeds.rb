@@ -7,19 +7,19 @@
 
 year = IdeathonYear.find_or_initialize_by(year: 2026)
 if year.new_record?
-  year.assign_attributes(
-    name: "Ideathon 2026",
-    description: "Spring ProductTAMU Ideathon",
-    location: "Texas A&M University",
-    start_date: Date.new(2026, 4, 11),
-    end_date: Date.new(2026, 4, 12),
-    is_active: true
-  )
-  # Legacy 501-club-staging DBs enforce at most one active year via a partial unique index.
-  # Clear other active flags before inserting a new active year so release-phase seeding cannot fail.
-  if year.is_active
-    IdeathonYear.where(is_active: true).update_all(is_active: false, updated_at: Time.current)
-  end
+     year.assign_attributes(
+       name: "Ideathon 2026",
+       description: "Spring ProductTAMU Ideathon",
+       location: "Texas A&M University",
+       start_date: Date.new(2026, 4, 11),
+       end_date: Date.new(2026, 4, 12),
+       is_active: true
+     )
+     # Legacy 501-club-staging DBs enforce at most one active year via a partial unique index.
+     # Clear other active flags before inserting a new active year so release-phase seeding cannot fail.
+     if year.is_active
+          IdeathonYear.where(is_active: true).update_all(is_active: false, updated_at: Time.current)
+     end
 end
 year.save!
 
