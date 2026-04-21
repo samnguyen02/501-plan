@@ -2,7 +2,7 @@
 
 class DeviseCreateAdmins < ActiveRecord::Migration[8.1]
      def change
-          create_table :admins do |t|
+          create_table :admins, if_not_exists: true do |t|
                t.string :email, null: false
                t.string :full_name
                t.string :uid
@@ -11,6 +11,6 @@ class DeviseCreateAdmins < ActiveRecord::Migration[8.1]
                t.timestamps null: false
           end
 
-          add_index :admins, :email, unique: true
+          add_index :admins, :email, unique: true unless index_exists?(:admins, :email)
      end
 end

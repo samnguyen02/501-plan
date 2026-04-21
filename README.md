@@ -93,6 +93,11 @@ ruby bin/setup --skip-server
 TAILWIND_WATCH=0 bash script/app-start
 ```
 
+If `bash` is not on your PATH, run the same scripts with Git Bash explicitly, for example  
+`"C:\Program Files\Git\bin\bash.exe" script/start-db`.
+
+If Rails then fails to connect to Postgres with errors mentioning `::1` / IPv6, set `DATABASE_HOST=127.0.0.1` for your shell session (or add it to `.env`) so the app uses IPv4.
+
 If `bin/setup` fails with `ActiveRecord::ConnectionNotEstablished` or
 `PG::ConnectionBad` and mentions `localhost:5432 refused`, PostgreSQL is not
 running yet. Run `bash script/start-db` (or start your local Postgres service),
@@ -173,55 +178,86 @@ TAILWIND_WATCH=0 bash script/app-start
 
 ## Deployment
 
-The application can be deployed to any Rack-compatible host (Heroku, AWS
-Elastic Beanstalk, DigitalOcean, etc.). A typical workflow:
-
-1. Ensure environment variables (DATABASE_URL, REDIS_URL, SECRET_KEY_BASE,
-   etc.) are set.
-2. Run `bundle exec rails db:migrate` on the server.
-3. Precompile assets: `RAILS_ENV=production bundle exec rails assets:precompile`.
-4. Restart the web server (e.g. Puma).
-5. Configure a process manager (systemd, Procfile, etc.) and optionally a
-   background job processor if you add Sidekiq or similar.
-
-A `Dockerfile` and `Procfile.dev` are included for containerized deployments.
+`501-plan` can be deployed to Heroku and other Rack-compatible hosts.
+A `Dockerfile`, `Procfile.dev`, and production `Procfile` are included.
 
 ### Deploying to Heroku
 
-You can deploy this Rails app to [Heroku](https://heroku.com) with the following steps:
+`501-plan` runs on Heroku with two process types:
+- `web` (`bundle exec puma -C config/puma.rb`)
+- `worker` (`bundle exec bin/jobs start`)
 
-1. **Create a Heroku app** (if you haven't already):
+1. **Create and connect your Heroku app:**
    ```sh
    heroku create your-app-name
+   heroku git:remote -a your-app-name
    ```
-2. **Set required environment variables** (replace values as needed):
-   ```sh
-   heroku config:set SECRET_KEY_BASE=... DATABASE_URL=... GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=...
-   ```
-3. **Provision a database** (if not auto-created):
+2. **Provision Postgres and set required config vars:**
    ```sh
    heroku addons:create heroku-postgresql:hobby-dev
+   heroku config:set SECRET_KEY_BASE=... GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=...
    ```
-4. **Deploy your code:**
+   Optional:
+   ```sh
+   heroku config:set ALLOWED_ADMIN_EMAILS=you@tamu.edu,other@tamu.edu
+   heroku config:set ASSUME_SSL=true FORCE_SSL=true RAILS_LOG_LEVEL=info
+   ```
+   Notes:
+   - Heroku sets `DATABASE_URL` automatically after provisioning Heroku Postgres.
+   - You may set `GOOGLE_OAUTH_CLIENT_ID`/`GOOGLE_OAUTH_CLIENT_SECRET` instead of `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`.
+   - If `ALLOWED_ADMIN_EMAILS` is unset, sign-in falls back to legacy `users` with `role` in (`admin`,`editor`) for `@tamu.edu` only (cutover from `501-club-staging`). Prefer setting the env var explicitly in production.
+3. **Deploy your code:**
    ```sh
    git push heroku main
-   # or, if using 'master' branch:
-   # git push heroku master
    ```
-5. **Run database migrations:**
+4. **Scale required dynos:**
    ```sh
-   heroku run bundle exec rails db:migrate
+   heroku ps:scale web=1 worker=1
    ```
-6. **(Optional) Seed initial data:**
-   ```sh
-   heroku run bundle exec rails db:seed
-   ```
-7. **Open your app:**
+5. **Open your app:**
    ```sh
    heroku open
    ```
 
-For more details, see the [Heroku Ruby on Rails guide](https://devcenter.heroku.com/articles/getting-started-with-rails6).
+Release phase (matches `501-club-staging`): migrations then seeds on every deploy.
+
+```Procfile
+release: DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:migrate && bundle exec rails db:seed
+```
+
+Production seeds are idempotent and do not inject demo attendees unless `SEED_SAMPLE_DATA=true`.
+When creating Ideathon 2026 for the first time, seeds clear any other `is_active` years first so databases that still carry the staging-era “single active year” unique index cannot fail deploy.
+
+### Replacing `501-club-staging` with this repo
+
+When you overwrite the GitHub repo that Heroku deploys from (previously `501-club-staging`) with `501-plan`:
+
+1. **Backup first:** `heroku pg:backups:capture -a your-app-name`
+2. **Confirm dynos:** `heroku ps:scale web=1 worker=1 -a your-app-name`
+3. **Push / auto-deploy** as usual; release runs `db:migrate` then `db:seed`.
+4. **Verify:** `heroku logs --tail`, open `/up`, sign in as admin, smoke-test registration and dashboard.
+5. **Rollback:** `heroku releases:rollback` if release phase fails; restore DB from backup if needed.
+
+Migrations are written so an existing staging Postgres (with `users`, `ideathon_years`, etc.) continues to work: legacy rows are copied into `admins` and log foreign keys are migrated from `user_id` to `admin_id` where applicable.
+
+### Storage note for Heroku
+
+Production currently uses `config.active_storage.service = :local`.
+Heroku dyno filesystems are ephemeral, so uploaded files are not durable across
+restarts/deploys. Use S3 or another persistent object store for production uploads.
+
+### Optional single-dyno queue mode
+
+For low-traffic deployments, you can run queue supervision in Puma:
+
+```sh
+heroku config:set SOLID_QUEUE_IN_PUMA=1
+heroku ps:scale web=1 worker=0
+```
+
+Use a dedicated `worker` dyno again when background load increases.
+
+For more details, see [Heroku Dev Center](https://devcenter.heroku.com/categories/ruby-support).
 
 ### Health and Monitoring
 
@@ -233,6 +269,8 @@ load balancer health checks or uptime monitors.
 * `rails console` – open interactive session
 * `rails db:reset` – drop, recreate, migrate, and seed the database
 * `rails routes | grep ideathon` – view route list
+* `heroku ps` – verify web/worker process state
+* `heroku logs --tail` – stream production logs
 
 ## Contribution
 

@@ -1,6 +1,6 @@
 class CreateIdeathonEvents < ActiveRecord::Migration[8.1]
      def change
-          create_table :ideathon_events do |t|
+          create_table :ideathon_events, if_not_exists: true do |t|
                t.references :ideathon_year, null: false, foreign_key: true
                t.string :event_name
                t.text :event_description

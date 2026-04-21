@@ -1,5 +1,7 @@
 class BackfillAndEnforceYearOnIdeathonYears < ActiveRecord::Migration[8.1]
      def up
+          return unless table_exists?(:ideathon_years) && column_exists?(:ideathon_years, :year)
+
           execute <<~SQL
             UPDATE ideathon_years
             SET year = CAST(substring(name FROM '(19|20)\\d{2}') AS integer)
@@ -20,6 +22,9 @@ class BackfillAndEnforceYearOnIdeathonYears < ActiveRecord::Migration[8.1]
             WHERE year IS NULL
               AND created_at IS NOT NULL;
           SQL
+
+          col = connection.columns(:ideathon_years).find { |c| c.name == "year" }
+          return if col.nil? || col.null == false
 
           change_column_null :ideathon_years, :year, false
      end

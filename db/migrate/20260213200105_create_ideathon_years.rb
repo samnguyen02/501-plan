@@ -1,6 +1,6 @@
 class CreateIdeathonYears < ActiveRecord::Migration[8.1]
      def change
-          create_table :ideathon_years do |t|
+          create_table :ideathon_years, if_not_exists: true do |t|
                t.string :name
                t.text :description
                t.string :location
