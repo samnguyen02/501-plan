@@ -27,6 +27,12 @@ RSpec.describe Admin, type: :model do
      end
 
      describe "email domain validation" do
+          it "requires email presence" do
+               admin = Admin.new(email: nil)
+               admin.valid?
+               expect(admin.errors[:email]).to include("can't be blank")
+          end
+
           it "requires @tamu.edu emails" do
                admin = Admin.new(email: "user@gmail.com")
                admin.valid?

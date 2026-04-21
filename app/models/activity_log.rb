@@ -5,14 +5,14 @@ class ActivityLog < ApplicationRecord
 
      ACTIONS = %w[added edited removed imported exported].freeze
      CONTENT_TYPE_FILTERS = {
-       "faqs" => { label: "FAQs", patterns: [ "FAQ %" ] },
-       "ideathons" => { label: "Ideathons", patterns: [ "Ideathon %" ] },
-       "judges" => { label: "Judges", patterns: [ "Judge %" ] },
-       "mentors" => { label: "Mentors", patterns: [ "Mentor %" ] },
-       "partners" => { label: "Partners", patterns: [ "Partner %" ] },
-       "photos" => { label: "Photos", patterns: [ "Logo for %", "Photo for %" ] },
-       "rules" => { label: "Rules", patterns: [ "Rule %", "Imported % rule%", "Exported % rule%" ] },
-       "sponsors" => { label: "Sponsors", patterns: [ "Sponsor %" ] }
+      "faqs" => { label: "FAQs", content_types: [ "faqs" ] },
+      "ideathons" => { label: "Ideathons", content_types: [ "ideathons" ] },
+      "judges" => { label: "Judges", content_types: [ "judges", "mentors_judges" ] },
+      "mentors" => { label: "Mentors", content_types: [ "mentors", "mentors_judges" ] },
+      "partners" => { label: "Partners", content_types: [ "partners", "sponsors_partners" ] },
+      "photos" => { label: "Photos", content_types: [ "photos" ] },
+      "rules" => { label: "Rules", content_types: [ "rules" ] },
+      "sponsors" => { label: "Sponsors", content_types: [ "sponsors", "sponsors_partners" ] }
      }.freeze
      DATE_RANGE_OPTIONS = [
        [ "All time", "" ],
@@ -141,10 +141,10 @@ class ActivityLog < ApplicationRecord
      end
 
      def self.apply_content_type_filter(logs, content_type)
-          patterns = CONTENT_TYPE_FILTERS.dig(content_type.to_s, :patterns)
-          return logs if patterns.blank?
+          selected_types = CONTENT_TYPE_FILTERS.dig(content_type.to_s, :content_types)
+          return logs if selected_types.blank?
 
-          logs.where(patterns.map { "message LIKE ?" }.join(" OR "), *patterns)
+          logs.where(content_type: selected_types)
      end
 
      def self.apply_date_range_filter(logs, date_range, start_date, end_date)

@@ -9,7 +9,7 @@ class Admin < ApplicationRecord
      has_many :activity_logs, dependent: :nullify
 
      enum :role, { admin: "admin", editor: "editor", unauthorized: "unauthorized" }, prefix: :role
-     validates :email, format: { with: /\A[^@\s]+@tamu\.edu\z/i, message: "must end with @tamu.edu" }, allow_blank: true
+     validates :email, presence: true, format: { with: /\A[^@\s]+@tamu\.edu\z/i, message: "must end with @tamu.edu" }
 
      # Only emails in the allowlist can sign in as admin.
      # Returns true if the email is in the allowed admin list (from ENV)

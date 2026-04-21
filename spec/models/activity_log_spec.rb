@@ -41,6 +41,33 @@ RSpec.describe ActivityLog, type: :model do
                expect(results).to include(new_log)
                expect(results).not_to include(old_log)
           end
+
+          it "includes import/export log content types in category filters" do
+               sponsor_import = described_class.create!(
+                 admin: admin,
+                 actor_name: "A",
+                 actor_email: admin.email,
+                 action: "imported",
+                 content_type: "sponsors_partners",
+                 item_name: "2 sponsors/partners",
+                 message: "Imported 2 sponsors/partners"
+               )
+               mentor_export = described_class.create!(
+                 admin: admin,
+                 actor_name: "A",
+                 actor_email: admin.email,
+                 action: "exported",
+                 content_type: "mentors_judges",
+                 item_name: "3 mentors/judges",
+                 message: "Exported 3 mentors/judges"
+               )
+
+               sponsor_results = described_class.filter(content_type: "sponsors")
+               judge_results = described_class.filter(content_type: "judges")
+
+               expect(sponsor_results).to include(sponsor_import)
+               expect(judge_results).to include(mentor_export)
+          end
      end
 
      describe "immutability" do
