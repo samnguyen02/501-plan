@@ -29,23 +29,22 @@ development machine for development and testing purposes.
 
 ### Prerequisites
 
-* **Ruby 3.1+** (managed via rbenv, rvm, or your system package manager).
+* **Ruby 3.4.6** (matches `.ruby-version`; managed via rbenv, rvm, or your system package manager).
 * **Bundler** (`gem install bundler`).
-* **PostgreSQL** (or another supported database) – ensure a running server and
-  a user with create privileges.
-* **Yarn** / **Node.js** (optional, only required if you modify JS assets).
-* **Docker** (optional) – the project includes a `Dockerfile` and `docker-compose`
-  setup for containerized development.
+* **PostgreSQL** server running locally (default config expects `localhost:5432`,
+  user `postgres`, password `postgres` unless you override env vars).
+* **Node.js** (recommended for Tailwind watcher support in local dev workflows).
+* **Bash shell** for helper scripts under `script/` (Git Bash/WSL on Windows).
 
-> Rails and system dependencies are defined in `Gemfile` and `package.json`.
+> Ruby dependencies are defined in `Gemfile`.
 
 ### Configuration
 
-Copy the example environment file and fill in required secrets:
+Copy the example environment file and fill in required values:
 
 ```sh
 cp .env.example .env
-# edit .env and set DATABASE_URL, SECRET_KEY_BASE, Google OAuth values, etc.
+# edit .env and set Google OAuth values and ALLOWED_ADMIN_EMAILS as needed
 ```
 
 Google OAuth env compatibility:
@@ -55,25 +54,62 @@ Google OAuth env compatibility:
 
 `501-plan` will use either pair, so local `.env` and deployed environment variables can use either naming convention.
 
+Database connection values are read from `config/database.yml` and can be
+overridden with:
+- `DATABASE_HOST`
+- `DATABASE_USER`
+- `DATABASE_PASSWORD`
+
 You may also use Rails credentials for sensitive values; see
 `config/credentials.yml.enc`.
 
-### Database Setup
+### First-Time Setup (after clone)
 
-Create and migrate the database, then seed initial data:
+Recommended one-command bootstrap:
 
 ```sh
-bundle exec rails db:create db:migrate db:seed
+ruby bin/setup --skip-server
 ```
 
-The seed file generates a default ideathon year and admin account if you need one.
+This command is idempotent and will:
+- verify/install gems
+- run `db:prepare`
+- clear logs/tmp files
+
+Then start development services:
+
+```sh
+bash script/start-db
+bin/dev
+```
+
+Open `http://localhost:3000`.
+
+For Windows (Git Bash/WSL), use:
+
+```sh
+ruby bin/setup --skip-server
+TAILWIND_WATCH=0 bash script/app-start
+```
+
+### Database Setup
+
+Prepare (create + migrate) the database:
+
+```sh
+bundle exec rails db:prepare
+```
+
+Optionally seed initial data:
+
+```sh
+bundle exec rails db:seed
+```
 
 ### Installing Dependencies
 
 ```sh
 bundle install
-# optional JS build
-yarn install
 ```
 
 ### Running the Server
@@ -82,13 +118,6 @@ Use the standard Rails dev server:
 
 ```sh
 bundle exec rails server
-```
-
-or via Docker:
-
-```sh
-docker-compose build
-docker-compose up
 ```
 
 Browse to `http://localhost:3000` to view the landing page.
