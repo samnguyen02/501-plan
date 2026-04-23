@@ -72,7 +72,7 @@ group :test do
      gem "capybara"
      gem "selenium-webdriver"
      # Pin minitest to 5.x for Rails 8.0 compatibility
-     gem "minitest", "~> 5.0"
+     gem "minitest", "~> 6.0"
 
      # RSpec
      gem "rspec-rails", "~> 6.1"
