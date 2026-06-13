@@ -75,7 +75,7 @@ group :test do
      gem "minitest", "~> 5.0"
 
      # RSpec
-     gem "rspec-rails", "~> 6.1"
+     gem "rspec-rails", "~> 8.0"
      gem "shoulda-matchers", "~> 6.0"
      gem "simplecov", "~> 0.22", require: false
 end
